@@ -16,6 +16,21 @@ public class Player : MonoBehaviour
     private Vector3 _PlayerMove;//移動速度情報
     private InputAction _move;//InputActionの Move のキャッシュ
     private InputAction _jump;//InputActin の Jump のキャッシュ
+    private InputAction _look;
+    private PlayerInput _input;
+
+
+    Vector3 cameraForward;
+    [SerializeField] private GameObject Camera;
+    float inputHorizontal;
+    float inputVertical;
+
+    float groundtime;
+    bool isgrounded;
+    private void Awake()
+    {
+        _input = this.GetComponent<PlayerInput>();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -29,9 +44,15 @@ public class Player : MonoBehaviour
 
         _move = input.currentActionMap.FindAction("Move");
         _jump = input.currentActionMap.FindAction("Jump");
+        _look = input.currentActionMap.FindAction("Look");
 
     }
 
+
+    private void OnEnable()
+    {
+        //_input
+    }
     // Update is called once per frame
     void Update()
     {
@@ -40,7 +61,21 @@ public class Player : MonoBehaviour
         _PlayerMove.x = moveValue.x * moveSpeed;
         _PlayerMove.z = moveValue.y * moveSpeed;
 
+
+
         //移動方向に向く
+        //_transform.LookAt(_transform.position + new Vector3(_PlayerMove.x, 0, _PlayerMove.z));
+
+
+        inputHorizontal = Input.GetAxis("Horizontal");
+        inputVertical = Input.GetAxis("Vertical");
+
+        cameraForward = Camera.transform.forward;
+        cameraForward.y = 0;
+        cameraForward = cameraForward.normalized;
+
+        _PlayerMove = cameraForward * inputVertical + Camera.transform.right * inputHorizontal * moveSpeed;
+
         _transform.LookAt(_transform.position + new Vector3(_PlayerMove.x, 0, _PlayerMove.z));
 
         if (_characterController.isGrounded)
@@ -58,8 +93,8 @@ public class Player : MonoBehaviour
         }
 
 
-            //オブジェクトを動かす
-            _characterController.Move(_PlayerMove * Time.deltaTime);
+        //オブジェクトを動かす
+        _characterController.Move(_PlayerMove * Time.deltaTime);
 
     }
 }
