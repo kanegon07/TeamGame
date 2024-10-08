@@ -1,9 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+
+
+[RequireComponent(typeof(CharacterController))]
+[RequireComponent (typeof(PlayerInput))]
 
 public class CameraPlayer : MonoBehaviour
 {
+
+    [SerializeField] private float jumpPower = 500;
+
+    //キャラクターコントローラーのキャッシュ
+    private CharacterController _characterController;
+    private InputAction _jump;
+    private InputAction _move;
+
     public float moveSpeed;
     public CharacterController charaCon;
 
@@ -18,7 +31,11 @@ public class CameraPlayer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        _characterController = GetComponent<CharacterController>();
+
+        var input = GetComponent<PlayerInput>();
+        input.currentActionMap.Enable();
+        _jump = input.currentActionMap.FindAction("Jump");
     }
 
     // Update is called once per frame
@@ -33,6 +50,21 @@ public class CameraPlayer : MonoBehaviour
         moveInput.Normalize();
 
         moveInput = moveInput * moveSpeed;
+
+
+        if(_characterController.isGrounded)
+        {
+            if(_jump.WasPressedThisFrame())
+            {
+                moveInput.y = jumpPower;
+            }
+        }
+        else
+        {
+            moveInput.y += Physics.gravity.y*25.0f *Time.deltaTime;
+        }
+
+        //charaCon.Move(moveInput * Time.deltaTime);
 
         charaCon.Move(moveInput * Time.deltaTime);
 
