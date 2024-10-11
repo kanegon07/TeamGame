@@ -7,6 +7,15 @@ public class TestPlayer : MonoBehaviour
     private float speed = 5.0f;
     public Transform cameraTransform; // カメラのTransformを参照するための変数
 
+    // エフェクト再生用のスクリプトを取得するための変数
+    public EffectManager _effectScript;
+
+    void Start()
+    {
+        // エフェクト再生用のスクリプトを取得
+        _effectScript = GetComponent<EffectManager>();
+    }
+
     void Update()
     {
         // カメラの前方向と右方向を取得
