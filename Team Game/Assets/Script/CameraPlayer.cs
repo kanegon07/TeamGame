@@ -10,7 +10,7 @@ using UnityEngine.InputSystem;
 public class CameraPlayer : MonoBehaviour
 {
 
-    [SerializeField] private float jumpPower = 500;
+   // [SerializeField] private float jumpPower = 500;
 
     //キャラクターコントローラーのキャッシュ
     private CharacterController _characterController;
@@ -18,6 +18,8 @@ public class CameraPlayer : MonoBehaviour
     private InputAction _move;
 
     public float moveSpeed;
+    public float gravityModifier;//重力
+    public float jumpPower;//ジャンプの大きさ
     public CharacterController charaCon;
 
     private Vector3 moveInput;
@@ -27,6 +29,10 @@ public class CameraPlayer : MonoBehaviour
     public bool invertX;
     public bool invertY;
 
+    //追加
+    private bool canJump;
+    public Transform groundCheckPoint;
+    public LayerMask whatIsGround;
 
     // Start is called before the first frame update
     void Start()
@@ -51,18 +57,39 @@ public class CameraPlayer : MonoBehaviour
 
         moveInput = moveInput * moveSpeed;
 
+        //追加
+        moveInput.y += Physics.gravity.y * gravityModifier * Time.deltaTime;
 
-        if(_characterController.isGrounded)
+
+        if(charaCon.isGrounded)
         {
-            if(_jump.WasPressedThisFrame())
-            {
-                moveInput.y = jumpPower;
-            }
+            moveInput.y = Physics.gravity.y * gravityModifier * Time.deltaTime;
         }
-        else
+
+        //ジャンプ
+        //地面に着いていて0.25経ったら
+        canJump = Physics.OverlapSphere(groundCheckPoint.position, 0.25f, whatIsGround).Length > 0;
+
+        if(Input.GetKeyDown(KeyCode.Space)&&canJump)
         {
-            moveInput.y += Physics.gravity.y*25.0f *Time.deltaTime;
+            moveInput.y = jumpPower;
         }
+
+        
+
+
+
+        //if(_characterController.isGrounded)
+        //{
+        //    if(_jump.WasPressedThisFrame())
+        //    {
+        //        //moveInput.y = jumpPower;
+        //    }
+        //}
+        //else
+        //{
+        //    moveInput.y += Physics.gravity.y * gravityModifier * Time.deltaTime;
+        //}
 
         //charaCon.Move(moveInput * Time.deltaTime);
 

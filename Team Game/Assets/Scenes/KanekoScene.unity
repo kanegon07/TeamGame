@@ -280,13 +280,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf3c283b7af0af048bae67d2902c27a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpPower: 10
   moveSpeed: 5
+  gravityModifier: 10
+  jumpPower: 100
   charaCon: {fileID: 136425376}
   camTrans: {fileID: 73506883}
   mouseSensitivity: 1
   invertX: 0
   invertY: 0
+  groundCheckPoint: {fileID: 342014758}
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!114 &136425375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -463,7 +468,7 @@ GameObject:
   - component: {fileID: 342014757}
   - component: {fileID: 342014756}
   - component: {fileID: 342014755}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -712,13 +717,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf3c283b7af0af048bae67d2902c27a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpPower: 3
   moveSpeed: 5
+  gravityModifier: 0
+  jumpPower: 0
   charaCon: {fileID: 1379073033}
   camTrans: {fileID: 73506883}
   mouseSensitivity: 1
   invertX: 0
   invertY: 0
+  groundCheckPoint: {fileID: 0}
+  whatIsGround:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!143 &1379073033
 CharacterController:
   m_ObjectHideFlags: 0
