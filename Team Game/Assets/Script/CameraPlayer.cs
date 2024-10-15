@@ -1,40 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using UnityEngine.InputSystem;
+using UnityEngine.InputSystem;
 
 
 [RequireComponent(typeof(CharacterController))]
-//[RequireComponent (typeof(PlayerInput))]
+[RequireComponent(typeof(PlayerInput))]
 
 public class CameraPlayer : MonoBehaviour
 {
-    //--------------------------------�v���C���[�֘A--------------------------------------------
-    private CharacterController _characterController;//�L�����N�^�[�R���g���[���[�̃L���b�V��
-    private InputAction _jump;//InputSystem��Jump�̃L���b�V��
-    private InputAction _move;//InputSystem��move�̃L���b�V��
-    private Transform _transform;//Transorm�̃L���b�V��
-    private Vector3 _moveVelocity;//�L�����̈ړ����
-    private Vector3 moveInput;//�ŏI�I�ȃL�����̈ړ����
+    //--------------------------------プレイヤー関連--------------------------------------------
+    private CharacterController _characterController;//キャラクターコントローラーのキャッシュ
+    private InputAction _jump;//InputSystemのJumpのキャッシュ
+    private InputAction _move;//InputSystemのmoveのキャッシュ
+    private Transform _transform;//Transormのキャッシュ
+    private Vector3 _moveVelocity;//キャラの移動情報
+    private Vector3 moveInput;//最終的なキャラの移動情報
 
 
-    public float moveSpeed;//�ړ��̑���
-    public float jumpPower;//�W�����v�̑傫��
-  //public float gravityModifier;//�d�� �������L�����͊����𖳎�����̂Ŏg���ĂȂ��ł��B
+    public float moveSpeed;//移動の速さ
+    public float jumpPower;//ジャンプの大きさ
+                           //public float gravityModifier;//重力 ※今回もキャラは慣性を無視するので使ってないです。
 
-   
-    //--------------------------------�J�����֘A---------------------------------------------------
-    public Transform camTrans;//�J�����͒N�Ȃ̂�
-    public float mouseSensitivity;//�J�����̊��x
-    public bool invertX;//X�����]����ꍇ�̓`�F�b�N�����
-    public bool invertY;//Y�����]����ꍇ�̓`�F�b�N�����
 
-    
+    //--------------------------------カメラ関連---------------------------------------------------
+    public Transform camTrans;//カメラは誰なのか
+    public float mouseSensitivity;//カメラの感度
+    public bool invertX;//X軸反転する場合はチェックをつける
+    public bool invertY;//Y軸反転する場合はチェックをつける
+
+
 
     // Start is called before the first frame update
     void Start()
     {
-        //-------------------InputSystem�̓�����A�L���b�V��-------------------------------
+        //-------------------InputSystemの導入や、キャッシュ-------------------------------
         _characterController = GetComponent<CharacterController>();
         _transform = transform;
         var input = GetComponent<PlayerInput>();
@@ -46,8 +46,8 @@ public class CameraPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
-        //--------------------------�L�����̈ړ�-------------------------------------------
+
+        //--------------------------キャラの移動-------------------------------------------
         var moveValue = _move.ReadValue<Vector2>();
         _moveVelocity.x = moveValue.x * moveSpeed;
         _moveVelocity.z = moveValue.y * moveSpeed;
@@ -61,38 +61,38 @@ public class CameraPlayer : MonoBehaviour
 
 
 
-        //-----------------�n�ʂɂ���Ƃ��̓W�����v���ł���----------------------------
+        //-----------------地面にいるときはジャンプができる----------------------------
         if (_characterController.isGrounded)
         {
-            if(_jump.WasPerformedThisFrame())
+            if (_jump.WasPerformedThisFrame())
             {
                 _moveVelocity.y = jumpPower;
             }
         }
         else
         {
-            //�d��
+            //重力
             _moveVelocity.y += Physics.gravity.y * Time.deltaTime;
         }
 
 
-        moveInput.y = moveInput.y + _moveVelocity.y;//moveInput��Y���̏���ǉ�����
-        _characterController.Move(moveInput * Time.deltaTime);//�����ōŏI�I�ȃL�����̈ړ�����n��
-       
+        moveInput.y = moveInput.y + _moveVelocity.y;//moveInputにY軸の情報も追加する
+        _characterController.Move(moveInput * Time.deltaTime);//ここで最終的なキャラの移動情報を渡す
 
 
 
-    //-------------------------------------�J�����֘A-----------------------------------------
 
-        //�J�����̉�]����
+        //-------------------------------------カメラ関連-----------------------------------------
+
+        //カメラの回転制御
         Vector2 mouseInput = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y")) * mouseSensitivity;
 
-        if(invertX)
+        if (invertX)
         {
             mouseInput.x = -mouseInput.x;
         }
 
-        if(invertY)
+        if (invertY)
         {
             mouseInput.y = -mouseInput.y;
         }
