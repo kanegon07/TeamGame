@@ -9,6 +9,7 @@ TagManager:
   - Goal
   - Air Ring
   - Target
+  - Stage
   layers:
   - Default
   - TransparentFX
