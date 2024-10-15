@@ -9,96 +9,82 @@ using UnityEngine;
 
 public class CameraPlayer : MonoBehaviour
 {
+    //--------------------------------ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Ö˜A--------------------------------------------
+    private CharacterController _characterController;//ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½^ï¿½[ï¿½Rï¿½ï¿½ï¿½gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½[ï¿½ÌƒLï¿½ï¿½ï¿½bï¿½Vï¿½ï¿½
+    private InputAction _jump;//InputSystemï¿½ï¿½Jumpï¿½ÌƒLï¿½ï¿½ï¿½bï¿½Vï¿½ï¿½
+    private InputAction _move;//InputSystemï¿½ï¿½moveï¿½ÌƒLï¿½ï¿½ï¿½bï¿½Vï¿½ï¿½
+    private Transform _transform;//Transormï¿½ÌƒLï¿½ï¿½ï¿½bï¿½Vï¿½ï¿½
+    private Vector3 _moveVelocity;//ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½ÌˆÚ“ï¿½ï¿½ï¿½ï¿½
+    private Vector3 moveInput;//ï¿½ÅIï¿½Iï¿½ÈƒLï¿½ï¿½ï¿½ï¿½ï¿½ÌˆÚ“ï¿½ï¿½ï¿½ï¿½
 
-   // [SerializeField] private float jumpPower = 500;
 
-    //ƒLƒƒƒ‰ƒNƒ^[ƒRƒ“ƒgƒ[ƒ‰[‚ÌƒLƒƒƒbƒVƒ…
-    private CharacterController _characterController;
-   // private InputAction _jump;
-   // private InputAction _move;
+    public float moveSpeed;//ï¿½Ú“ï¿½ï¿½Ì‘ï¿½ï¿½ï¿½
+    public float jumpPower;//ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½vï¿½Ì‘å‚«ï¿½ï¿½
+  //public float gravityModifier;//ï¿½dï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½ÍŠï¿½ï¿½ï¿½ï¿½ğ–³ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚Ågï¿½ï¿½ï¿½Ä‚È‚ï¿½ï¿½Å‚ï¿½ï¿½B
 
-    public float moveSpeed;
-    public float gravityModifier;//d—Í
-    public float jumpPower;//ƒWƒƒƒ“ƒv‚Ì‘å‚«‚³
-    public CharacterController charaCon;
+   
+    //--------------------------------ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Ö˜A---------------------------------------------------
+    public Transform camTrans;//ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Í’Nï¿½È‚Ì‚ï¿½
+    public float mouseSensitivity;//ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½ÌŠï¿½ï¿½x
+    public bool invertX;//Xï¿½ï¿½ï¿½ï¿½ï¿½]ï¿½ï¿½ï¿½ï¿½ê‡ï¿½Íƒ`ï¿½Fï¿½bï¿½Nï¿½ï¿½Â‚ï¿½ï¿½ï¿½
+    public bool invertY;//Yï¿½ï¿½ï¿½ï¿½ï¿½]ï¿½ï¿½ï¿½ï¿½ê‡ï¿½Íƒ`ï¿½Fï¿½bï¿½Nï¿½ï¿½Â‚ï¿½ï¿½ï¿½
 
-    private Vector3 moveInput;
-
-    public Transform camTrans;
-    public float mouseSensitivity;
-    public bool invertX;
-    public bool invertY;
-
-    //’Ç‰Á
-    private bool canJump;
-    public Transform groundCheckPoint;
-    public LayerMask whatIsGround;
+    
 
     // Start is called before the first frame update
     void Start()
     {
+        //-------------------InputSystemï¿½Ì“ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½Lï¿½ï¿½ï¿½bï¿½Vï¿½ï¿½-------------------------------
         _characterController = GetComponent<CharacterController>();
-
-       // var input = GetComponent<PlayerInput>();
-        //input.currentActionMap.Enable();
-        //_jump = input.currentActionMap.FindAction("Jump");
+        _transform = transform;
+        var input = GetComponent<PlayerInput>();
+        input.currentActionMap.Enable();
+        _jump = input.currentActionMap.FindAction("Jump");
+        _move = input.currentActionMap.FindAction("Move");
     }
 
     // Update is called once per frame
     void Update()
     {
-        //moveInput.x = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
-        //moveInput.z = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;
+       
+        //--------------------------ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½ÌˆÚ“ï¿½-------------------------------------------
+        var moveValue = _move.ReadValue<Vector2>();
+        _moveVelocity.x = moveValue.x * moveSpeed;
+        _moveVelocity.z = moveValue.y * moveSpeed;
 
-        Vector3 verMove = transform.forward * Input.GetAxis("Vertical");
-        Vector3 horiMove = transform.right * Input.GetAxis("Horizontal");
+        Vector3 verMove = transform.forward * _moveVelocity.z;
+        Vector3 horiMove = transform.right * _moveVelocity.x;
         moveInput = horiMove + verMove;
         moveInput.Normalize();
 
         moveInput = moveInput * moveSpeed;
 
-        //’Ç‰Á
-        moveInput.y += Physics.gravity.y * gravityModifier * Time.deltaTime;
 
 
-        if(charaCon.isGrounded)
+        //-----------------ï¿½nï¿½Ê‚É‚ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½ÍƒWï¿½ï¿½ï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½----------------------------
+        if (_characterController.isGrounded)
         {
-            moveInput.y = Physics.gravity.y * gravityModifier * Time.deltaTime;
+            if(_jump.WasPerformedThisFrame())
+            {
+                _moveVelocity.y = jumpPower;
+            }
+        }
+        else
+        {
+            //ï¿½dï¿½ï¿½
+            _moveVelocity.y += Physics.gravity.y * Time.deltaTime;
         }
 
-        //ƒWƒƒƒ“ƒv
-        //’n–Ê‚É’…‚¢‚Ä‚¢‚Ä0.25Œo‚Á‚½‚ç
-        canJump = Physics.OverlapSphere(groundCheckPoint.position, 0.25f, whatIsGround).Length > 0;
 
-        if(Input.GetKeyDown(KeyCode.Space)&&canJump)
-        {
-            moveInput.y = jumpPower;
-        }
-
-        
+        moveInput.y = moveInput.y + _moveVelocity.y;//moveInputï¿½ï¿½Yï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½Ç‰ï¿½ï¿½ï¿½ï¿½ï¿½
+        _characterController.Move(moveInput * Time.deltaTime);//ï¿½ï¿½ï¿½ï¿½ï¿½ÅÅIï¿½Iï¿½ÈƒLï¿½ï¿½ï¿½ï¿½ï¿½ÌˆÚ“ï¿½ï¿½ï¿½ï¿½ï¿½nï¿½ï¿½
+       
 
 
 
-        //if(_characterController.isGrounded)
-        //{
-        //    if(_jump.WasPressedThisFrame())
-        //    {
-        //        //moveInput.y = jumpPower;
-        //    }
-        //}
-        //else
-        //{
-        //    moveInput.y += Physics.gravity.y * gravityModifier * Time.deltaTime;
-        //}
+    //-------------------------------------ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Ö˜A-----------------------------------------
 
-        //charaCon.Move(moveInput * Time.deltaTime);
-
-        charaCon.Move(moveInput * Time.deltaTime);
-
-
-        //charaCon.Move(moveInput);
-
-        //ƒJƒƒ‰‚Ì‰ñ“]§Œä
+        //ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Ì‰ï¿½]ï¿½ï¿½ï¿½ï¿½
         Vector2 mouseInput = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y")) * mouseSensitivity;
 
         if(invertX)
@@ -114,7 +100,5 @@ public class CameraPlayer : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + mouseInput.x, transform.rotation.eulerAngles.z);
         camTrans.rotation = Quaternion.Euler(camTrans.rotation.eulerAngles + new Vector3(-mouseInput.y, 0f, 0f));
-
-        //charaCon.Move(moveInput);
     }
 }

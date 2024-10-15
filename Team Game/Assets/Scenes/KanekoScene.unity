@@ -365,17 +365,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  gravityModifier: 10
-  jumpPower: 100
-  charaCon: {fileID: 136425376}
+  jumpPower: 5
   camTrans: {fileID: 73506883}
   mouseSensitivity: 1
   invertX: 0
   invertY: 0
-  groundCheckPoint: {fileID: 342014758}
-  whatIsGround:
-    serializedVersion: 2
-    m_Bits: 8
 --- !u!114 &136425375
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -552,7 +546,7 @@ GameObject:
   - component: {fileID: 342014757}
   - component: {fileID: 342014756}
   - component: {fileID: 342014755}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
