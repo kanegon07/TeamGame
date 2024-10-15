@@ -6,11 +6,25 @@ using UnityEngine;
 public class BulletController : MonoBehaviour
 {
     private BulletManager bulletManager;
+    private float lifespan = 5f; // 弾が消えるまでの時間
+    private float timer = 0f; // 経過時間を記録する変数
 
     // BulletManagerを設定するメソッド
     public void SetBulletManager(BulletManager manager)
     {
         bulletManager = manager;
+    }
+
+    private void Update()
+    {
+        // 経過時間を加算
+        timer += Time.deltaTime;
+
+        // 経過時間が lifespan を超えたら弾を消去
+        if (timer >= lifespan)
+        {
+            DestroyBullet();
+        }
     }
 
     // 衝突したときの処理
@@ -26,10 +40,19 @@ public class BulletController : MonoBehaviour
             return; // プレイヤーに当たった場合は何もしない
         }
 
-        // BulletManagerを使って自身を破棄する
+        DestroyBullet();
+    }
+
+    // 弾を消去するメソッド
+    private void DestroyBullet()
+    {
         if (bulletManager != null)
         {
             bulletManager.RemoveBullet(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject); // BulletManagerが設定されていない場合はそのまま消去
         }
     }
 }
