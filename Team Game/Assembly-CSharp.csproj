@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="Assets\Supercyan Character Pack Free Sample\Scripts\AccessoryWearLogic.cs" />
     <Compile Include="Assets\Script\CameraPlayer.cs" />
+    <Compile Include="Assets\Script\CameraPlayer_Copy.cs" />
     <Compile Include="Assets\Supercyan Character Pack Free Sample\Scripts\FreeCameraLogic.cs" />
     <Compile Include="Assets\Supercyan Character Pack Free Sample\Scripts\DemoFree.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />

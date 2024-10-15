@@ -280,9 +280,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf3c283b7af0af048bae67d2902c27a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
-  gravityModifier: 10
-  jumpPower: 100
+  moveSpeed: 10
+  gravityModifier: 50
+  jumpPower: 5
   charaCon: {fileID: 136425376}
   camTrans: {fileID: 73506883}
   mouseSensitivity: 1

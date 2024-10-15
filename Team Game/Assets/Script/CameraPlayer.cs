@@ -10,12 +10,15 @@ using UnityEngine.InputSystem;
 public class CameraPlayer : MonoBehaviour
 {
 
-   // [SerializeField] private float jumpPower = 500;
+    //[SerializeField] public float jumpPower = 200;
 
     //キャラクターコントローラーのキャッシュ
     private CharacterController _characterController;
     private InputAction _jump;
     private InputAction _move;
+    private Transform _transform;
+    private Vector3 _moveVelocity;
+
 
     public float moveSpeed;
     public float gravityModifier;//重力
@@ -38,10 +41,13 @@ public class CameraPlayer : MonoBehaviour
     void Start()
     {
         _characterController = GetComponent<CharacterController>();
+        _transform = transform;
+
 
         var input = GetComponent<PlayerInput>();
         input.currentActionMap.Enable();
         _jump = input.currentActionMap.FindAction("Jump");
+        _move = input.currentActionMap.FindAction("Move");
     }
 
     // Update is called once per frame
@@ -50,33 +56,38 @@ public class CameraPlayer : MonoBehaviour
         //moveInput.x = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
         //moveInput.z = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;
 
-        Vector3 verMove = transform.forward * Input.GetAxis("Vertical");
-        Vector3 horiMove = transform.right * Input.GetAxis("Horizontal");
-        moveInput = horiMove + verMove;
-        moveInput.Normalize();
+        //--------------------------------------------------------------------------------------------------------------------------------------------
 
-        moveInput = moveInput * moveSpeed;
+        //Vector3 verMove = transform.forward * Input.GetAxis("Vertical");
+        //Vector3 horiMove = transform.right * Input.GetAxis("Horizontal");
+        //moveInput = horiMove + verMove;
+        //moveInput.Normalize();
 
-        //追加
-        moveInput.y += Physics.gravity.y * gravityModifier * Time.deltaTime;
+        //moveInput = moveInput * moveSpeed;
 
 
-        if(charaCon.isGrounded)
-        {
-            moveInput.y = Physics.gravity.y * gravityModifier * Time.deltaTime;
-        }
 
-        //ジャンプ
-        //地面に着いていて0.25経ったら
-        canJump = Physics.OverlapSphere(groundCheckPoint.position, 0.25f, whatIsGround).Length > 0;
 
-        if(Input.GetKeyDown(KeyCode.Space)&&canJump)
-        {
-            moveInput.y = jumpPower;
-        }
 
-        
+        //moveInput.y += Physics.gravity.y * gravityModifier * Time.deltaTime;
 
+
+        //if(charaCon.isGrounded)
+        //{
+        //    moveInput.y = Physics.gravity.y * gravityModifier * Time.deltaTime;
+        //}
+
+        ////ジャンプ
+        ////地面に着いていて0.25経ったら
+        //canJump = Physics.OverlapSphere(groundCheckPoint.position, 0.25f, whatIsGround).Length > 0;
+
+        //if(Input.GetKeyDown(KeyCode.Space)&&canJump)
+        //{
+        //    moveInput.y = jumpPower;
+        //}
+
+
+        //--------------------------------------------------------------------------------------------------------------------------------------------
 
 
         //if(_characterController.isGrounded)
@@ -93,10 +104,63 @@ public class CameraPlayer : MonoBehaviour
 
         //charaCon.Move(moveInput * Time.deltaTime);
 
-        charaCon.Move(moveInput * Time.deltaTime);
 
 
-        //charaCon.Move(moveInput);
+
+        //--------------------------------------------------------------------------------------------------------------------------------------------
+
+        //これ使ってる
+        //charaCon.Move(moveInput * Time.deltaTime);
+
+
+        //-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
+        var moveValue = _move.ReadValue<Vector2>();
+        _moveVelocity.x = moveValue.x * moveSpeed;
+        _moveVelocity.z = moveValue.y * moveSpeed;
+
+
+        Vector3 verMove = transform.forward * _moveVelocity.z;
+        Vector3 horiMove = transform.right * _moveVelocity.x;
+        moveInput = horiMove + verMove;
+        moveInput.Normalize();
+
+        
+
+
+
+
+        if (_characterController.isGrounded)
+        {
+            if(_jump.WasPerformedThisFrame())
+            {
+                _moveVelocity.y = jumpPower;
+            }
+        }
+        else
+        {
+            _moveVelocity.y += Physics.gravity.y * Time.deltaTime;
+        }
+
+
+        moveInput.y = moveInput.y + _moveVelocity.y;
+        _characterController.Move(moveInput * Time.deltaTime);
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       
 
         //カメラの回転制御
         Vector2 mouseInput = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y")) * mouseSensitivity;
@@ -114,7 +178,5 @@ public class CameraPlayer : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + mouseInput.x, transform.rotation.eulerAngles.z);
         camTrans.rotation = Quaternion.Euler(camTrans.rotation.eulerAngles + new Vector3(-mouseInput.y, 0f, 0f));
-
-        //charaCon.Move(moveInput);
     }
 }
