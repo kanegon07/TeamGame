@@ -524,13 +524,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 410087039}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.7701542, y: -0.26162446, z: -0.34515953, w: 0.46827364}
+  m_LocalRotation: {x: 0.79907274, y: -0.21716274, z: -0.27211252, w: 0.49018154}
   m_LocalPosition: {x: 0.02, y: 1.71, z: -0.25}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -212.73, y: 67.408, z: 59.690002}
+  m_LocalEulerAnglesHint: {x: -221.69699, y: 60.175003, z: 55.294}
 --- !u!114 &410087042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1781,6 +1781,7 @@ GameObject:
   - component: {fileID: 1726638057}
   - component: {fileID: 1726638056}
   - component: {fileID: 1726638055}
+  - component: {fileID: 1726638059}
   m_Layer: 0
   m_Name: Cloud
   m_TagString: Untagged
@@ -1877,6 +1878,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
+--- !u!114 &1726638059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1726638054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf9925ec490b1a74fa312b51c91ee415, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1758767016
 PrefabInstance:
   m_ObjectHideFlags: 0
