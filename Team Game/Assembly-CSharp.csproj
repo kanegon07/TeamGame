@@ -69,6 +69,7 @@
     <Compile Include="Assets\Scripts\RayManager.cs" />
     <Compile Include="Assets\Script\CameraPlayer.cs" />
     <Compile Include="Assets\Effekseer\Example\EfkBasic.cs" />
+    <Compile Include="Assets\Script\mushroom.cs" />
     <Compile Include="Assets\Supercyan Character Pack Free Sample\Scripts\FreeCameraLogic.cs" />
     <Compile Include="Assets\Supercyan Character Pack Free Sample\Scripts\DemoFree.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />

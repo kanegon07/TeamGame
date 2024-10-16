@@ -22,7 +22,6 @@ public class CameraPlayer : MonoBehaviour
     public float jumpPower;//ジャンプの大きさ
                            //public float gravityModifier;//重力 ※今回もキャラは慣性を無視するので使ってないです。
 
-
     //--------------------------------カメラ関連---------------------------------------------------
     public Transform camTrans;//カメラは誰なのか
     public float mouseSensitivity;//カメラの感度
@@ -30,7 +29,12 @@ public class CameraPlayer : MonoBehaviour
     public bool invertY;//Y軸反転する場合はチェックをつける
 
 
-
+    public void UpPlayer(float y)
+    {
+       
+        moveInput.y = y;
+        
+    }
     // Start is called before the first frame update
     void Start()
     {
