@@ -3,4 +3,6 @@ Team Game/Library
 Team Game/Logs
 Team Game/Temp
 Team Game/UserSettings
-Team Game/.vs/
+Team Game/.vs
+
+git rm --cached <.vs>
