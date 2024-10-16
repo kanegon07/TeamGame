@@ -68,6 +68,7 @@
     <Compile Include="Assets\Scripts\EffectManager.cs" />
     <Compile Include="Assets\Scripts\RayManager.cs" />
     <Compile Include="Assets\Script\CameraPlayer.cs" />
+    <Compile Include="Assets\Script\Sky Spin.cs" />
     <Compile Include="Assets\Effekseer\Example\EfkBasic.cs" />
     <Compile Include="Assets\Supercyan Character Pack Free Sample\Scripts\FreeCameraLogic.cs" />
     <Compile Include="Assets\Supercyan Character Pack Free Sample\Scripts\DemoFree.cs" />
