@@ -16,16 +16,19 @@ public class mushroom : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
 
     //“–‚½‚Á‚½‚Æ‚«
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player"))
         {
-            player.UpPlayer(300.0f);
+            Debug.Log("“–‚½‚Á‚Ä‚é‚æ");
+            player.UpPlayer(10.0f,15);
         }
+
+       
     }
 }
