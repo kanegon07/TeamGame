@@ -27,7 +27,7 @@ public class mushroom : MonoBehaviour
         {
             Debug.Log("“–‚½‚Á‚Ä‚é‚æ");
             player.UpPlayer(10.0f,15);
-            //ƒeƒXƒg
+            
         }
 
        
