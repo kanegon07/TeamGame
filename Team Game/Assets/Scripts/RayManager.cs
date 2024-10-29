@@ -6,26 +6,28 @@ using UnityEngine.UI;
 public class RayManager : MonoBehaviour
 {
     public Camera mainCamera;  // カメラを参照
-    public Image reticle;  // レティクルオブジェクトを参照
     public BulletManager bulletManager;  // BulletManagerを参照
 
-    void Update()
+    // ターゲット位置を取得するメソッド
+    public Vector3 GetTargetPosition()
     {
-        // カメラの視点方向にレイを飛ばす
+        // レイを飛ばす
         Ray ray = new Ray(mainCamera.transform.position, mainCamera.transform.forward);
-        RaycastHit hit;
+        Vector3 targetPosition;
 
-        // レイがオブジェクトに当たった場合、その位置にレティクルを配置
-        if (Physics.Raycast(ray, out hit))
+        // レイキャストを行う
+        if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            reticle.transform.position = hit.point;
+            // レイがヒットした位置を取得
+            targetPosition = hit.point;
+        }
+        else
+        {
+            // ヒットしなかった場合は、カメラの前方をターゲットとする
+            targetPosition = ray.origin + ray.direction * 20f;
         }
 
-        // 左クリックで弾を発射する処理
-        if (Input.GetMouseButtonDown(0))  // マウスの左ボタン
-        {
-            bulletManager.Shoot(mainCamera.transform.position, mainCamera.transform.rotation);
-        }
+        return targetPosition;
     }
 
     /*//発射元オブジェクト
