@@ -23,11 +23,11 @@ public class CameraPlayer : MonoBehaviour
                            //public float gravityModifier;//重力 ※今回もキャラは慣性を無視するので使ってないです。
 
 
-    //--------------------------------カメラ関連---------------------------------------------------
+    /*//--------------------------------カメラ関連---------------------------------------------------
     public Transform camTrans;//カメラは誰なのか
     public float mouseSensitivity;//カメラの感度
     public bool invertX;//X軸反転する場合はチェックをつける
-    public bool invertY;//Y軸反転する場合はチェックをつける
+    public bool invertY;//Y軸反転する場合はチェックをつける*/
 
 
 
@@ -82,7 +82,7 @@ public class CameraPlayer : MonoBehaviour
 
 
 
-        //-------------------------------------カメラ関連-----------------------------------------
+        /*//-------------------------------------カメラ関連-----------------------------------------
 
         //カメラの回転制御
         Vector2 mouseInput = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y")) * mouseSensitivity;
@@ -99,6 +99,6 @@ public class CameraPlayer : MonoBehaviour
 
 
         transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + mouseInput.x, transform.rotation.eulerAngles.z);
-        camTrans.rotation = Quaternion.Euler(camTrans.rotation.eulerAngles + new Vector3(-mouseInput.y, 0f, 0f));
+        camTrans.rotation = Quaternion.Euler(camTrans.rotation.eulerAngles + new Vector3(-mouseInput.y, 0f, 0f));*/
     }
 }

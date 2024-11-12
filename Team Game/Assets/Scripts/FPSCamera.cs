@@ -10,20 +10,31 @@ public class FPSCamera : MonoBehaviour
 
     void Update()
     {
-        // マウスの移動量取得
-        float mx = Input.GetAxis("Mouse X") * mouseSensitivity; // 横移動
-        float my = Input.GetAxis("Mouse Y") * mouseSensitivity; // 縦移動
+        // マウスの移動量を取得
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity; // 水平移動
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity; // 垂直移動
 
+        // プレイヤーの水平回転（Y軸回転）
+        RotatePlayerHorizontally(mouseX);
 
-        // 水平方向の回転（プレイヤーのY軸回り）
-        if (Mathf.Abs(mx) > 0.001f)
+        // カメラの垂直回転（X軸回転）
+        RotateCameraVertically(mouseY);
+    }
+
+    // プレイヤーのY軸を中心に水平回転
+    private void RotatePlayerHorizontally(float mouseX)
+    {
+        if (Mathf.Abs(mouseX) > 0.001f)
         {
-            transform.RotateAround(transform.position, Vector3.up, mx); // 横回転
+            transform.RotateAround(transform.position, Vector3.up, mouseX);
         }
+    }
 
-        // 縦方向の回転（カメラのX軸回り）
-        xRotation -= my; // 縦の視点移動を追跡
-        xRotation = Mathf.Clamp(xRotation, -90f, 90f); // 上下90度の範囲で制限
-        transform.localRotation = Quaternion.Euler(xRotation, transform.localEulerAngles.y, 0f); // 回転を適用
+    // カメラのX軸を中心に垂直回転
+    private void RotateCameraVertically(float mouseY)
+    {
+        xRotation -= mouseY;
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
+        transform.localRotation = Quaternion.Euler(xRotation, transform.localEulerAngles.y, 0f);
     }
 }
