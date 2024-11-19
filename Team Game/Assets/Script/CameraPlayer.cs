@@ -16,6 +16,7 @@ public class CameraPlayer : MonoBehaviour
     private Transform _transform;//Transormのキャッシュ
     private Vector3 _moveVelocity;//キャラの移動情報
     private Vector3 moveInput;//最終的なキャラの移動情報
+    private bool isMovingFlg; // 移動フラグ
 
 
     public float moveSpeed;//移動の速さ
@@ -49,6 +50,10 @@ public class CameraPlayer : MonoBehaviour
 
         //--------------------------キャラの移動-------------------------------------------
         var moveValue = _move.ReadValue<Vector2>();
+
+        // 移動入力に基づいて移動フラグを設定
+        isMovingFlg = moveValue.x != 0 || moveValue.y != 0;
+
         _moveVelocity.x = moveValue.x * moveSpeed;
         _moveVelocity.z = moveValue.y * moveSpeed;
 
@@ -77,10 +82,7 @@ public class CameraPlayer : MonoBehaviour
 
 
         moveInput.y = moveInput.y + _moveVelocity.y;//moveInputにY軸の情報も追加する
-        _characterController.Move(moveInput * Time.deltaTime);//ここで最終的なキャラの移動情報を渡す
-
-
-
+        _characterController.Move(moveInput * Time.deltaTime);//ここで最終的なキャラの移動情報を渡
 
         /*//-------------------------------------カメラ関連-----------------------------------------
 
@@ -100,5 +102,11 @@ public class CameraPlayer : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + mouseInput.x, transform.rotation.eulerAngles.z);
         camTrans.rotation = Quaternion.Euler(camTrans.rotation.eulerAngles + new Vector3(-mouseInput.y, 0f, 0f));*/
+    }
+
+    // 移動キーが押されているかどうかを返すプロパティ
+    public bool IsMoving()
+    {
+        return isMovingFlg;
     }
 }
