@@ -26,6 +26,8 @@ public class CameraPlayer : MonoBehaviour
     public bool BoundFlg = false;
     private int BoundTime = 0;
 
+    public Transform MomongaHead;//モモンガの頭
+
     //--------------------------------カメラ関連---------------------------------------------------
     public Transform camTrans;//カメラは誰なのか
     public float mouseSensitivity;//カメラの感度
@@ -153,5 +155,8 @@ public class CameraPlayer : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + mouseInput.x, transform.rotation.eulerAngles.z);
         camTrans.rotation = Quaternion.Euler(camTrans.rotation.eulerAngles + new Vector3(-mouseInput.y, 0f, 0f));
+        
+        //モモンガの頭部
+        MomongaHead.rotation = Quaternion.Euler(MomongaHead.rotation.eulerAngles + new Vector3(mouseInput.y, 0f, 0f));
     }
 }
