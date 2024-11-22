@@ -2,19 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MushRoomAnimation : MonoBehaviour
+public class SkySpin : MonoBehaviour
 {
-    private Animator anim;
-
     // Start is called before the first frame update
     void Start()
     {
-        anim = gameObject.GetComponent<Animator>();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        // transformを取得
+        Transform myTransform = this.transform;
+
+        // ワールド座標基準で、現在の回転量へ加算する
+        myTransform.Rotate(0.0f, 0.01f, 0.0f, Space.World);
     }
 }

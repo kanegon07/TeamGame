@@ -1,3 +1,5 @@
+//テスト
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,8 +23,13 @@ public class CameraPlayer : MonoBehaviour
 
     public float moveSpeed;//移動の速さ
     public float jumpPower;//ジャンプの大きさ
-                           //public float gravityModifier;//重力 ※今回もキャラは慣性を無視するので使ってないです。
 
+    //public float gravityModifier;//重力 ※今回もキャラは慣性を無視するので使ってないです。
+    private float BoundPower = 0;
+    public bool BoundFlg = false;
+    private int BoundTime = 0;
+
+    public Transform MomongaHead;//モモンガの頭
 
     /*//--------------------------------カメラ関連---------------------------------------------------
     public Transform camTrans;//カメラは誰なのか
@@ -31,7 +38,27 @@ public class CameraPlayer : MonoBehaviour
     public bool invertY;//Y軸反転する場合はチェックをつける*/
 
 
+    public void UpPlayer(float y,int time)
+    {
+        BoundTime = time;
+        if (BoundFlg == false)
+        {
+            BoundFlg = true;
+            BoundPower = y;
+            _moveVelocity.y = BoundPower;
+        }
 
+        //moveInput.y += y;
+        //_moveVelocity.z += y;
+
+
+
+
+
+
+
+
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -47,6 +74,27 @@ public class CameraPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        Debug.Log(BoundTime);
+
+        if(BoundFlg==true)
+        {
+            BoundTime--;
+            if (BoundTime <= 0)
+            {
+                Debug.Log("ストップ！");
+                BoundTime = 0;
+                BoundPower = 0.0f;
+                BoundFlg = false;
+            }
+        }
+
+        if (BoundFlg==false)
+        {
+            BoundPower = 0.0f;
+            BoundTime = 0;
+        }
+
 
         //--------------------------キャラの移動-------------------------------------------
         var moveValue = _move.ReadValue<Vector2>();
@@ -76,13 +124,22 @@ public class CameraPlayer : MonoBehaviour
         }
         else
         {
-            //重力
-            _moveVelocity.y += Physics.gravity.y * Time.deltaTime;
+
+            if (BoundFlg == false)
+            {
+                //重力
+                _moveVelocity.y += Physics.gravity.y * Time.deltaTime;
+            }
+
+            //if(BoundFlg==true)
+            //{
+            //    _moveVelocity.y = 0.0f;
+            //}
         }
 
 
-        moveInput.y = moveInput.y + _moveVelocity.y;//moveInputにY軸の情報も追加する
-        _characterController.Move(moveInput * Time.deltaTime);//ここで最終的なキャラの移動情報を渡
+        moveInput.y = moveInput.y + _moveVelocity.y + BoundPower;//moveInputにY軸の情報も追加する
+        _characterController.Move(moveInput * Time.deltaTime);//ここで最終的なキャラの移動情報を渡す
 
         /*//-------------------------------------カメラ関連-----------------------------------------
 
@@ -101,6 +158,10 @@ public class CameraPlayer : MonoBehaviour
 
 
         transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + mouseInput.x, transform.rotation.eulerAngles.z);
+        camTrans.rotation = Quaternion.Euler(camTrans.rotation.eulerAngles + new Vector3(-mouseInput.y, 0f, 0f));
+        
+        //モモンガの頭部
+        MomongaHead.rotation = Quaternion.Euler(MomongaHead.rotation.eulerAngles + new Vector3(mouseInput.y, 0f, 0f));
         camTrans.rotation = Quaternion.Euler(camTrans.rotation.eulerAngles + new Vector3(-mouseInput.y, 0f, 0f));*/
     }
 
