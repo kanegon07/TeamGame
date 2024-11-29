@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Effekseer", "Effekseer.csproj", "{F12A4AFE-7E59-7ABF-3456-38D5558A1D01}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-firstpass", "Assembly-CSharp-firstpass.csproj", "{BAABB59F-C5B3-207C-DC80-ACAD4256F44C}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EffekseerEditor", "EffekseerEditor.csproj", "{F96FA9C1-F4F6-F04B-10F7-A0AF13AB7A76}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Effekseer.PostProcessing", "Effekseer.PostProcessing.csproj", "{94DF8150-F1B7-2489-91E3-7DA7F9E18316}"
@@ -29,6 +31,10 @@ Global
 		{F12A4AFE-7E59-7ABF-3456-38D5558A1D01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F12A4AFE-7E59-7ABF-3456-38D5558A1D01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F12A4AFE-7E59-7ABF-3456-38D5558A1D01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAABB59F-C5B3-207C-DC80-ACAD4256F44C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAABB59F-C5B3-207C-DC80-ACAD4256F44C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAABB59F-C5B3-207C-DC80-ACAD4256F44C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAABB59F-C5B3-207C-DC80-ACAD4256F44C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F96FA9C1-F4F6-F04B-10F7-A0AF13AB7A76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F96FA9C1-F4F6-F04B-10F7-A0AF13AB7A76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F96FA9C1-F4F6-F04B-10F7-A0AF13AB7A76}.Release|Any CPU.ActiveCfg = Release|Any CPU

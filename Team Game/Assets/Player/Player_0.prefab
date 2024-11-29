@@ -636,6 +636,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   jumpPower: 5
+  BoundFlg: 0
   camTrans: {fileID: 5847286447600118767}
   mouseSensitivity: 1
   invertX: 0
