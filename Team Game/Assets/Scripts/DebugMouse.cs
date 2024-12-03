@@ -13,6 +13,12 @@ public class DebugMouse : MonoBehaviour
 
     void Update()
     {
+        // ウィンドウがアクティブになった場合もカーソルを非表示にする
+        if (Application.isFocused && isCursorLocked)
+        {
+            LockCursor();
+        }
+
         // Pキーでカーソルのロック状態を切り替え
         if (Input.GetKeyDown(KeyCode.P))
         {
