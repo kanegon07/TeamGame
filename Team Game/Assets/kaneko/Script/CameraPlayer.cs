@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.ProBuilder.MeshOperations;
 
 
 [RequireComponent(typeof(CharacterController))]
@@ -28,6 +30,13 @@ public class CameraPlayer : MonoBehaviour
 
     public Transform MomongaHead;//モモンガの頭
 
+    //---------------------------------新規実装---------------------------------------------------
+    public bool JumpingFlg = false;//ジャンプ中かどうか
+    public bool FlyFlg = false;//滑空状態にあるかどうか
+    private float FlyGravity = 0.0f;
+    private int FlyCount = 0;
+
+
     //--------------------------------カメラ関連---------------------------------------------------
     public Transform camTrans;//カメラは誰なのか
     public float mouseSensitivity;//カメラの感度
@@ -35,6 +44,7 @@ public class CameraPlayer : MonoBehaviour
     public bool invertY;//Y軸反転する場合はチェックをつける
 
 
+    //キノコのジャンプ
     public void UpPlayer(float y,int time)
     {
         BoundTime = time;
@@ -43,16 +53,11 @@ public class CameraPlayer : MonoBehaviour
             BoundFlg = true;
             BoundPower = y;
             _moveVelocity.y = BoundPower;
+            JumpingFlg = true;
         }
 
         //moveInput.y += y;
         //_moveVelocity.z += y;
-
-
-
-
-
-
 
 
     }
@@ -72,14 +77,14 @@ public class CameraPlayer : MonoBehaviour
     void Update()
     {
 
-        Debug.Log(BoundTime);
+        //Debug.Log(BoundTime);
 
         if(BoundFlg==true)
         {
             BoundTime--;
             if (BoundTime <= 0)
             {
-                Debug.Log("ストップ！");
+                //Debug.Log("ストップ！");
                 BoundTime = 0;
                 BoundPower = 0.0f;
                 BoundFlg = false;
@@ -92,6 +97,9 @@ public class CameraPlayer : MonoBehaviour
             BoundTime = 0;
         }
 
+
+        //滑空
+        Fly();
 
         //--------------------------キャラの移動-------------------------------------------
         var moveValue = _move.ReadValue<Vector2>();
@@ -110,9 +118,12 @@ public class CameraPlayer : MonoBehaviour
         //-----------------地面にいるときはジャンプができる----------------------------
         if (_characterController.isGrounded)
         {
+            
+            //JumpingFlg = false;
             if (_jump.WasPerformedThisFrame())
             {
                 _moveVelocity.y = jumpPower;
+                JumpingFlg = true;
             }
         }
         else
@@ -123,6 +134,12 @@ public class CameraPlayer : MonoBehaviour
                 //重力
                 _moveVelocity.y += Physics.gravity.y * Time.deltaTime;
             }
+            
+            if(FlyFlg==true)
+            {
+                _moveVelocity.y = 0.0f;
+                FlyGravity += -0.8f * Time.deltaTime;
+            }
 
             //if(BoundFlg==true)
             //{
@@ -130,11 +147,18 @@ public class CameraPlayer : MonoBehaviour
             //}
         }
 
-
-        moveInput.y = moveInput.y + _moveVelocity.y + BoundPower;//moveInputにY軸の情報も追加する
+        //Debug.Log(JumpingFlg);
+        if (FlyFlg == true)
+        {
+            moveInput.y = moveInput.y + FlyGravity;
+        }
+        else
+        {
+            moveInput.y = moveInput.y + _moveVelocity.y + BoundPower;//moveInputにY軸の情報も追加する
+        }
         _characterController.Move(moveInput * Time.deltaTime);//ここで最終的なキャラの移動情報を渡す
 
-
+        Debug.Log(moveInput.y);
 
 
         //-------------------------------------カメラ関連-----------------------------------------
@@ -159,4 +183,49 @@ public class CameraPlayer : MonoBehaviour
         //モモンガの頭部
         MomongaHead.rotation = Quaternion.Euler(MomongaHead.rotation.eulerAngles + new Vector3(mouseInput.y, 0f, 0f));
     }
+
+
+
+
+    void Fly()
+    {
+        if(JumpingFlg==true)
+        {
+            
+            if (_jump.WasPerformedThisFrame())
+            {
+                FlyFlg = true;
+                
+
+
+
+            }
+        }
+       
+
+        if(FlyFlg==true)
+        {
+            FlyCount++;
+           
+            if (FlyCount >= 5)
+            {
+                if (_jump.WasPerformedThisFrame())
+                {
+                    FlyFlg = false;
+                }
+            }
+        }
+
+        if(FlyFlg==false)
+        {
+
+            moveInput.y = 0.0f;
+            FlyGravity = 0;
+            FlyCount = 0;
+        }
+        
+    }
+    
 }
+
+
