@@ -90,7 +90,6 @@
     <Compile Include="Assets\Scripts\BulletManager.cs" />
     <Compile Include="Assets\Scripts\UI\OptionTag\OptionTagView.cs" />
     <Compile Include="Assets\Supercyan Character Pack Free Sample\Scripts\SimpleSampleCharacterControl.cs" />
-    <Compile Include="Assets\Scripts\UI\MyUIInputModule.cs" />
     <Compile Include="Assets\Scripts\UI\Result\ResultEvents.cs" />
     <Compile Include="Assets\Supercyan Character Pack Free Sample\Scripts\AccessoryLogic.cs" />
     <Compile Include="Assets\Scripts\BulletController.cs" />

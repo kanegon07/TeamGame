@@ -3,6 +3,11 @@ using MessagePipe;
 using System.Threading;
 using System;
 
+/*
+ * MessagePipe用のフィルターを集めたもの
+ * 使うかは分からない...
+ */
+
 public class WhereFilter<T> : MessageHandlerFilter<T> {
 	private readonly Func<T, bool> _predicate;
 
