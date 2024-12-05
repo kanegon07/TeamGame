@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class mushroom : MonoBehaviour
+public class PlayerHiObj : MonoBehaviour
 {
 
-    CameraPlayer player;
+    CameraPlayer player;//Ç±Ç±Ç≈ÇÃÉvÉåÉCÉÑÅ[
     // Start is called before the first frame update
     void Start()
     {
@@ -16,20 +16,23 @@ public class mushroom : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
 
-    //ìñÇΩÇ¡ÇΩÇ∆Ç´
+
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Ground"))
         {
-            Debug.Log("ìñÇΩÇ¡ÇƒÇÈÇÊ");
-            player.UpPlayer(10.0f,15);
-            
+            player.JumpingFlg = false;
+
         }
 
-       
+        if (collision.gameObject.CompareTag("Spring")|| collision.gameObject.CompareTag("Ground"))
+        {
+            player.FlyFlg = false;
+        }
     }
+
 }
