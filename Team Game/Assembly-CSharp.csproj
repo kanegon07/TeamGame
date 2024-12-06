@@ -61,28 +61,29 @@
     <Analyzer Include="C:\Users\Takahashi Haruki\Desktop\2023.2.19f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Script\MushRoom Animation.cs" />
     <Compile Include="Assets\Scripts\TestPlayer.cs" />
+    <Compile Include="Assets\kaneko\Script\MushRoom Animation.cs" />
     <Compile Include="Assets\Supercyan Character Pack Free Sample\Scripts\AccessoryWearLogic.cs" />
     <Compile Include="Assets\Scripts\FPSCamera.cs" />
     <Compile Include="Assets\Scripts\BulletShooter.cs" />
     <Compile Include="Assets\Scripts\EffectManager.cs" />
     <Compile Include="Assets\Scripts\RayManager.cs" />
-    <Compile Include="Assets\Script\CameraPlayer.cs" />
-    <Compile Include="Assets\Script\Sky Spin.cs" />
     <Compile Include="Assets\Effekseer\Example\EfkBasic.cs" />
     <Compile Include="Assets\Scripts\TriangleMesh.cs" />
-    <Compile Include="Assets\Script\mushroom.cs" />
+    <Compile Include="Assets\kaneko\Script\Sky Spin.cs" />
     <Compile Include="Assets\Supercyan Character Pack Free Sample\Scripts\FreeCameraLogic.cs" />
     <Compile Include="Assets\Supercyan Character Pack Free Sample\Scripts\DemoFree.cs" />
+    <Compile Include="Assets\kaneko\Script\mushroom.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\Scripts\BulletManager.cs" />
     <Compile Include="Assets\Scripts\ParticleManager.cs" />
     <Compile Include="Assets\Scripts\DebugMouse.cs" />
     <Compile Include="Assets\Supercyan Character Pack Free Sample\Scripts\SimpleSampleCharacterControl.cs" />
+    <Compile Include="Assets\kaneko\Script\CameraPlayer.cs" />
     <Compile Include="Assets\Supercyan Character Pack Free Sample\Scripts\AccessoryLogic.cs" />
     <Compile Include="Assets\Scripts\Throw.cs" />
     <Compile Include="Assets\Scripts\BulletController.cs" />
+    <Compile Include="Assets\kaneko\Script\PlayerHiObj.cs" />
     <Compile Include="Assets\Scripts\CameraChange.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -101,6 +102,7 @@
     <None Include="Assets\Effekseer\Materials\EffekseerShaderCommon.cginc" />
     <None Include="Assets\Effekseer\Materials\EffekseerShaderSoftParticlePS.cginc" />
     <None Include="Assets\Effekseer\Materials\EffekseerShaderVS.cginc" />
+    <None Include="Assets\kaneko\Script\NewUnlitShader.shader" />
     <None Include="Assets\Effekseer\Materials\EffekseerShaderAdVS.cginc" />
     <None Include="Assets\Effekseer\Materials\FakeShader.shader" />
     <None Include="Assets\Effekseer\Materials\EffekseerShaderLitUnlitPS.cginc" />

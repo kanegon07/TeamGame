@@ -33,7 +33,7 @@ public class FPSCamera : MonoBehaviour
     // ƒJƒƒ‰‚ÌX²‚ğ’†S‚É‚’¼‰ñ“]
     private void RotateCameraVertically(float mouseY)
     {
-        xRotation -= mouseY;
+        xRotation += mouseY;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
         transform.localRotation = Quaternion.Euler(xRotation, transform.localEulerAngles.y, 0f);
     }
