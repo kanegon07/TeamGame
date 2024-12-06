@@ -116,8 +116,8 @@ public class CameraController : MonoBehaviour
 
     private InputAction _move; // InputSystemのmoveアクション
 
-    [SerializeField] private Vector3 mainCameraPosition = new Vector3(0, 0.8f, 0.3f);
-    [SerializeField] private Vector3 subCameraPosition = new Vector3(0, 0.3f, 0.3f);
+    [SerializeField] private Vector3 mainCameraPosition = new (0, 0.8f, 0.3f);
+    [SerializeField] private Vector3 subCameraPosition = new (0, 0.3f, 0.3f);
 
     private bool isTransitioning = false; // カメラの切り替え中かどうか
     private bool isMoving = false; // プレイヤーが移動しているかどうか

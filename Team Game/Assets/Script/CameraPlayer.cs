@@ -24,6 +24,10 @@ public class CameraPlayer : MonoBehaviour
     public float moveSpeed;//移動の速さ
     public float jumpPower;//ジャンプの大きさ
 
+    //テスト
+    [SerializeField] private ParticleSystem moveParticle; // 移動時のパーティクルシステム
+    //
+
     //public float gravityModifier;//重力 ※今回もキャラは慣性を無視するので使ってないです。
     private float BoundPower = 0;
     public bool BoundFlg = false;
@@ -140,6 +144,24 @@ public class CameraPlayer : MonoBehaviour
 
         moveInput.y = moveInput.y + _moveVelocity.y + BoundPower;//moveInputにY軸の情報も追加する
         _characterController.Move(moveInput * Time.deltaTime);//ここで最終的なキャラの移動情報を渡す
+
+        //テスト
+        //-----------------移動に応じたパーティクル制御-----------------
+        if (isMovingFlg)
+        {
+            if (!moveParticle.isPlaying) // 再生されていない場合は再生
+            {
+                moveParticle.Play();
+            }
+        }
+        else
+        {
+            if (moveParticle.isPlaying) // 再生中の場合は停止
+            {
+                moveParticle.Stop();
+            }
+        }
+        //
 
         /*//-------------------------------------カメラ関連-----------------------------------------
 
