@@ -46,10 +46,13 @@ public class CameraPlayer : MonoBehaviour
 
     //--------------------------------カメラ関連---------------------------------------------------
     //public Transform camTrans;//カメラは誰なのか
+
+    //FPSCamera Camera;//FPSカメラ
+
     public float mouseSensitivity;//カメラの感度
     public bool invertX;//X軸反転する場合はチェックをつける
     public bool invertY;//Y軸反転する場合はチェックをつける*/
-
+   
 
     //キノコのジャンプ
     public void UpPlayer(float y,int time)
@@ -73,6 +76,7 @@ public class CameraPlayer : MonoBehaviour
     {
         //-------------------InputSystemの導入や、キャッシュ-------------------------------
         _characterController = GetComponent<CharacterController>();
+        //Camera = GetComponent<FPSCamera>();
         _transform = transform;
         var input = GetComponent<PlayerInput>();
         input.currentActionMap.Enable();
@@ -187,10 +191,14 @@ public class CameraPlayer : MonoBehaviour
         }
         //
 
-        /*//-------------------------------------カメラ関連-----------------------------------------
+        //transform.rotation = Quaternion.Euler(Camera.yRotation,0f,Camera.transform.rotation.eulerAngles.z);
 
-        //カメラの回転制御
-        Vector2 mouseInput = new Vector2(Input.GetAxisRaw("Mouse X"), Input.GetAxisRaw("Mouse Y")) * mouseSensitivity;
+        //-------------------------------------カメラ関連-----------------------------------------
+
+        
+
+        /*//カメラの回転制御
+        Vector2 mouseInput = new Vector2(Input.GetAxisRaw("Mouse X"), 0.0f) * mouseSensitivity;
 
         if (invertX)
         {
@@ -204,11 +212,19 @@ public class CameraPlayer : MonoBehaviour
 
 
         transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + mouseInput.x, transform.rotation.eulerAngles.z);
-        camTrans.rotation = Quaternion.Euler(camTrans.rotation.eulerAngles + new Vector3(-mouseInput.y, 0f, 0f));
+        */
+
+        //camTrans.rotation = Quaternion.Euler(camTrans.rotation.eulerAngles + new Vector3(-mouseInput.y, 0f, 0f));
         
         //モモンガの頭部
-        MomongaHead.rotation = Quaternion.Euler(MomongaHead.rotation.eulerAngles + new Vector3(mouseInput.y, 0f, 0f));
-        camTrans.rotation = Quaternion.Euler(camTrans.rotation.eulerAngles + new Vector3(-mouseInput.y, 0f, 0f));*/
+        //MomongaHead.rotation = Quaternion.Euler(MomongaHead.rotation.eulerAngles + new Vector3(mouseInput.y, 0f, 0f));
+        //camTrans.rotation = Quaternion.Euler(camTrans.rotation.eulerAngles + new Vector3(-mouseInput.y, 0f, 0f));
+    }
+
+
+    public void GetTransform(Transform _transform)
+    {
+        transform.rotation = _transform.rotation;
     }
 
     // 移動キーが押されているかどうかを返すプロパティ
