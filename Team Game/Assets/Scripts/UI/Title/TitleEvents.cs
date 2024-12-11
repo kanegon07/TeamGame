@@ -20,6 +20,8 @@ public class TitleEvents : MonoBehaviour {
 	[Inject] private IPublisher<byte, Window.DisplayMessage> _displayPublisher = null;
 	[Inject] private IPublisher<byte, Window.ActivateMessage> _activatePublisher = null;
 
+	[Inject] private IAsyncPublisher<WipeEffectController.WipeMessage> _wipeAsyncPublisher = null;
+
 	[Inject] private ISubscriber<byte, CustomButton.PressMessage> _pressSubscriber = null;
 	[Inject] private ISubscriber<byte, CustomButton.CancelMessage> _cancelSubscriber = null;
 
@@ -37,7 +39,19 @@ public class TitleEvents : MonoBehaviour {
 		_displayPublisher.Publish((byte)WindowID.StageSelector, new Window.DisplayMessage(false));
 	}
 
-	private void TransitScene(string nextScene) {
+	private async UniTask Wipe(bool wipesOut)
+		=> await _wipeAsyncPublisher.PublishAsync(
+			new WipeEffectController.WipeMessage(wipesOut),
+			this.GetCancellationTokenOnDestroy()
+		);
+
+	private async void TransitScene(string nextScene) {
+		_activatePublisher.Publish((byte)WindowID.StageSelector, new Window.ActivateMessage(false));
+
+		Time.timeScale = 0F;
+
+		await Wipe(true);
+
 		SceneManager.LoadScene(nextScene);
 	}
 
@@ -64,8 +78,11 @@ public class TitleEvents : MonoBehaviour {
 			.AddTo(this.GetCancellationTokenOnDestroy());
 	}
 
-	private void Start() {
+	private async void Start() {
 		_displayPublisher.Publish((byte)WindowID.Main, new Window.DisplayMessage(true));
+
+		await Wipe(false);
+
 		_activatePublisher.Publish((byte)WindowID.Main, new Window.ActivateMessage(true));
 
 		Time.timeScale = 1F;

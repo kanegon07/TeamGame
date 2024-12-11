@@ -1206,6 +1206,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3123939058037414883, guid: c17cd588492dfb146a6721844790e653,
+        type: 3}
+      propertyPath: Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 0c630c68dfeddb242a6e0a32ebfda48f, type: 2}
     - target: {fileID: 5628517907196795679, guid: c17cd588492dfb146a6721844790e653,
         type: 3}
       propertyPath: m_Name
@@ -1216,6 +1221,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c17cd588492dfb146a6721844790e653, type: 3}
+--- !u!1 &571005662 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5628517907196795679, guid: c17cd588492dfb146a6721844790e653,
+    type: 3}
+  m_PrefabInstance: {fileID: 571005661}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &577466936
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2361,6 +2372,11 @@ PrefabInstance:
       propertyPath: 'autoInjectGameObjects.Array.data[5]'
       value: 
       objectReference: {fileID: 1130235305}
+    - target: {fileID: 3896966321135586570, guid: aa1c01aa9c92681479d18424c71acf4c,
+        type: 3}
+      propertyPath: 'autoInjectGameObjects.Array.data[6]'
+      value: 
+      objectReference: {fileID: 571005662}
     - target: {fileID: 5778226618131559401, guid: aa1c01aa9c92681479d18424c71acf4c,
         type: 3}
       propertyPath: m_AnchorMax.y

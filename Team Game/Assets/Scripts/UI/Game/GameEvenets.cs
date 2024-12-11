@@ -21,6 +21,8 @@ public class GameEvents : MonoBehaviour {
 	[Inject] private IPublisher<byte, Window.DisplayMessage> _displayPublisher = null;
 	[Inject] private IPublisher<byte, Window.ActivateMessage> _activatePublisher = null;
 
+	[Inject] private IAsyncPublisher<WipeEffectController.WipeMessage> _wipeAsyncPublisher = null;
+
 	[Inject] private ISubscriber<OptionTag.OptionMessage> _optionSubscriber = null;
 	[Inject] private ISubscriber<byte, CustomButton.PressMessage> _pressSubscriber = null;
 	[Inject] private ISubscriber<byte, CustomButton.CancelMessage> _cancelSubscriber = null;
@@ -57,14 +59,18 @@ public class GameEvents : MonoBehaviour {
 		_optionStatePublisher.Publish(false);
 	}
 
-	private void ReturnToTitle() {
-		SceneManager.LoadScene("Title");
-	}
+	private async UniTask Wipe(bool wipesOut)
+		=> await _wipeAsyncPublisher.PublishAsync(
+			new WipeEffectController.WipeMessage(wipesOut),
+			this.GetCancellationTokenOnDestroy()
+		);
 
-	private void EnterNextScene(string nextScene) {
+	private async void TransitScene(string nextScene) {
 		Player.enabled = false;
 
 		Time.timeScale = 0F;
+
+		await Wipe(true);
 
 		SceneManager.LoadScene(nextScene);
 	}
@@ -81,7 +87,7 @@ public class GameEvents : MonoBehaviour {
 		_pressSubscriber.Subscribe((byte)ButtonID.Resume, _ => CloseOption())
 			.AddTo(this.GetCancellationTokenOnDestroy());
 
-		_pressSubscriber.Subscribe((byte)ButtonID.Title, _ => ReturnToTitle())
+		_pressSubscriber.Subscribe((byte)ButtonID.Title, _ => TransitScene("Title"))
 			.AddTo(this.GetCancellationTokenOnDestroy());
 
 		_cancelSubscriber.Subscribe((byte)ButtonID.Resume, _ => CloseOption())
@@ -90,11 +96,14 @@ public class GameEvents : MonoBehaviour {
 		_cancelSubscriber.Subscribe((byte)ButtonID.Title, _ => CloseOption())
 			.AddTo(this.GetCancellationTokenOnDestroy());
 
-		_goalSubscriber.Subscribe(x => EnterNextScene(x.NextScene)).AddTo(this.GetCancellationTokenOnDestroy());
+		_goalSubscriber.Subscribe(x => TransitScene(x.NextScene)).AddTo(this.GetCancellationTokenOnDestroy());
 	}
 
-	private void Start() {
+	private async void Start() {
 		_displayPublisher.Publish((byte)WindowID.Main, new Window.DisplayMessage(true));
+
+		await Wipe(false);
+
 		_activatePublisher.Publish((byte)WindowID.Main, new Window.ActivateMessage(true));
 
 		Time.timeScale = 1F;

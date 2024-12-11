@@ -1,7 +1,10 @@
+using Cysharp.Threading.Tasks;
+using MessagePipe;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using VContainer;
 
 /// <summary>
 /// 選択フッククラス
@@ -10,8 +13,13 @@ using UnityEngine.SceneManagement;
 /// 選択し直せずに詰むので、それの対策用
 /// </summary>
 public class SelectionHook : MonoBehaviour {
+	// 登録解除を求めるメッセージ
+	public struct UnhookMessage { }
+
 	// 最後に選択されたオブジェクト
 	public GameObject PrevSelected { get; set; } = null;
+
+	[Inject] private ISubscriber<UnhookMessage> _unhookSubscriber = null;
 
 	/// <summary>
 	/// EventSystemのオブジェクト選択を待つコルーチン
@@ -37,12 +45,15 @@ public class SelectionHook : MonoBehaviour {
 	/// 現在のシーンが終了したときの処理
 	/// オブジェクトの登録を解除する
 	/// </summary>
-	/// <param name="_"></param>
-	private void ResetSelection(Scene _) => PrevSelected = null;
+	private void ResetSelection() => PrevSelected = null;
+
+	private void Awake() {
+		_unhookSubscriber.Subscribe(_ => ResetSelection()).AddTo(this.GetCancellationTokenOnDestroy());
+	}
 
 	private void Start() {
 		StartCoroutine(RestrictSelection());
 
-		SceneManager.sceneUnloaded += ResetSelection;
+		SceneManager.sceneUnloaded += _ => ResetSelection();
 	}
 }

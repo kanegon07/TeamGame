@@ -49,7 +49,9 @@ public class Window : MonoBehaviour {
 	// メッセージ発信の窓口
 	// インスタンスIDをキーとすることで、「どのウィンドウからのメッセージか」を区別する
 	[Inject] private IPublisher<int, DisplayMessage> _displayPublisher = null;		// 表示or非表示のメッセージ
-	[Inject] private IPublisher<int, ActivateMessage> _activatePublisher = null;	// アクティブ状態変更のメッセージ
+	[Inject] private IPublisher<int, ActivateMessage> _activatePublisher = null;    // アクティブ状態変更のメッセージ
+
+	[Inject] private IPublisher<SelectionHook.UnhookMessage> _unhookPublisher = null;
 
 	// メッセージ受信の窓口
 	[Inject] private ISubscriber<byte, DisplayMessage> _displaySubscriber = null;	// 表示or非表示のメッセージ
@@ -116,6 +118,9 @@ public class Window : MonoBehaviour {
 			} else {
 				EventSystem.current.SetSelectedGameObject(FirstSelected.gameObject);
 			}
+		} else {
+			_unhookPublisher.Publish(new SelectionHook.UnhookMessage());
+			EventSystem.current.SetSelectedGameObject(null);
 		}
 	}
 

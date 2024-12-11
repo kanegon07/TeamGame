@@ -147,6 +147,7 @@ GameObject:
   - component: {fileID: 2379237940018411571}
   - component: {fileID: 1719745777011539852}
   - component: {fileID: 2972829544152090051}
+  - component: {fileID: 612124974313236250}
   - component: {fileID: 4990447241741388328}
   - component: {fileID: 5715982197718986098}
   - component: {fileID: 9042200796539903930}
@@ -172,9 +173,9 @@ RectTransform:
   - {fileID: 327794107809132069}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 100}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1719745777011539852
@@ -215,6 +216,28 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!95 &612124974313236250
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7516685603680862865}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: de8247bff40edc445a3486aec588ce8d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 2
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &4990447241741388328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -239,10 +262,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3463a73ff974be4b9ed5dfc31594c83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectOnLeft: {fileID: 0}
-  selectOnUp: {fileID: 0}
-  selectOnRight: {fileID: 0}
-  selectOnDown: {fileID: 0}
+  ID: 0
+  SelectOnLeft: {fileID: 0}
+  SelectOnUp: {fileID: 0}
+  SelectOnRight: {fileID: 0}
+  SelectOnDown: {fileID: 0}
 --- !u!114 &9042200796539903930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -255,7 +279,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c158341fb448e7346b0d0f26d928e13d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NormalColor: {r: 1, g: 1, b: 1, a: 1}
-  SelectedColor: {r: 1, g: 0, b: 0, a: 1}
-  PressedColor: {r: 0.49803922, g: 0, b: 0, a: 1}
-  InactiveColor: {r: 0.49803922, g: 0.49803922, b: 0.49803922, a: 1}
