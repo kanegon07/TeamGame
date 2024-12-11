@@ -10,6 +10,9 @@ TagManager:
   - Air Ring
   - Target
   - Stage
+  - PlayerHit
+  - Ground
+  - MushRoom
   layers:
   - Default
   - TransparentFX

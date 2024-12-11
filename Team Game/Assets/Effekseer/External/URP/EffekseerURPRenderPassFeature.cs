@@ -101,27 +101,25 @@ public class EffekseerURPRenderPassFeature : ScriptableRendererFeature
 			if (Effekseer.EffekseerSystem.Instance == null) return;
 #if EFFEKSEER_URP_DEPTHTARGET_FIX
 			var renderer = renderingData.cameraData.renderer;
-			prop.colorTargetIdentifier = renderer.cameraColorTargetHandle.nameID;
-
-			// 代替コード：RTHandleからのIdentifier取得
-			RenderTargetIdentifier cameraDepthTargetIdentifier;
-			if (renderer.cameraDepthTargetHandle != null)
-			{
-				cameraDepthTargetIdentifier = renderer.cameraDepthTargetHandle.nameID; // または rt など適切なプロパティを使用
-			}
-			else
-			{
-				cameraDepthTargetIdentifier = new RenderTargetIdentifier(BuiltinRenderTextureType.CameraTarget);
-			}
+#if UNITY_2022_3_OR_NEWER
+			prop.colorTargetIdentifier = renderer.cameraColorTargetHandle;
+#else
+			prop.colorTargetIdentifier = renderer.cameraColorTarget;
+#endif
 
 			// NOTE: We need to know whether the depth in cameraDepthTarget is valid or not since if it is valid,
 			//       we need to pass cameraDepthTarget to SetRenderTarget() later on. If it isn't valid, the depth in
 			//       cameraColorTarget is used instead.
-			var isValidDepth = IsValidCameraDepthTarget(cameraDepthTargetIdentifier);
+#if UNITY_2022_3_OR_NEWER
+			var cameraDepthTarget = renderer.cameraDepthTargetHandle;
+#else
+			var cameraDepthTarget = renderer.cameraDepthTarget;
+#endif
+			var isValidDepth = IsValidCameraDepthTarget(cameraDepthTarget);
 
 			if (isValidDepth)
 			{
-				prop.depthTargetIdentifier = cameraDepthTargetIdentifier;
+				prop.depthTargetIdentifier = cameraDepthTarget;
 			}
 			else
 			{
