@@ -7013,7 +7013,6 @@ GameObject:
   - component: {fileID: 1726638057}
   - component: {fileID: 1726638056}
   - component: {fileID: 1726638055}
-  - component: {fileID: 1726638059}
   m_Layer: 0
   m_Name: Cloud
   m_TagString: Untagged
@@ -7110,18 +7109,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
---- !u!114 &1726638059
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1726638054}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf9925ec490b1a74fa312b51c91ee415, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1784340349
 PrefabInstance:
   m_ObjectHideFlags: 0
