@@ -757,12 +757,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3554c2c8245f37f4c919858659b74a30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationObj: {fileID: 1852251443}
-  cameraObj: {fileID: 7153606315833556219}
-  subCameraObj: {fileID: 1285419499}
-  lineObj: {fileID: 1691668966}
-  particleObj: {fileID: 1584748072}
-  yRotation: 0
+  playerHead: {fileID: 1852251443}
+  mainCamera: {fileID: 7153606315833556219}
+  subCamera: {fileID: 1285419499}
+  trajectoryLine: {fileID: 1691668966}
+  particleEffect: {fileID: 1584748072}
   mouseSensitivity: 1
 --- !u!1 &654356202
 GameObject:
@@ -828,6 +827,7 @@ MonoBehaviour:
   mainCamera: {fileID: 7153606315833556219}
   subCamera: {fileID: 1285419499}
   characterController: {fileID: 7153606315833556218}
+  player: {fileID: 810476589}
   mainCameraPosition: {x: 0, y: 0.8, z: 0.3}
   subCameraPosition: {x: 0, y: 0.3, z: 0.3}
 --- !u!4 &654356205
@@ -845,6 +845,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &810476589 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5174415711459911452, guid: e333a0de7b4f1874a9931e4b82a76717,
+    type: 3}
+  m_PrefabInstance: {fileID: 7153606315833556217}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 567471665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf3c283b7af0af048bae67d2902c27a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -1429,7 +1441,7 @@ Transform:
   m_GameObject: {fileID: 1285419499}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0.4}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6916,8 +6928,24 @@ MonoBehaviour:
   itemPrefab: {fileID: 6895267508864092905, guid: cccab352d013c114595ad135a0d5a2d2,
     type: 3}
   lineRenderer: {fileID: 1691668970}
-  projectileSpeed: 10
+  baseProjectileSpeed: 10
+  maxProjectileSpeed: 20
   gravity: -9.81
+  speedIncreaseTime: 2
+--- !u!114 &1708760732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 567471665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c186ef23bd224064096f43431d75b5b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  particles:
+  - {fileID: 1584748075}
 --- !u!1001 &1719156002
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7295,12 +7323,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3554c2c8245f37f4c919858659b74a30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationObj: {fileID: 0}
-  cameraObj: {fileID: 0}
-  subCameraObj: {fileID: 0}
-  lineObj: {fileID: 0}
-  particleObj: {fileID: 0}
-  yRotation: 0
+  playerHead: {fileID: 0}
+  mainCamera: {fileID: 0}
+  subCamera: {fileID: 0}
+  trajectoryLine: {fileID: 0}
+  particleEffect: {fileID: 0}
   mouseSensitivity: 1
 --- !u!1 &1857745863
 GameObject:
@@ -8068,6 +8095,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 567471672}
+    - targetCorrespondingSourceObject: {fileID: 5598751835541079152, guid: e333a0de7b4f1874a9931e4b82a76717,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1708760732}
     - targetCorrespondingSourceObject: {fileID: 7296036232036626155, guid: e333a0de7b4f1874a9931e4b82a76717,
         type: 3}
       insertIndex: -1

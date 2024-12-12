@@ -52,7 +52,9 @@ public class CameraPlayer : MonoBehaviour
     public float mouseSensitivity;//カメラの感度
     public bool invertX;//X軸反転する場合はチェックをつける
     public bool invertY;//Y軸反転する場合はチェックをつける*/
-   
+
+    //--------------------------------パーティクル関連---------------------------------------------
+    private ParticleManager _particleManager;
 
     //キノコのジャンプ
     public void UpPlayer(float y,int time)
@@ -82,6 +84,7 @@ public class CameraPlayer : MonoBehaviour
         input.currentActionMap.Enable();
         _jump = input.currentActionMap.FindAction("Jump");
         _move = input.currentActionMap.FindAction("Move");
+        _particleManager = GetComponent<ParticleManager>(); // ParticleManagerをキャッシュ
     }
 
     // Update is called once per frame
@@ -128,8 +131,6 @@ public class CameraPlayer : MonoBehaviour
 
         moveInput = moveInput * moveSpeed;
 
-
-
         //-----------------地面にいるときはジャンプができる----------------------------
         if (_characterController.isGrounded)
         {
@@ -173,29 +174,29 @@ public class CameraPlayer : MonoBehaviour
         }
         _characterController.Move(moveInput * Time.deltaTime);//ここで最終的なキャラの移動情報を渡す
 
-        //テスト
-        //-----------------移動に応じたパーティクル制御-----------------
-        if (isMovingFlg)
+        //-----------------滑空時のパーティクル制御-----------------
+        if (FlyFlg)
         {
-            if (!moveParticle.isPlaying) // 再生されていない場合は再生
+            if (!_particleManager.IsEffectPlaying("RadialLines")) // 再生されていない場合は再生
             {
-                moveParticle.Play();
+                _particleManager.PlayEffect("RadialLines");
             }
         }
         else
         {
-            if (moveParticle.isPlaying) // 再生中の場合は停止
+            if (_particleManager.IsEffectPlaying("RadialLines")) // 再生中の場合は停止
             {
-                moveParticle.Stop();
+                _particleManager.StopEffect("RadialLines");
             }
         }
+
         //
 
         //transform.rotation = Quaternion.Euler(Camera.yRotation,0f,Camera.transform.rotation.eulerAngles.z);
 
         //-------------------------------------カメラ関連-----------------------------------------
 
-        
+
 
         /*//カメラの回転制御
         Vector2 mouseInput = new Vector2(Input.GetAxisRaw("Mouse X"), 0.0f) * mouseSensitivity;
@@ -215,7 +216,7 @@ public class CameraPlayer : MonoBehaviour
         */
 
         //camTrans.rotation = Quaternion.Euler(camTrans.rotation.eulerAngles + new Vector3(-mouseInput.y, 0f, 0f));
-        
+
         //モモンガの頭部
         //MomongaHead.rotation = Quaternion.Euler(MomongaHead.rotation.eulerAngles + new Vector3(mouseInput.y, 0f, 0f));
         //camTrans.rotation = Quaternion.Euler(camTrans.rotation.eulerAngles + new Vector3(-mouseInput.y, 0f, 0f));
@@ -233,30 +234,26 @@ public class CameraPlayer : MonoBehaviour
         return isMovingFlg;
     }
 
-
-
-
     void Fly()
     {
-        if(JumpingFlg==true)
+        // ジャンプ中かどうかを確認
+        if (JumpingFlg == true)
         {
-            
-            if (_jump.WasPerformedThisFrame())
+            // ジャンプ開始時に飛行フラグをセット
+            if (_jump.WasPerformedThisFrame() && !FlyFlg)
             {
                 FlyFlg = true;
-                
-
-
-
+                FlyCount = 0; // FlyCountをリセット
             }
         }
-       
 
-        if(FlyFlg==true)
+        // 飛行中の処理
+        if (FlyFlg == true)
         {
             FlyCount++;
-           
-            if (FlyCount >= 5)
+
+            // 飛行カウントが5に達っするか地面に触れると飛行を停止
+            if (FlyCount >= 5 || _characterController.isGrounded)
             {
                 if (_jump.WasPerformedThisFrame())
                 {
@@ -265,16 +262,12 @@ public class CameraPlayer : MonoBehaviour
             }
         }
 
-        if(FlyFlg==false)
+        // 飛行が終了した場合のリセット処理
+        if (FlyFlg == false)
         {
-
-            moveInput.y = 0.0f;
-            FlyGravity = 0;
-            FlyCount = 0;
+            moveInput.y = 0.0f;  // Y軸の移動をリセット
+            FlyGravity = 0;      // 飛行重力をリセット
+            FlyCount = 0;        // カウントをリセット
         }
-        
     }
-    
 }
-
-
