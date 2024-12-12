@@ -26,6 +26,6 @@ public class Timer : MonoBehaviour {
 		_time += Time.deltaTime;
 
 		Remaining = TimeLimit - (int)_time;
-		_slider.value = (float)TimeLimit - _time;
+		_slider.value = TimeLimit - _time;
 	}
 }

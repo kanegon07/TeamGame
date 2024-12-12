@@ -26,9 +26,10 @@ public class WipeEffectController : MonoBehaviour {
 	private float _wipeSize = 1F;
 
 	private async UniTask Wipe(WipeMessage msg, CancellationToken ct) {
-		bool finished = false;
+		Time.timeScale = 0F;
 
 		while (!ct.IsCancellationRequested) {
+			bool finished;
 			// ˆê’èŠÔŠu‚ÅƒƒCƒv—Ê‚ğ•Ï‰»‚³‚¹‚é
 			if (msg.WipesOut) {
 				_wipeSize = 0F;
@@ -53,9 +54,12 @@ public class WipeEffectController : MonoBehaviour {
 			}
 
 			if (finished) {
+				Time.timeScale = 1F;
 				return;
 			}
 		}
+
+		Time.timeScale = 1F;
 	}
 
 	private void Awake() {

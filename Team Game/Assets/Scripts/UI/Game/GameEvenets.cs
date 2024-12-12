@@ -68,8 +68,6 @@ public class GameEvents : MonoBehaviour {
 	private async void TransitScene(string nextScene) {
 		Player.enabled = false;
 
-		Time.timeScale = 0F;
-
 		await Wipe(true);
 
 		SceneManager.LoadScene(nextScene);
@@ -106,6 +104,6 @@ public class GameEvents : MonoBehaviour {
 
 		_activatePublisher.Publish((byte)WindowID.Main, new Window.ActivateMessage(true));
 
-		Time.timeScale = 1F;
+		Cursor.visible = false;
 	}
 }

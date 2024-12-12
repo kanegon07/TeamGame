@@ -29,8 +29,6 @@ public class ResultEvents : MonoBehaviour {
 	private async void TransitScene(string nextScene) {
 		_activatePublisher.Publish((byte)WindowID.Main, new Window.ActivateMessage(false));
 
-		Time.timeScale = 0F;
-
 		await Wipe(true);
 
 		SceneManager.LoadScene(nextScene);
@@ -48,6 +46,6 @@ public class ResultEvents : MonoBehaviour {
 
 		_activatePublisher.Publish((byte)WindowID.Main, new Window.ActivateMessage(true));
 
-		Time.timeScale = 1F;
+		Cursor.visible = true;
 	}
 }
