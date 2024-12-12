@@ -6,23 +6,27 @@ using Effekseer;
 public class EffectManager : MonoBehaviour
 {
     // エフェクト管理用
-    private Dictionary<string, EffekseerEffectAsset> _effects;
-
-    private EffekseerHandle _landingEffectHandle;
-    private EffekseerHandle _testEffectHandle;
+    private Dictionary<string, EffekseerEffectAsset> _loadedEffects;
 
     //エフェクトを追尾させるか
-    private Dictionary<EffekseerHandle, Transform> _followingEffects;
+    private Dictionary<EffekseerHandle, Transform> _trackingEffects;
 
     // Start is called before the first frame update
     void Start()
     {
-        //エフェクト辞書を初期化する
-        _effects = new Dictionary<string, EffekseerEffectAsset>();
-        _followingEffects = new Dictionary<EffekseerHandle, Transform>();
+        InitializeEffects();
+    }
 
-        // 必要なエフェクトをロードして辞書に追加する
-        AddEffect("Undine", "Undine"); //テスト用
+    // 必要なエフェクトのロード
+    private void InitializeEffects()
+    {
+        //エフェクト辞書を初期化する
+        _loadedEffects = new Dictionary<string, EffekseerEffectAsset>();
+        _trackingEffects = new Dictionary<EffekseerHandle, Transform>();
+
+        // エフェクトを辞書に登録
+        AddEffect("Undine", "Undine"); // テスト用エフェクト
+        AddEffect("Sylph", "Sylph"); //落下地点用エフェクト
     }
 
     // エフェクトを辞書に追加
@@ -31,11 +35,11 @@ public class EffectManager : MonoBehaviour
         EffekseerEffectAsset effect = Resources.Load<EffekseerEffectAsset>(resourcePath);
         if (effect != null)
         {
-            _effects.Add(key, effect);
+            _loadedEffects.Add(key, effect);
         }
         else
         {
-            Debug.LogWarning($"Effect {resourcePath} could not be loaded.");
+            Debug.LogWarning($"エフェクト {resourcePath} のロードに失敗しました。");
         }
     }
 
@@ -48,7 +52,7 @@ public class EffectManager : MonoBehaviour
             scale = Vector3.one;
         }
 
-        if (_effects.TryGetValue(key, out EffekseerEffectAsset effect))
+        if (_loadedEffects.TryGetValue(key, out EffekseerEffectAsset effect))
         {
             EffekseerHandle handle = EffekseerSystem.PlayEffect(effect, position);
             handle.SetRotation(rotation);
@@ -57,20 +61,28 @@ public class EffectManager : MonoBehaviour
             // 追尾対象がある場合は辞書に追加
             if (followTarget != null)
             {
-                _followingEffects.Add(handle, followTarget);
+                _trackingEffects.Add(handle, followTarget);
             }
         }
         else
         {
-            Debug.LogWarning($"Effect with key {key} not found.");
+            Debug.LogWarning($"エフェクトキー {key} が見つかりません。");
         }
     }
 
+    //テストエフェクト
     public void PlayTestEffect(Vector3 position, Quaternion rotation, Transform followTarget = null, Vector3 scale = default)
     {
         PlayEffect("Undine", position, rotation, followTarget, scale);
     }
 
+    //落下地点エフェクト
+    public void PlayFallingPointEffect(Vector3 position, Quaternion rotation, Transform followTarget = null, Vector3 scale = default)
+    {
+        PlayEffect("Sylph", position, rotation, followTarget, scale);
+    }
+
+    /*
     // プレイヤーの位置と回転にエフェクトのTransformを追従させるコルーチン
     private IEnumerator FollowPlayer(Transform effectTransform, Transform playerTransform)
     {
@@ -81,13 +93,14 @@ public class EffectManager : MonoBehaviour
             yield return null; // 次のフレームまで待機
         }
     }
+    */
 
     // Update is called once per frame
+    // 追尾するエフェクトの位置を更新
     void Update()
     {
-        // 追尾するエフェクトの位置を更新
         List<EffekseerHandle> handlesToRemove = new List<EffekseerHandle>();
-        foreach (var kvp in _followingEffects)
+        foreach (var kvp in _trackingEffects)
         {
             if (kvp.Key.exists)
             {
@@ -95,14 +108,14 @@ public class EffectManager : MonoBehaviour
             }
             else
             {
-                handlesToRemove.Add(kvp.Key);
+                handlesToRemove.Add(kvp.Key); // 存在しない場合削除リストに追加
             }
         }
 
         // 追尾が終わったエフェクトを辞書から削除
         foreach (var handle in handlesToRemove)
         {
-            _followingEffects.Remove(handle);
+            _trackingEffects.Remove(handle);
         }
     }
 }
