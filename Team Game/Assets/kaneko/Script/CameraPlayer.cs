@@ -17,7 +17,6 @@ public class CameraPlayer : MonoBehaviour
     private CharacterController _characterController;//キャラクターコントローラーのキャッシュ
     private InputAction _jump;//InputSystemのJumpのキャッシュ
     private InputAction _move;//InputSystemのmoveのキャッシュ
-    private Transform _transform;//Transormのキャッシュ
     private Vector3 _moveVelocity;//キャラの移動情報
     private Vector3 moveInput;//最終的なキャラの移動情報
     private bool isMovingFlg; // 移動フラグ
@@ -26,11 +25,17 @@ public class CameraPlayer : MonoBehaviour
     public float moveSpeed;//移動の速さ
     public float jumpPower;//ジャンプの大きさ
 
-    //テスト
-    [SerializeField] private ParticleSystem moveParticle; // 移動時のパーティクルシステム
+    private Vector3 _originalCenter; // キャラクターコントローラーの元の center
+    private float _originalHeight; // キャラクターコントローラーの元の height
+    private CapsuleCollider _capsuleCollider; // キャッシュするカプセルコライダー
 
-    //[SerializeField] private Collider headCollider; // 顔用のコライダー
-    //
+    [Header("判定を消す対象")]
+    public PlayerHiObj _playerHit;
+    public GameObject _playerHead;
+
+    [Header("描画を消す対象")]
+    public GameObject playerLeftFoot; // プレイヤーの左足オブジェクト
+    public GameObject playerRightFoot; // プレイヤーの右足オブジェクト
 
     //public float gravityModifier;//重力 ※今回もキャラは慣性を無視するので使ってないです。
     private float BoundPower = 0;
@@ -80,8 +85,12 @@ public class CameraPlayer : MonoBehaviour
     {
         //-------------------InputSystemの導入や、キャッシュ-------------------------------
         _characterController = GetComponent<CharacterController>();
-        //Camera = GetComponent<FPSCamera>();
-        _transform = transform;
+        _capsuleCollider = GetComponent<CapsuleCollider>(); // カプセルコライダーを取得
+
+        // CharacterController の元の設定を保存
+        _originalCenter = _characterController.center;
+        _originalHeight = _characterController.height;
+
         var input = GetComponent<PlayerInput>();
         input.currentActionMap.Enable();
         _jump = input.currentActionMap.FindAction("Jump");
@@ -92,10 +101,12 @@ public class CameraPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //頭は常に非表示
+        HideObjectRenderer(_playerHead);
 
         //Debug.Log(BoundTime);
 
-        if(BoundFlg==true)
+        if (BoundFlg==true)
         {
             BoundTime--;
             if (BoundTime <= 0)
@@ -224,12 +235,6 @@ public class CameraPlayer : MonoBehaviour
         //camTrans.rotation = Quaternion.Euler(camTrans.rotation.eulerAngles + new Vector3(-mouseInput.y, 0f, 0f));
     }
 
-
-    public void GetTransform(Transform _transform)
-    {
-        transform.rotation = _transform.rotation;
-    }
-
     // 移動キーが押されているかどうかを返すプロパティ
     public bool IsMoving()
     {
@@ -246,6 +251,9 @@ public class CameraPlayer : MonoBehaviour
             {
                 FlyFlg = true;
                 FlyCount = 0; // FlyCountをリセット
+
+                DisableCharacterControllerCollision(); // 滑空開始時に判定を無効化
+                HideFeetDuringFly();
             }
         }
 
@@ -255,9 +263,9 @@ public class CameraPlayer : MonoBehaviour
             FlyCount++;
 
             // 飛行カウントが5に達っするか地面に触れると飛行を停止
-            if (FlyCount >= 5 || _characterController.isGrounded)
+            if (FlyCount >= 5)
             {
-                if (_jump.WasPerformedThisFrame())
+                if (_jump.WasPerformedThisFrame() || _characterController.isGrounded)
                 {
                     FlyFlg = false;
                 }
@@ -270,6 +278,102 @@ public class CameraPlayer : MonoBehaviour
             moveInput.y = 0.0f;  // Y軸の移動をリセット
             FlyGravity = 0;      // 飛行重力をリセット
             FlyCount = 0;        // カウントをリセット
+            EnableCharacterControllerCollision(); // 滑空終了時に判定を有効化
+            ShowFeet();
+        }
+    }
+
+    private void DisableCharacterControllerCollision()
+    {
+        // 判定をゼロに設定
+        _characterController.center = Vector3.zero;
+        _characterController.height = 0.0f;
+
+        // カプセルコライダーを無効化
+        if (_capsuleCollider != null)
+        {
+            _capsuleCollider.enabled = false;
+        }
+        // PlayerHitObjのコライダーを無効化
+        if (_playerHit != null)
+        {
+            Collider playerCollider = _playerHit.GetComponent<Collider>();
+
+            playerCollider.enabled = false;
+        }
+        // PlayerHeadのコライダーを有効化
+        if (_playerHead != null)
+        {
+            Collider playerHeadCollider = _playerHead.GetComponent<Collider>();
+
+            playerHeadCollider.enabled = true;
+        }
+    }
+
+    private void EnableCharacterControllerCollision()
+    {
+        // 元の設定に戻す
+        _characterController.center = _originalCenter;
+        _characterController.height = _originalHeight;
+
+        // カプセルコライダーを有効化
+        if (_capsuleCollider != null)
+        {
+            _capsuleCollider.enabled = true;
+        }
+        // PlayerHitObjのコライダーを有効化
+        if (_playerHit != null)
+        {
+            Collider playerCollider = _playerHit.GetComponent<Collider>();
+
+            playerCollider.enabled = true;
+        }
+        // PlayerHeadのコライダーを無効化
+        if (_playerHead != null)
+        {
+            Collider playerCollider = _playerHead.GetComponent<Collider>();
+
+            playerCollider.enabled = false;
+        }
+    }
+
+    // 滑空中に足を非表示にする
+    private void HideFeetDuringFly()
+    {
+        HideObjectRenderer(playerLeftFoot);
+        HideObjectRenderer(playerRightFoot);
+    }
+
+    // 足を表示する
+    private void ShowFeet()
+    {
+        ShowObjectRenderer(playerLeftFoot);
+        ShowObjectRenderer(playerRightFoot);
+    }
+
+    // オブジェクトのRendererを非表示にする
+    private void HideObjectRenderer(GameObject obj)
+    {
+        if (obj != null)
+        {
+            Renderer objRenderer = obj.GetComponent<Renderer>();
+            if (objRenderer != null)
+            {
+                objRenderer.enabled = false; // オブジェクトを非表示
+            }
+        }
+    }
+
+    // オブジェクトのRendererを表示する
+    private void ShowObjectRenderer(GameObject obj)
+    {
+        if (obj != null)
+        {
+            Renderer objRenderer = obj.GetComponent<Renderer>();
+            if (objRenderer != null)
+            {
+                objRenderer.enabled = true; // オブジェクトを表示
+            }
         }
     }
 }

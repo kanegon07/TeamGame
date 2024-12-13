@@ -763,11 +763,6 @@ MonoBehaviour:
   trajectoryLine: {fileID: 1691668966}
   particleEffect: {fileID: 1584748072}
   mouseSensitivity: 1
-  player: {fileID: 810476589}
-  playerLeftFoot: {fileID: 1602887673}
-  playerRightFoot: {fileID: 1682381428}
-  playerBodyCollider: {fileID: 0}
-  playerHeadCollider: {fileID: 0}
 --- !u!1 &654356202
 GameObject:
   m_ObjectHideFlags: 0
@@ -1535,7 +1530,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.1
   far clip plane: 1000
   field of view: 60
   orthographic: 0
@@ -7345,10 +7340,10 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.6031848, y: 2.5558727, z: 1.6031846}
-  m_Center: {x: 0, y: 0.4763437, z: 0.0000009536743}
+  m_Size: {x: 1.36, y: 1.18, z: 1.39}
+  m_Center: {x: 0, y: 0.14, z: -0.02}
 --- !u!1 &1857745863
 GameObject:
   m_ObjectHideFlags: 0
@@ -7937,6 +7932,11 @@ PrefabInstance:
       propertyPath: m_CastShadows
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 314524126346970068, guid: e333a0de7b4f1874a9931e4b82a76717,
+        type: 3}
+      propertyPath: near clip plane
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 391829238259583916, guid: e333a0de7b4f1874a9931e4b82a76717,
         type: 3}
       propertyPath: m_CastShadows
@@ -8024,6 +8024,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5174415711459911452, guid: e333a0de7b4f1874a9931e4b82a76717,
         type: 3}
+      propertyPath: _playerHit
+      value: 
+      objectReference: {fileID: 1049032190}
+    - target: {fileID: 5174415711459911452, guid: e333a0de7b4f1874a9931e4b82a76717,
+        type: 3}
+      propertyPath: _playerHead
+      value: 
+      objectReference: {fileID: 1852251443}
+    - target: {fileID: 5174415711459911452, guid: e333a0de7b4f1874a9931e4b82a76717,
+        type: 3}
       propertyPath: headCollider
       value: 
       objectReference: {fileID: 1852251454}
@@ -8032,6 +8042,16 @@ PrefabInstance:
       propertyPath: moveParticle
       value: 
       objectReference: {fileID: 1584748075}
+    - target: {fileID: 5174415711459911452, guid: e333a0de7b4f1874a9931e4b82a76717,
+        type: 3}
+      propertyPath: playerLeftFoot
+      value: 
+      objectReference: {fileID: 1602887673}
+    - target: {fileID: 5174415711459911452, guid: e333a0de7b4f1874a9931e4b82a76717,
+        type: 3}
+      propertyPath: playerRightFoot
+      value: 
+      objectReference: {fileID: 1682381428}
     - target: {fileID: 5174415711459911452, guid: e333a0de7b4f1874a9931e4b82a76717,
         type: 3}
       propertyPath: mouseSensitivity
@@ -8094,6 +8114,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8438280402233230764, guid: e333a0de7b4f1874a9931e4b82a76717,
         type: 3}
+      propertyPath: m_Height
+      value: 1.19
+      objectReference: {fileID: 0}
+    - target: {fileID: 8438280402233230764, guid: e333a0de7b4f1874a9931e4b82a76717,
+        type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
@@ -8103,6 +8128,11 @@ PrefabInstance:
       value: 0.63
       objectReference: {fileID: 0}
     - target: {fileID: 8992487170563575725, guid: e333a0de7b4f1874a9931e4b82a76717,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9097348471610117950, guid: e333a0de7b4f1874a9931e4b82a76717,
         type: 3}
       propertyPath: m_Enabled
       value: 1
