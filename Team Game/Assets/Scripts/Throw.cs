@@ -6,11 +6,14 @@ public class Throw : MonoBehaviour
 {
     public GameObject itemPrefab;
     public LineRenderer lineRenderer; // 軌跡を表示するラインレンダラー
-    public float projectileSpeed = 10f; // 投げる速度
+    public float baseProjectileSpeed = 5f; // 基本の投げる速度
+    public float maxProjectileSpeed = 20f; // 最大投げる速度
     public float gravity = -9.81f; // 重力
+    public float speedIncreaseTime = 2f; // 速度が最大になるまでの時間
 
     private EffectManager effectManager; // EffectManagerへの参照
-    
+    private float holdTime = 0f; // 右クリックを押し続ける時間
+
     void Start()
     {
         // EffectManagerを取得
@@ -21,6 +24,7 @@ public class Throw : MonoBehaviour
     {
         if (Input.GetMouseButton(1)) // 右クリック長押し
         {
+            holdTime += Time.deltaTime; // 右クリック時間の計測
             UpdateTrajectory(); // 軌跡の更新
         }
 
@@ -28,6 +32,7 @@ public class Throw : MonoBehaviour
         {
             ThrowItem(); // アイテムを投げる
             ClearTrajectory(); // 軌跡を消去
+            holdTime = 0f; // 右クリック時間リセット
         }
     }
 
@@ -36,7 +41,8 @@ public class Throw : MonoBehaviour
     {
         lineRenderer.positionCount = 0; // 既存のポイントをクリア
         Vector3 startPosition = transform.position; // 投げ始めの位置
-        Vector3 startVelocity = transform.forward * projectileSpeed; // 投げる方向と速度
+        float adjustedSpeed = Mathf.Lerp(baseProjectileSpeed, maxProjectileSpeed, holdTime / speedIncreaseTime); // 速度を補間
+        Vector3 startVelocity = transform.forward * adjustedSpeed; // 投げる方向と速度
 
         // 投げる弾の軌道を計算
         for (float t = 0; t < 2f; t += 0.1f) // 0.1秒ごとにポイントを計算
@@ -72,7 +78,13 @@ public class Throw : MonoBehaviour
     {
         GameObject item = Instantiate(itemPrefab, transform.position, Quaternion.identity);
         Rigidbody itemRb = item.GetComponent<Rigidbody>();
-        itemRb.AddForce(transform.forward * projectileSpeed, ForceMode.Impulse);
+
+        // 右クリック時間に基づいて速度を調整
+        float adjustedSpeed = Mathf.Lerp(baseProjectileSpeed, maxProjectileSpeed, holdTime / speedIncreaseTime); // 速度を補間
+
+        // 投げる力を追加
+        itemRb.AddForce(transform.forward * adjustedSpeed, ForceMode.Impulse);
+
         Destroy(item, 3.5f); // 3.5秒後に弾を消去
     }
 
