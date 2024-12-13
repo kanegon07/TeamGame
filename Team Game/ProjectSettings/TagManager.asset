@@ -13,6 +13,8 @@ TagManager:
   - PlayerHit
   - Ground
   - MushRoom
+  - Wall
+  - WallHit
   layers:
   - Default
   - TransparentFX

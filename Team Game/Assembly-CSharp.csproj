@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\TestPlayer.cs" />
+    <Compile Include="Assets\kaneko\Script\WallHit.cs" />
     <Compile Include="Assets\kaneko\Script\MushRoom Animation.cs" />
     <Compile Include="Assets\Supercyan Character Pack Free Sample\Scripts\AccessoryWearLogic.cs" />
     <Compile Include="Assets\Scripts\FPSCamera.cs" />
@@ -91,6 +92,8 @@
     <None Include="Assets\Effekseer\Materials\EffekseerShaderDistortionPS.cginc" />
     <None Include="Assets\Effekseer\Plugins\x86\EffekseerUnity.dll" />
     <None Include="Assets\Supercyan Character Pack Free Sample\Shaders\Legacy\CelShader.shader" />
+    <None Include="Assets\kaneko\Shader\KanekoShader.shader" />
+    <None Include="Assets\kaneko\Shader\CullofShader.shader" />
     <None Include="Assets\Effekseer\Materials\EffekseerShaderAdLitUnlitPS.cginc" />
     <None Include="Assets\Supercyan Character Pack Free Sample\Shaders\SupercyanShader.shader" />
     <None Include="Assets\Effekseer\Materials\Texture2DArrayBlitShader.shader" />
