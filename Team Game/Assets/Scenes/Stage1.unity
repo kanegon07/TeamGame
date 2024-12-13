@@ -763,6 +763,11 @@ MonoBehaviour:
   trajectoryLine: {fileID: 1691668966}
   particleEffect: {fileID: 1584748072}
   mouseSensitivity: 1
+  player: {fileID: 810476589}
+  playerLeftFoot: {fileID: 1602887673}
+  playerRightFoot: {fileID: 1682381428}
+  playerBodyCollider: {fileID: 0}
+  playerHeadCollider: {fileID: 0}
 --- !u!1 &654356202
 GameObject:
   m_ObjectHideFlags: 0
@@ -829,7 +834,7 @@ MonoBehaviour:
   characterController: {fileID: 7153606315833556218}
   player: {fileID: 810476589}
   mainCameraPosition: {x: 0, y: 0.8, z: 0.3}
-  subCameraPosition: {x: 0, y: 0.3, z: 0.3}
+  subCameraPosition: {x: 0, y: 0.5, z: 0.3}
 --- !u!4 &654356205
 Transform:
   m_ObjectHideFlags: 0
@@ -6742,6 +6747,18 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!1 &1602887673 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2529907205187165063, guid: e333a0de7b4f1874a9931e4b82a76717,
+    type: 3}
+  m_PrefabInstance: {fileID: 7153606315833556217}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1682381428 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5076523695355086089, guid: e333a0de7b4f1874a9931e4b82a76717,
+    type: 3}
+  m_PrefabInstance: {fileID: 7153606315833556217}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1691668966
 GameObject:
   m_ObjectHideFlags: 0
@@ -7311,24 +7328,27 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7153606315833556217}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1852251450
-MonoBehaviour:
+--- !u!65 &1852251454
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1852251443}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
   m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3554c2c8245f37f4c919858659b74a30, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerHead: {fileID: 0}
-  mainCamera: {fileID: 0}
-  subCamera: {fileID: 0}
-  trajectoryLine: {fileID: 0}
-  particleEffect: {fileID: 0}
-  mouseSensitivity: 1
+  serializedVersion: 3
+  m_Size: {x: 1.6031848, y: 2.5558727, z: 1.6031846}
+  m_Center: {x: 0, y: 0.4763437, z: 0.0000009536743}
 --- !u!1 &1857745863
 GameObject:
   m_ObjectHideFlags: 0
@@ -8004,6 +8024,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5174415711459911452, guid: e333a0de7b4f1874a9931e4b82a76717,
         type: 3}
+      propertyPath: headCollider
+      value: 
+      objectReference: {fileID: 1852251454}
+    - target: {fileID: 5174415711459911452, guid: e333a0de7b4f1874a9931e4b82a76717,
+        type: 3}
       propertyPath: moveParticle
       value: 
       objectReference: {fileID: 1584748075}
@@ -8037,6 +8062,11 @@ PrefabInstance:
       propertyPath: m_CastShadows
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7196951954418575403, guid: e333a0de7b4f1874a9931e4b82a76717,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7929549081844413521, guid: e333a0de7b4f1874a9931e4b82a76717,
         type: 3}
       propertyPath: m_LocalRotation.w
@@ -8061,6 +8091,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8438280402233230764, guid: e333a0de7b4f1874a9931e4b82a76717,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8438280402233230764, guid: e333a0de7b4f1874a9931e4b82a76717,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 0.63
+      objectReference: {fileID: 0}
+    - target: {fileID: 8992487170563575725, guid: e333a0de7b4f1874a9931e4b82a76717,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9097348471610117950, guid: e333a0de7b4f1874a9931e4b82a76717,
         type: 3}
@@ -8102,7 +8147,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7296036232036626155, guid: e333a0de7b4f1874a9931e4b82a76717,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1852251450}
+      addedObject: {fileID: 1852251454}
   m_SourcePrefab: {fileID: 100100000, guid: e333a0de7b4f1874a9931e4b82a76717, type: 3}
 --- !u!143 &7153606315833556218 stripped
 CharacterController:

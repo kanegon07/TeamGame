@@ -28,6 +28,8 @@ public class CameraPlayer : MonoBehaviour
 
     //テスト
     [SerializeField] private ParticleSystem moveParticle; // 移動時のパーティクルシステム
+
+    //[SerializeField] private Collider headCollider; // 顔用のコライダー
     //
 
     //public float gravityModifier;//重力 ※今回もキャラは慣性を無視するので使ってないです。

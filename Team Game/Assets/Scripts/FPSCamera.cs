@@ -15,6 +15,13 @@ public class FPSCamera : MonoBehaviour
     private float xRotation = 0f; // 縦の視点回転角度を管理
     public float mouseSensitivity = 1f; // マウス感度を調整する変数
 
+    public CameraPlayer player; // CameraPlayerスクリプトへの参照
+    public GameObject playerLeftFoot; // プレイヤーの左足オブジェクト
+    public GameObject playerRightFoot; // プレイヤーの右足オブジェクト
+
+    public Collider playerBodyCollider; // プレイヤー全体のコライダー
+    public Collider playerHeadCollider; // プレイヤーの顔部分のコライダー
+
     private List<GameObject> cameraRelatedObjects; // 回転を適用するオブジェクトのリスト
 
     private void Start()
@@ -24,18 +31,20 @@ public class FPSCamera : MonoBehaviour
     }
     void Update()
     {
-        /*// マウスの移動量を取得
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity; // 水平移動
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity; // 垂直移動
-        
-         // プレイヤーの水平回転（Y軸回転）
-        RotatePlayerHorizontally(mouseX);
-
-        // カメラの垂直回転（X軸回転）
-        RotateCameraVertically(mouseY);*/
-
         // マウス入力の取得
         Vector2 mouseInput = GetMouseInput();
+
+        // 滑空中かどうかで足の表示を切り替え
+        if (player.FlyFlg)
+        {
+            HideFeetDuringFly();
+            EnableHeadColliderOnly();
+        }
+        else
+        {
+            ShowFeet();
+            EnableBodyCollider();
+        }
 
         // プレイヤーの水平回転
         RotatePlayerHorizontally(mouseInput.x);
@@ -68,16 +77,77 @@ public class FPSCamera : MonoBehaviour
         xRotation -= mouseY; // 回転角度を計算
         xRotation = Mathf.Clamp(xRotation, -90f, 62f); // 回転範囲を制限
 
-        /*playerHead.transform.localRotation = Quaternion.Euler(xRotation, playerHead.transform.localEulerAngles.y, 0f);
-        mainCamera.transform.localRotation = Quaternion.Euler(xRotation, mainCamera.transform.localEulerAngles.y, 0f);
-        subCamera.transform.localRotation = Quaternion.Euler(xRotation, subCamera.transform.localEulerAngles.y, 0f);
-        trajectoryLine.transform.localRotation = Quaternion.Euler(xRotation, trajectoryLine.transform.localEulerAngles.y, 0f);
-        particleEffect.transform.localRotation = Quaternion.Euler(xRotation, particleEffect.transform.localEulerAngles.y, 0f);*/
-
         // 各オブジェクトに垂直回転を適用
         foreach (var obj in cameraRelatedObjects)
         {
             obj.transform.localRotation = Quaternion.Euler(xRotation, obj.transform.localEulerAngles.y, 0f);
+        }
+    }
+
+    // 滑空中に足を非表示にする
+    private void HideFeetDuringFly()
+    {
+        HideObjectRenderer(playerLeftFoot);
+        HideObjectRenderer(playerRightFoot);
+    }
+
+    // 足を表示する
+    private void ShowFeet()
+    {
+        ShowObjectRenderer(playerLeftFoot);
+        ShowObjectRenderer(playerRightFoot);
+
+    }
+
+    // オブジェクトのRendererを非表示にする
+    private void HideObjectRenderer(GameObject obj)
+    {
+        if (obj != null)
+        {
+            Renderer objRenderer = obj.GetComponent<Renderer>();
+            if (objRenderer != null)
+            {
+                objRenderer.enabled = false; // オブジェクトを非表示
+            }
+        }
+    }
+
+    // オブジェクトのRendererを表示する
+    private void ShowObjectRenderer(GameObject obj)
+    {
+        if (obj != null)
+        {
+            Renderer objRenderer = obj.GetComponent<Renderer>();
+            if (objRenderer != null)
+            {
+                objRenderer.enabled = true; // オブジェクトを表示
+            }
+        }
+    }
+
+    // 滑空中に顔だけのコライダーを有効化
+    private void EnableHeadColliderOnly()
+    {
+        if (playerBodyCollider != null)
+        {
+            playerBodyCollider.enabled = false; // 全体のコライダーを無効化
+        }
+        if (playerHeadCollider != null)
+        {
+            playerHeadCollider.enabled = true; // 顔のコライダーを有効化
+        }
+    }
+
+    // 通常時に全体のコライダーを有効化
+    private void EnableBodyCollider()
+    {
+        if (playerBodyCollider != null)
+        {
+            playerBodyCollider.enabled = true; // 全体のコライダーを有効化
+        }
+        if (playerHeadCollider != null)
+        {
+            playerHeadCollider.enabled = false; // 顔のコライダーを無効化
         }
     }
 }
