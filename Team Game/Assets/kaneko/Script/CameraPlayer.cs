@@ -44,6 +44,9 @@ public class CameraPlayer : MonoBehaviour
     public bool FlyFlg = false;//滑空状態にあるかどうか
     private float FlyGravity = 0.0f;
     private int FlyCount = 0;
+    public bool WallHitFlg = false;//壁にはりつけるよ
+    public bool StickWall = false;//壁に張り付いてるよ
+    private int StickWallCount = 0;
 
 
     //--------------------------------カメラ関連---------------------------------------------------
@@ -92,10 +95,10 @@ public class CameraPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        Debug.Log(WallHitFlg);
         //Debug.Log(BoundTime);
 
-        if(BoundFlg==true)
+        if (BoundFlg==true)
         {
             BoundTime--;
             if (BoundTime <= 0)
@@ -133,11 +136,13 @@ public class CameraPlayer : MonoBehaviour
 
         moveInput = moveInput * moveSpeed;
 
+
         //-----------------地面にいるときはジャンプができる----------------------------
         if (_characterController.isGrounded)
         {
-            
-            //JumpingFlg = false;
+
+            WallHitFlg = false;//壁に当たってるよのフラグ
+                //JumpingFlg = false;
             if (_jump.WasPerformedThisFrame())
             {
                 _moveVelocity.y = jumpPower;
@@ -159,6 +164,8 @@ public class CameraPlayer : MonoBehaviour
                 FlyGravity += -0.8f * Time.deltaTime;
             }
 
+            
+
             //if(BoundFlg==true)
             //{
             //    _moveVelocity.y = 0.0f;
@@ -166,6 +173,45 @@ public class CameraPlayer : MonoBehaviour
         }
 
         //Debug.Log(JumpingFlg);
+
+        //壁に貼りつける準備
+        if (WallHitFlg == true)
+        {
+            
+            if (StickWallCount == 0)
+            {
+                if (Input.GetMouseButton(1))//右クリック
+                {
+                    StickWall = true;
+                }
+            }
+        }
+
+        //壁に貼りついてるよ
+        if(StickWall==true)
+        {
+            _moveVelocity.y = 0.0f;
+            FlyFlg = false;
+            WallHitFlg = false;
+            StickWallCount++;
+
+            if(StickWallCount>=15)
+            {
+                if (Input.GetMouseButton(1))//右クリック
+                {
+                    StickWall = false;
+                }
+            }
+
+
+        }
+        else 
+        {
+            StickWallCount = 0;
+        }
+
+
+
         if (FlyFlg == true)
         {
             moveInput.y = moveInput.y + FlyGravity;
