@@ -192,10 +192,10 @@ public class CameraPlayer : MonoBehaviour
         {
             _moveVelocity.y = 0.0f;
             FlyFlg = false;
-            WallHitFlg = false;
+            //WallHitFlg = false;
             StickWallCount++;
 
-            if(StickWallCount>=15)
+            if(StickWallCount>=10)
             {
                 if (Input.GetMouseButton(1))//右クリック
                 {
@@ -205,8 +205,14 @@ public class CameraPlayer : MonoBehaviour
 
 
         }
-        else 
+        else if(StickWall==false)
         {
+            //StickWallCount--;
+            //if(StickWallCount<=0)
+            //{
+            //    StickWallCount = 0;
+            //}
+
             StickWallCount = 0;
         }
 
