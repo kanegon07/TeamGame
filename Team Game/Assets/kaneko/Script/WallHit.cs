@@ -22,13 +22,22 @@ public class WallHit : MonoBehaviour
 
 
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        if(other.gameObject.CompareTag("WallHit"))
+        if (other.gameObject.CompareTag("WallHit"))
         {
             player.WallHitFlg = true;
         }
     }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.gameObject.CompareTag("WallHit"))
+        {
+            player.WallHitFlg = false;
+        }
+    }
+
 
 
 }
