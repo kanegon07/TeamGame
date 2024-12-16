@@ -2,15 +2,13 @@ using MessagePipe;
 using UnityEngine;
 using VContainer;
 
-[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(MeshCollider))]
 public class LowerCloud : MonoBehaviour {
-	public struct GameOverMessage { }
+	[Inject] private IPublisher<GameEvents.GameOverMessage> _gameOverPublisher = null;
 
-	[Inject] private IPublisher<GameOverMessage> _gameOverPublisher = null;
-
-	private void OnTriggerEnter(Collider other) {
-		if (other.CompareTag("Player")) {
-			_gameOverPublisher.Publish(new GameOverMessage());
+	private void OnCollisionEnter(Collision other) {
+		if (other.gameObject.CompareTag("Player")) {
+			_gameOverPublisher.Publish(new GameEvents.GameOverMessage());
 		}
 	}
 }

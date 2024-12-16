@@ -1,9 +1,12 @@
+using MessagePipe;
 using R3;
 using UnityEngine;
-using UnityEngine.UI;
+using VContainer;
 
 public class Timer : MonoBehaviour {
 	[SerializeField] private int TimeLimit = 0;
+
+	[Inject] private IPublisher<GameEvents.GameOverMessage> _gameOverPublisher = null;
 
 	private readonly ReactiveProperty<float> _remainingRP = new(0);
 
@@ -20,6 +23,10 @@ public class Timer : MonoBehaviour {
 
 	private void FixedUpdate() {
 		Remaining = TimeLimit - _time;
+
+		if (Remaining < 0F) {
+			_gameOverPublisher.Publish(new GameEvents.GameOverMessage());
+		}
 
 		_time += Time.fixedDeltaTime;
 	}

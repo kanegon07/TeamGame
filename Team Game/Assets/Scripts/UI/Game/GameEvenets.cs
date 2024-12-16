@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 using VContainer;
 
 public class GameEvents : MonoBehaviour {
+	public struct GameOverMessage { }
+
 	public enum WindowID : byte {
 		Main,
 		Option
@@ -27,7 +29,7 @@ public class GameEvents : MonoBehaviour {
 	[Inject] private ISubscriber<byte, CustomButton.PressMessage> _pressSubscriber = null;
 	[Inject] private ISubscriber<byte, CustomButton.CancelMessage> _cancelSubscriber = null;
 	[Inject] private ISubscriber<GoalFlag.GoalMessage> _goalSubscriber = null;
-//	[Inject] private ISubscriber<LowerCloud.GameOverMessage> _gameOverSUbscriber = null;
+	[Inject] private ISubscriber<GameOverMessage> _gameOverSubscriber = null;
 
 	private void OpenOption() {
 		Time.timeScale = 0F;
@@ -95,6 +97,8 @@ public class GameEvents : MonoBehaviour {
 			.AddTo(this.GetCancellationTokenOnDestroy());
 
 		_goalSubscriber.Subscribe(x => TransitScene(x.NextScene)).AddTo(this.GetCancellationTokenOnDestroy());
+
+		_gameOverSubscriber.Subscribe(x => TransitScene(SceneManager.GetActiveScene().name));
 	}
 
 	private async void Start() {
