@@ -195,7 +195,7 @@ public class CameraPlayer : MonoBehaviour
             //WallHitFlg = false;
             StickWallCount++;
 
-            if(StickWallCount>=10)
+            if(StickWallCount>=6)
             {
                 if (Input.GetMouseButton(1))//右クリック
                 {
