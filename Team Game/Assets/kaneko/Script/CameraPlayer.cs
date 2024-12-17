@@ -17,7 +17,6 @@ public class CameraPlayer : MonoBehaviour
     private CharacterController _characterController;//キャラクターコントローラーのキャッシュ
     private InputAction _jump;//InputSystemのJumpのキャッシュ
     private InputAction _move;//InputSystemのmoveのキャッシュ
-    private Transform _transform;//Transormのキャッシュ
     private Vector3 _moveVelocity;//キャラの移動情報
     private Vector3 moveInput;//最終的なキャラの移動情報
     private bool isMovingFlg; // 移動フラグ
@@ -26,11 +25,17 @@ public class CameraPlayer : MonoBehaviour
     public float moveSpeed;//移動の速さ
     public float jumpPower;//ジャンプの大きさ
 
-    //テスト
-    [SerializeField] private ParticleSystem moveParticle; // 移動時のパーティクルシステム
+    private Vector3 _originalCenter; // キャラクターコントローラーの元の center
+    private float _originalHeight; // キャラクターコントローラーの元の height
+    private CapsuleCollider _capsuleCollider; // キャッシュするカプセルコライダー
 
-    //[SerializeField] private Collider headCollider; // 顔用のコライダー
-    //
+    [Header("判定を消す対象")]
+    public PlayerHiObj _playerHit;
+    public GameObject _playerHead;
+
+    [Header("描画を消す対象")]
+    public GameObject playerLeftFoot; // プレイヤーの左足オブジェクト
+    public GameObject playerRightFoot; // プレイヤーの右足オブジェクト
 
     //public float gravityModifier;//重力 ※今回もキャラは慣性を無視するので使ってないです。
     private float BoundPower = 0;
@@ -49,6 +54,8 @@ public class CameraPlayer : MonoBehaviour
     private int StickWallCount = 0;
     private bool WallHitMouseButtonFlg = false;//壁貼りつき準備完了の時の右クリックを制御するためのフラグ
     private bool StickWallMouseButtonFlg = false;//壁貼りつきの時の右クリックを制御するためのフラグ
+
+    private InputAction _StickWall;//壁に貼りついてる時のプレイヤー操作
 
 
     //--------------------------------カメラ関連---------------------------------------------------
@@ -85,12 +92,19 @@ public class CameraPlayer : MonoBehaviour
     {
         //-------------------InputSystemの導入や、キャッシュ-------------------------------
         _characterController = GetComponent<CharacterController>();
-        //Camera = GetComponent<FPSCamera>();
-        _transform = transform;
+        _capsuleCollider = GetComponent<CapsuleCollider>(); // カプセルコライダーを取得
+
+        // CharacterController の元の設定を保存
+        _originalCenter = _characterController.center;
+        _originalHeight = _characterController.height;
+
         var input = GetComponent<PlayerInput>();
         input.currentActionMap.Enable();
         _jump = input.currentActionMap.FindAction("Jump");
         _move = input.currentActionMap.FindAction("Move");
+
+        _StickWall = input.currentActionMap.FindAction("StickWall");
+
         _particleManager = GetComponent<ParticleManager>(); // ParticleManagerをキャッシュ
     }
 
@@ -98,6 +112,9 @@ public class CameraPlayer : MonoBehaviour
     void Update()
     {
         Debug.Log(WallHitFlg);
+        //頭は常に非表示
+        HideObjectRenderer(_playerHead);
+
         //Debug.Log(BoundTime);
 
         if (BoundFlg==true)
@@ -122,24 +139,50 @@ public class CameraPlayer : MonoBehaviour
         //滑空
         Fly();
 
+       
+
         //壁に貼りつく
         Stickwall();
 
         //--------------------------キャラの移動-------------------------------------------
-        var moveValue = _move.ReadValue<Vector2>();
+        if (StickWall == true)
+        {
+           
 
-        // 移動入力に基づいて移動フラグを設定
-        isMovingFlg = moveValue.x != 0 || moveValue.y != 0;
+            var WallmoveValue = _StickWall.ReadValue<Vector2>();
 
-        _moveVelocity.x = moveValue.x * moveSpeed;
-        _moveVelocity.z = moveValue.y * moveSpeed;
+            _moveVelocity.x = WallmoveValue.x * moveSpeed;
+            _moveVelocity.y = WallmoveValue.y * moveSpeed;
 
-        Vector3 verMove = transform.forward * _moveVelocity.z;
-        Vector3 horiMove = transform.right * _moveVelocity.x;
-        moveInput = horiMove + verMove;
-        moveInput.Normalize();
+            Vector3 WallverMove = transform.up * _moveVelocity.y;
+            Vector3 WallhoriMove = transform.right * _moveVelocity.x;
+            moveInput = WallhoriMove + WallverMove;
+            moveInput.Normalize();
 
-        moveInput = moveInput * moveSpeed;
+            moveInput = moveInput * moveSpeed;
+
+
+        }
+        else
+        {
+           
+
+
+            var moveValue = _move.ReadValue<Vector2>();
+
+            // 移動入力に基づいて移動フラグを設定
+            isMovingFlg = moveValue.x != 0 || moveValue.y != 0;
+
+            _moveVelocity.x = moveValue.x * moveSpeed;
+            _moveVelocity.z = moveValue.y * moveSpeed;
+
+            Vector3 verMove = transform.forward * _moveVelocity.z;
+            Vector3 horiMove = transform.right * _moveVelocity.x;
+            moveInput = horiMove + verMove;
+            moveInput.Normalize();
+
+            moveInput = moveInput * moveSpeed;
+        }
 
 
         //-----------------地面にいるときはジャンプができる----------------------------
@@ -212,12 +255,6 @@ public class CameraPlayer : MonoBehaviour
        
     }
 
-
-    public void GetTransform(Transform _transform)
-    {
-        transform.rotation = _transform.rotation;
-    }
-
     // 移動キーが押されているかどうかを返すプロパティ
     public bool IsMoving()
     {
@@ -234,6 +271,9 @@ public class CameraPlayer : MonoBehaviour
             {
                 FlyFlg = true;
                 FlyCount = 0; // FlyCountをリセット
+
+                DisableCharacterControllerCollision(); // 滑空開始時に判定を無効化
+                HideFeetDuringFly();
             }
         }
 
@@ -243,9 +283,9 @@ public class CameraPlayer : MonoBehaviour
             FlyCount++;
 
             // 飛行カウントが5に達っするか地面に触れると飛行を停止
-            if (FlyCount >= 5 || _characterController.isGrounded)
+            if (FlyCount >= 5)
             {
-                if (_jump.WasPerformedThisFrame())
+                if (_jump.WasPerformedThisFrame() || _characterController.isGrounded)
                 {
                     FlyFlg = false;
                 }
@@ -258,6 +298,102 @@ public class CameraPlayer : MonoBehaviour
             moveInput.y = 0.0f;  // Y軸の移動をリセット
             FlyGravity = 0;      // 飛行重力をリセット
             FlyCount = 0;        // カウントをリセット
+            EnableCharacterControllerCollision(); // 滑空終了時に判定を有効化
+            ShowFeet();
+        }
+    }
+
+    private void DisableCharacterControllerCollision()
+    {
+        // 判定をゼロに設定
+        _characterController.center = Vector3.zero;
+        _characterController.height = 0.0f;
+
+        // カプセルコライダーを無効化
+        if (_capsuleCollider != null)
+        {
+            _capsuleCollider.enabled = false;
+        }
+        // PlayerHitObjのコライダーを無効化
+        if (_playerHit != null)
+        {
+            Collider playerCollider = _playerHit.GetComponent<Collider>();
+
+            playerCollider.enabled = false;
+        }
+        // PlayerHeadのコライダーを有効化
+        if (_playerHead != null)
+        {
+            Collider playerHeadCollider = _playerHead.GetComponent<Collider>();
+
+            playerHeadCollider.enabled = true;
+        }
+    }
+
+    private void EnableCharacterControllerCollision()
+    {
+        // 元の設定に戻す
+        _characterController.center = _originalCenter;
+        _characterController.height = _originalHeight;
+
+        // カプセルコライダーを有効化
+        if (_capsuleCollider != null)
+        {
+            _capsuleCollider.enabled = true;
+        }
+        // PlayerHitObjのコライダーを有効化
+        if (_playerHit != null)
+        {
+            Collider playerCollider = _playerHit.GetComponent<Collider>();
+
+            playerCollider.enabled = true;
+        }
+        // PlayerHeadのコライダーを無効化
+        if (_playerHead != null)
+        {
+            Collider playerCollider = _playerHead.GetComponent<Collider>();
+
+            playerCollider.enabled = false;
+        }
+    }
+
+    // 滑空中に足を非表示にする
+    private void HideFeetDuringFly()
+    {
+        HideObjectRenderer(playerLeftFoot);
+        HideObjectRenderer(playerRightFoot);
+    }
+
+    // 足を表示する
+    private void ShowFeet()
+    {
+        ShowObjectRenderer(playerLeftFoot);
+        ShowObjectRenderer(playerRightFoot);
+    }
+
+    // オブジェクトのRendererを非表示にする
+    private void HideObjectRenderer(GameObject obj)
+    {
+        if (obj != null)
+        {
+            Renderer objRenderer = obj.GetComponent<Renderer>();
+            if (objRenderer != null)
+            {
+                objRenderer.enabled = false; // オブジェクトを非表示
+            }
+        }
+    }
+
+    // オブジェクトのRendererを表示する
+    private void ShowObjectRenderer(GameObject obj)
+    {
+        if (obj != null)
+        {
+            Renderer objRenderer = obj.GetComponent<Renderer>();
+            if (objRenderer != null)
+            {
+                objRenderer.enabled = true; // オブジェクトを表示
+            }
         }
     }
 
@@ -285,6 +421,11 @@ public class CameraPlayer : MonoBehaviour
         //壁に貼りついてるよ
         if (StickWall == true)
         {
+            if(WallHitFlg==false)
+            {
+                StickWall = false;
+            }
+
             _moveVelocity.y = 0.0f;//重力リセット
             FlyFlg = false;//滑空中の場合も解除する
             JumpingFlg = false;//ジャンプしてるかどうかもリセットする
@@ -314,6 +455,7 @@ public class CameraPlayer : MonoBehaviour
            
             WallHitMouseButtonFlg = true;//貼りつきするための右クリックのフラグがtrue(可能)
             StickWallCount = 0;//貼りつき解除のための右クリックのクールタイムをリセット
+            WallHitFlg = true;
 
 
         }
