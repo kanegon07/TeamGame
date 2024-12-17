@@ -196,6 +196,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 0}
+  Camera: {fileID: 0}
+  MouseLock: {fileID: 0}
 --- !u!114 &3896966321135586570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -930,7 +932,7 @@ PrefabInstance:
     - target: {fileID: 4908545551658399905, guid: bffdc965b8b84e349b3807b23fcb55ff,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 168
+      value: 215
       objectReference: {fileID: 0}
     - target: {fileID: 4908545551658399905, guid: bffdc965b8b84e349b3807b23fcb55ff,
         type: 3}

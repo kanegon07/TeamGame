@@ -27,6 +27,9 @@ public class ResultEvents : MonoBehaviour {
 		);
 
 	private async void TransitScene(string nextScene) {
+		Cursor.lockState = CursorLockMode.Locked;
+		Cursor.visible = false;
+
 		_activatePublisher.Publish((byte)WindowID.Main, new Window.ActivateMessage(false));
 
 		await Wipe(true);
@@ -40,12 +43,16 @@ public class ResultEvents : MonoBehaviour {
 	}
 
 	private async void Start() {
+		Cursor.lockState = CursorLockMode.Locked;
+		Cursor.visible = false;
+
 		_displayPublisher.Publish((byte)WindowID.Main, new Window.DisplayMessage(true));
 
 		await Wipe(false);
 
 		_activatePublisher.Publish((byte)WindowID.Main, new Window.ActivateMessage(true));
 
+		Cursor.lockState = CursorLockMode.None;
 		Cursor.visible = true;
 	}
 }

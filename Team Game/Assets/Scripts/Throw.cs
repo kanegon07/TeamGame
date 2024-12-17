@@ -22,17 +22,17 @@ public class Throw : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButton(1)) // 右クリック長押し
+        if (Input.GetMouseButton(0)) // 左クリック長押し
         {
-            holdTime += Time.deltaTime; // 右クリック時間の計測
+            holdTime += Time.deltaTime; // 左クリック時間の計測
             UpdateTrajectory(); // 軌跡の更新
         }
 
-        if (Input.GetMouseButtonUp(1)) // 右クリックを離したら
+        if (Input.GetMouseButtonUp(0)) // 左クリックを離したら
         {
             ThrowItem(); // アイテムを投げる
             ClearTrajectory(); // 軌跡を消去
-            holdTime = 0f; // 右クリック時間リセット
+            holdTime = 0f; // 左クリック時間リセット
         }
     }
 

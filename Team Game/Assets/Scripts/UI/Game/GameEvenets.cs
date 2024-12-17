@@ -18,6 +18,8 @@ public class GameEvents : MonoBehaviour {
 	}
 
 	[SerializeField] private CameraPlayer Player = null;
+	[SerializeField] private FPSCamera Camera = null;
+	[SerializeField] private DebugMouse MouseLock = null;
 
 	[Inject] private IPublisher<bool> _optionStatePublisher = null;
 	[Inject] private IPublisher<byte, Window.DisplayMessage> _displayPublisher = null;
@@ -35,13 +37,14 @@ public class GameEvents : MonoBehaviour {
 		Time.timeScale = 0F;
 
 		Player.enabled = false;
+		Camera.enabled = false;
 
 		_displayPublisher.Publish((byte)WindowID.Option, new Window.DisplayMessage(true));
 
 		_activatePublisher.Publish((byte)WindowID.Main, new Window.ActivateMessage(false));
 		_activatePublisher.Publish((byte)WindowID.Option, new Window.ActivateMessage(true));
 
-		Cursor.visible = true;
+		MouseLock.Lock(false);
 
 		_optionStatePublisher.Publish(true);
 	}
@@ -53,10 +56,11 @@ public class GameEvents : MonoBehaviour {
 		_displayPublisher.Publish((byte)WindowID.Option, new Window.DisplayMessage(false));
 
 		Player.enabled = true;
+		Camera.enabled = true;
 
 		Time.timeScale = 1F;
 
-		Cursor.visible = false;
+		MouseLock.Lock(true);
 
 		_optionStatePublisher.Publish(false);
 	}
@@ -68,7 +72,10 @@ public class GameEvents : MonoBehaviour {
 		);
 
 	private async void TransitScene(string nextScene) {
+		MouseLock.Lock(true);
+
 		Player.enabled = false;
+		Camera.enabled = false;
 
 		await Wipe(true);
 
@@ -102,12 +109,24 @@ public class GameEvents : MonoBehaviour {
 	}
 
 	private async void Start() {
+		MouseLock.Lock(true);
+
+		Player.enabled = false;
+		Camera.enabled = false;
+
 		_displayPublisher.Publish((byte)WindowID.Main, new Window.DisplayMessage(true));
 
 		await Wipe(false);
 
+		Player.enabled = true;
+		Camera.enabled = true;
+
 		_activatePublisher.Publish((byte)WindowID.Main, new Window.ActivateMessage(true));
 
-		Cursor.visible = false;
+		SceneManager.sceneUnloaded += (_) => {
+			Player = null;
+			Camera = null;
+			MouseLock = null;
+		};
 	}
 }
