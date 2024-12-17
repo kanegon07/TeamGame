@@ -50,6 +50,8 @@ public class CameraPlayer : MonoBehaviour
     private bool WallHitMouseButtonFlg = false;//壁貼りつき準備完了の時の右クリックを制御するためのフラグ
     private bool StickWallMouseButtonFlg = false;//壁貼りつきの時の右クリックを制御するためのフラグ
 
+    private InputAction _StickWall;//壁に貼りついてる時のプレイヤー操作
+
 
     //--------------------------------カメラ関連---------------------------------------------------
     //public Transform camTrans;//カメラは誰なのか
@@ -91,6 +93,9 @@ public class CameraPlayer : MonoBehaviour
         input.currentActionMap.Enable();
         _jump = input.currentActionMap.FindAction("Jump");
         _move = input.currentActionMap.FindAction("Move");
+
+        _StickWall = input.currentActionMap.FindAction("StickWall");
+
         _particleManager = GetComponent<ParticleManager>(); // ParticleManagerをキャッシュ
     }
 
@@ -122,24 +127,50 @@ public class CameraPlayer : MonoBehaviour
         //滑空
         Fly();
 
+       
+
         //壁に貼りつく
         Stickwall();
 
         //--------------------------キャラの移動-------------------------------------------
-        var moveValue = _move.ReadValue<Vector2>();
+        if (StickWall == true)
+        {
+           
 
-        // 移動入力に基づいて移動フラグを設定
-        isMovingFlg = moveValue.x != 0 || moveValue.y != 0;
+            var WallmoveValue = _StickWall.ReadValue<Vector2>();
 
-        _moveVelocity.x = moveValue.x * moveSpeed;
-        _moveVelocity.z = moveValue.y * moveSpeed;
+            _moveVelocity.x = WallmoveValue.x * moveSpeed;
+            _moveVelocity.y = WallmoveValue.y * moveSpeed;
 
-        Vector3 verMove = transform.forward * _moveVelocity.z;
-        Vector3 horiMove = transform.right * _moveVelocity.x;
-        moveInput = horiMove + verMove;
-        moveInput.Normalize();
+            Vector3 WallverMove = transform.up * _moveVelocity.y;
+            Vector3 WallhoriMove = transform.right * _moveVelocity.x;
+            moveInput = WallhoriMove + WallverMove;
+            moveInput.Normalize();
 
-        moveInput = moveInput * moveSpeed;
+            moveInput = moveInput * moveSpeed;
+
+
+        }
+        else
+        {
+           
+
+
+            var moveValue = _move.ReadValue<Vector2>();
+
+            // 移動入力に基づいて移動フラグを設定
+            isMovingFlg = moveValue.x != 0 || moveValue.y != 0;
+
+            _moveVelocity.x = moveValue.x * moveSpeed;
+            _moveVelocity.z = moveValue.y * moveSpeed;
+
+            Vector3 verMove = transform.forward * _moveVelocity.z;
+            Vector3 horiMove = transform.right * _moveVelocity.x;
+            moveInput = horiMove + verMove;
+            moveInput.Normalize();
+
+            moveInput = moveInput * moveSpeed;
+        }
 
 
         //-----------------地面にいるときはジャンプができる----------------------------
@@ -285,6 +316,11 @@ public class CameraPlayer : MonoBehaviour
         //壁に貼りついてるよ
         if (StickWall == true)
         {
+            if(WallHitFlg==false)
+            {
+                StickWall = false;
+            }
+
             _moveVelocity.y = 0.0f;//重力リセット
             FlyFlg = false;//滑空中の場合も解除する
             JumpingFlg = false;//ジャンプしてるかどうかもリセットする
