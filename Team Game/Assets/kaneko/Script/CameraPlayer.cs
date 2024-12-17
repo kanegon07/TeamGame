@@ -57,6 +57,10 @@ public class CameraPlayer : MonoBehaviour
     private bool UnStickWall = false;//クリックじゃなく、途中で張り付きが解除された場合のフラグ
 
     private InputAction _StickWall;//壁に貼りついてる時のプレイヤー操作
+    public float Player_Stamina = 0.0f;//壁貼りつき時のプレイヤーのスタミナ
+    private const float StamiMax = 100.0f;//壁貼りつき時のプレイヤーのスタミナのMAX値
+    private const float StaminaUp = 1.0f;//スタミナの回復の値
+    private const float StaminaDown = 0.5f;//スタミナの消費の値
 
 
     //--------------------------------カメラ関連---------------------------------------------------
@@ -112,7 +116,7 @@ public class CameraPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(WallHitFlg);
+        Debug.Log(Player_Stamina);
         //頭は常に非表示
         HideObjectRenderer(_playerHead);
 
@@ -145,18 +149,37 @@ public class CameraPlayer : MonoBehaviour
         //壁に貼りつく
         Stickwall();
 
+        
+
         //--------------------------キャラの移動-------------------------------------------
        
         //貼りついてる時
         if (StickWall == true)
         {
            
-
+            //移動処理
             var WallmoveValue = _StickWall.ReadValue<Vector2>();
 
+            //スタミナのための処理
+            float vexX = _moveVelocity.x;
+            float vexY = _moveVelocity.y;
+
+            //移動処理(通常の処理とは違い、縦と横にしか動かない)
             _moveVelocity.x = WallmoveValue.x * moveSpeed;
             _moveVelocity.y = WallmoveValue.y * moveSpeed;
 
+            //スタミナのための処理
+            if(vexX!=_moveVelocity.x)
+            {
+                PlayerStaminaDec();//スタミナをここで消費
+            }
+
+            if (vexY!= _moveVelocity.y)
+            {
+                PlayerStaminaDec();//スタミナをここで消費
+            }
+
+            //移動処理
             Vector3 WallverMove = transform.up * _moveVelocity.y;
             Vector3 WallhoriMove = transform.right * _moveVelocity.x;
             moveInput = WallhoriMove + WallverMove;
@@ -168,8 +191,10 @@ public class CameraPlayer : MonoBehaviour
         }
         else
         {
-           
-
+          
+            
+            
+            //-------------------移動処理-----------------------------
 
             var moveValue = _move.ReadValue<Vector2>();
 
@@ -192,12 +217,13 @@ public class CameraPlayer : MonoBehaviour
         if (_characterController.isGrounded)
         {
 
+
             WallHitFlg = false;//壁に当たってるよのフラグ
                 //JumpingFlg = false;
             if (_jump.WasPerformedThisFrame())
             {
                 _moveVelocity.y = jumpPower;
-                JumpingFlg = true;
+                JumpingFlg = true;//オフにするにはPlayerHitObj.csのほうで操作する
             }
         }
         else
@@ -485,5 +511,52 @@ public class CameraPlayer : MonoBehaviour
 
         }
 
+        //スタミナが切れた時の処理
+        if (Player_Stamina <= 0)
+        {
+            Player_Stamina = 0;
+            UnStickWall = true;
+
+        }
+
+    }
+
+    //壁貼りつき時のスタミナが減っていく関数
+    public void PlayerStaminaDec()
+    {
+        Player_Stamina -= StaminaDown;
+        if(Player_Stamina<=0)
+        {
+            Player_Stamina = 0;
+        }
+    }
+
+    public void PlayerStaminaDec(float _stamina)
+    {
+        Player_Stamina -= _stamina;
+        if (Player_Stamina <= 0)
+        {
+            Player_Stamina = 0;
+        }
+    }
+
+
+    //壁貼りつき時のスタミナが増えていく関数
+    public void PlayerStaminaRec()
+    {
+        Player_Stamina += StaminaUp;
+        if(Player_Stamina>=StamiMax)
+        {
+            Player_Stamina = StamiMax;
+        }
+    }
+
+    public void PlayerStaminaRec(float _stamina)
+    {
+        Player_Stamina+= _stamina;
+        if (Player_Stamina >= StamiMax)
+        {
+            Player_Stamina = StamiMax;
+        }
     }
 }
