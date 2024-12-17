@@ -54,6 +54,7 @@ public class CameraPlayer : MonoBehaviour
     private int StickWallCount = 0;
     private bool WallHitMouseButtonFlg = false;//壁貼りつき準備完了の時の右クリックを制御するためのフラグ
     private bool StickWallMouseButtonFlg = false;//壁貼りつきの時の右クリックを制御するためのフラグ
+    private bool UnStickWall = false;//クリックじゃなく、途中で張り付きが解除された場合のフラグ
 
     private InputAction _StickWall;//壁に貼りついてる時のプレイヤー操作
 
@@ -145,6 +146,8 @@ public class CameraPlayer : MonoBehaviour
         Stickwall();
 
         //--------------------------キャラの移動-------------------------------------------
+       
+        //貼りついてる時
         if (StickWall == true)
         {
            
@@ -212,6 +215,10 @@ public class CameraPlayer : MonoBehaviour
                 FlyGravity += -0.8f * Time.deltaTime;
             }
 
+            if(StickWall == true)
+            {
+                _moveVelocity.y = 0.0f;
+            }
             
 
             //if(BoundFlg==true)
@@ -225,8 +232,11 @@ public class CameraPlayer : MonoBehaviour
         
 
 
-
-        if (FlyFlg == true)
+        if(StickWall==true)
+        {
+            moveInput.y = moveInput.y + 0;
+        }
+        else if (FlyFlg == true)
         {
             moveInput.y = moveInput.y + FlyGravity;
         }
@@ -421,9 +431,11 @@ public class CameraPlayer : MonoBehaviour
         //壁に貼りついてるよ
         if (StickWall == true)
         {
+            //途中で範囲から外れた場合
             if(WallHitFlg==false)
             {
-                StickWall = false;
+                UnStickWall = true;
+                
             }
 
             _moveVelocity.y = 0.0f;//重力リセット
@@ -455,9 +467,23 @@ public class CameraPlayer : MonoBehaviour
            
             WallHitMouseButtonFlg = true;//貼りつきするための右クリックのフラグがtrue(可能)
             StickWallCount = 0;//貼りつき解除のための右クリックのクールタイムをリセット
-            WallHitFlg = true;
+            UnStickWall = false;//任意では無い時に張り付きが解除された場合のフラグもfalse(そうではない状態)にする
+            WallHitFlg = true;//再度貼り付けるように、貼り付け準備フラグをtrue(可能)にする
 
 
         }
+
+
+        //途中で貼り付きが解除された場合
+        if(UnStickWall==true)
+        {
+
+            StickWallMouseButtonFlg = false;//壁から離れるための右クリックがfalse(不可能)
+
+
+            StickWall = false;//貼りつき解除
+
+        }
+
     }
 }
