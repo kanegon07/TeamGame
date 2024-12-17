@@ -21,18 +21,34 @@ public class PlayerHiObj : MonoBehaviour
 
 
 
+    //当たったときだけ
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            player.JumpingFlg = false;
+            player.JumpingFlg = false;//ジャンプしていない判定
+            
 
         }
 
         if (collision.gameObject.CompareTag("Spring")|| collision.gameObject.CompareTag("Ground"))
         {
-            player.FlyFlg = false;
+            player.FlyFlg = false;//飛んでるフラグをオフにする
         }
     }
 
+
+    //当たっている間ずっと
+    private void OnCollisionStay(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Ground"))
+        {
+            player.PlayerStaminaRec();//スタミナを回復
+        }
+
+        if (collision.gameObject.CompareTag("Spring") || collision.gameObject.CompareTag("Ground"))
+        {
+            player.PlayerStaminaRec();//スタミナを回復(念のためここにも記述している。)
+        }
+    }
 }
