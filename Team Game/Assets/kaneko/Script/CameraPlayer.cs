@@ -49,6 +49,13 @@ public class CameraPlayer : MonoBehaviour
     public bool FlyFlg = false;//滑空状態にあるかどうか
     private float FlyGravity = 0.0f;
     private int FlyCount = 0;
+    public bool WallHitFlg = false;//壁にはりつけるよ
+    public bool StickWall = false;//壁に張り付いてるよ
+    private int StickWallCount = 0;
+    private bool WallHitMouseButtonFlg = false;//壁貼りつき準備完了の時の右クリックを制御するためのフラグ
+    private bool StickWallMouseButtonFlg = false;//壁貼りつきの時の右クリックを制御するためのフラグ
+
+    private InputAction _StickWall;//壁に貼りついてる時のプレイヤー操作
 
 
     //--------------------------------カメラ関連---------------------------------------------------
@@ -95,12 +102,16 @@ public class CameraPlayer : MonoBehaviour
         input.currentActionMap.Enable();
         _jump = input.currentActionMap.FindAction("Jump");
         _move = input.currentActionMap.FindAction("Move");
+
+        _StickWall = input.currentActionMap.FindAction("StickWall");
+
         _particleManager = GetComponent<ParticleManager>(); // ParticleManagerをキャッシュ
     }
 
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(WallHitFlg);
         //頭は常に非表示
         HideObjectRenderer(_playerHead);
 
@@ -128,27 +139,58 @@ public class CameraPlayer : MonoBehaviour
         //滑空
         Fly();
 
+       
+
+        //壁に貼りつく
+        Stickwall();
+
         //--------------------------キャラの移動-------------------------------------------
-        var moveValue = _move.ReadValue<Vector2>();
+        if (StickWall == true)
+        {
+           
 
-        // 移動入力に基づいて移動フラグを設定
-        isMovingFlg = moveValue.x != 0 || moveValue.y != 0;
+            var WallmoveValue = _StickWall.ReadValue<Vector2>();
 
-        _moveVelocity.x = moveValue.x * moveSpeed;
-        _moveVelocity.z = moveValue.y * moveSpeed;
+            _moveVelocity.x = WallmoveValue.x * moveSpeed;
+            _moveVelocity.y = WallmoveValue.y * moveSpeed;
 
-        Vector3 verMove = transform.forward * _moveVelocity.z;
-        Vector3 horiMove = transform.right * _moveVelocity.x;
-        moveInput = horiMove + verMove;
-        moveInput.Normalize();
+            Vector3 WallverMove = transform.up * _moveVelocity.y;
+            Vector3 WallhoriMove = transform.right * _moveVelocity.x;
+            moveInput = WallhoriMove + WallverMove;
+            moveInput.Normalize();
 
-        moveInput = moveInput * moveSpeed;
+            moveInput = moveInput * moveSpeed;
+
+
+        }
+        else
+        {
+           
+
+
+            var moveValue = _move.ReadValue<Vector2>();
+
+            // 移動入力に基づいて移動フラグを設定
+            isMovingFlg = moveValue.x != 0 || moveValue.y != 0;
+
+            _moveVelocity.x = moveValue.x * moveSpeed;
+            _moveVelocity.z = moveValue.y * moveSpeed;
+
+            Vector3 verMove = transform.forward * _moveVelocity.z;
+            Vector3 horiMove = transform.right * _moveVelocity.x;
+            moveInput = horiMove + verMove;
+            moveInput.Normalize();
+
+            moveInput = moveInput * moveSpeed;
+        }
+
 
         //-----------------地面にいるときはジャンプができる----------------------------
         if (_characterController.isGrounded)
         {
-            
-            //JumpingFlg = false;
+
+            WallHitFlg = false;//壁に当たってるよのフラグ
+                //JumpingFlg = false;
             if (_jump.WasPerformedThisFrame())
             {
                 _moveVelocity.y = jumpPower;
@@ -170,6 +212,8 @@ public class CameraPlayer : MonoBehaviour
                 FlyGravity += -0.8f * Time.deltaTime;
             }
 
+            
+
             //if(BoundFlg==true)
             //{
             //    _moveVelocity.y = 0.0f;
@@ -177,6 +221,11 @@ public class CameraPlayer : MonoBehaviour
         }
 
         //Debug.Log(JumpingFlg);
+
+        
+
+
+
         if (FlyFlg == true)
         {
             moveInput.y = moveInput.y + FlyGravity;
@@ -203,36 +252,7 @@ public class CameraPlayer : MonoBehaviour
             }
         }
 
-        //
-
-        //transform.rotation = Quaternion.Euler(Camera.yRotation,0f,Camera.transform.rotation.eulerAngles.z);
-
-        //-------------------------------------カメラ関連-----------------------------------------
-
-
-
-        /*//カメラの回転制御
-        Vector2 mouseInput = new Vector2(Input.GetAxisRaw("Mouse X"), 0.0f) * mouseSensitivity;
-
-        if (invertX)
-        {
-            mouseInput.x = -mouseInput.x;
-        }
-
-        if (invertY)
-        {
-            mouseInput.y = -mouseInput.y;
-        }
-
-
-        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y + mouseInput.x, transform.rotation.eulerAngles.z);
-        */
-
-        //camTrans.rotation = Quaternion.Euler(camTrans.rotation.eulerAngles + new Vector3(-mouseInput.y, 0f, 0f));
-
-        //モモンガの頭部
-        //MomongaHead.rotation = Quaternion.Euler(MomongaHead.rotation.eulerAngles + new Vector3(mouseInput.y, 0f, 0f));
-        //camTrans.rotation = Quaternion.Euler(camTrans.rotation.eulerAngles + new Vector3(-mouseInput.y, 0f, 0f));
+       
     }
 
     // 移動キーが押されているかどうかを返すプロパティ
@@ -374,6 +394,69 @@ public class CameraPlayer : MonoBehaviour
             {
                 objRenderer.enabled = true; // オブジェクトを表示
             }
+        }
+    }
+
+
+
+    void Stickwall()
+    {
+        //壁に貼りつける準備
+        if (WallHitFlg == true)
+        {
+
+            //壁に貼りつくための右クリックtrue(可能)、貼りつき解除する右クリックfalse(不可能)の時
+            if (WallHitMouseButtonFlg == true && StickWallMouseButtonFlg == false)
+            {
+                if (Input.GetMouseButtonDown(1))//右クリック
+                {
+                    WallHitMouseButtonFlg = false;//壁に貼りつくための右クリックがfalse(不可能)
+                    StickWall = true;//貼りつけ！
+
+                }
+            }
+
+        }
+
+        //壁に貼りついてるよ
+        if (StickWall == true)
+        {
+            if(WallHitFlg==false)
+            {
+                StickWall = false;
+            }
+
+            _moveVelocity.y = 0.0f;//重力リセット
+            FlyFlg = false;//滑空中の場合も解除する
+            JumpingFlg = false;//ジャンプしてるかどうかもリセットする
+            //WallHitFlg = false;
+            StickWallCount++;//一応次のボタンが押せるようになるカウント
+
+            if (StickWallCount >= 5)//カウントが5経ったら
+            {
+                StickWallMouseButtonFlg = true;//貼りつき解除するためのフラグがtrue
+            }
+
+            //貼りつき解除するため右クリックのフラグがtrue(可能)、貼りつくための右クリックのフラグがfalse(不可能)の時
+            if (StickWallMouseButtonFlg == true && WallHitMouseButtonFlg == false)
+            {
+                if (Input.GetMouseButtonDown(1))//右クリック
+                {
+                    StickWallMouseButtonFlg = false;//壁から離れるための右クリックがfalse(不可能)
+                    StickWall = false;//貼りついてないよ!
+
+                }
+            }
+
+
+        }
+        else if (StickWall == false)//貼りついてない時(貼りつき準備はケースバイケース)
+        {
+           
+            WallHitMouseButtonFlg = true;//貼りつきするための右クリックのフラグがtrue(可能)
+            StickWallCount = 0;//貼りつき解除のための右クリックのクールタイムをリセット
+
+
         }
     }
 }
