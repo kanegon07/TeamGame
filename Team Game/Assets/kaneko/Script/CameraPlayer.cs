@@ -455,6 +455,7 @@ public class CameraPlayer : MonoBehaviour
            
             WallHitMouseButtonFlg = true;//貼りつきするための右クリックのフラグがtrue(可能)
             StickWallCount = 0;//貼りつき解除のための右クリックのクールタイムをリセット
+            WallHitFlg = true;
 
 
         }
