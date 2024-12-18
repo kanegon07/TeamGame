@@ -3506,6 +3506,11 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Untagged
       objectReference: {fileID: 0}
+    - target: {fileID: 501010562893742205, guid: 323de9852a94ad948916939fae03984c,
+        type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1101299170298818545, guid: 323de9852a94ad948916939fae03984c,
         type: 3}
       propertyPath: m_LocalPosition.x
