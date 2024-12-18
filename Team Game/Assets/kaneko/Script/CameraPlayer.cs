@@ -62,6 +62,8 @@ public class CameraPlayer : MonoBehaviour
     private const float StaminaUp = 1.0f;//スタミナの回復の値
     private const float StaminaDown = 0.5f;//スタミナの消費の値
 
+    public bool FallFlg = false;
+
 
     //--------------------------------カメラ関連---------------------------------------------------
     //public Transform camTrans;//カメラは誰なのか
@@ -116,7 +118,8 @@ public class CameraPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(Player_Stamina);
+        //Debug.Log(Player_Stamina);
+        Debug.Log(FallFlg);
         //頭は常に非表示
         HideObjectRenderer(_playerHead);
 
@@ -216,7 +219,7 @@ public class CameraPlayer : MonoBehaviour
         //-----------------地面にいるときはジャンプができる----------------------------
         if (_characterController.isGrounded)
         {
-
+            
 
             WallHitFlg = false;//壁に当たってるよのフラグ
                 //JumpingFlg = false;
@@ -224,10 +227,19 @@ public class CameraPlayer : MonoBehaviour
             {
                 _moveVelocity.y = jumpPower;
                 JumpingFlg = true;//オフにするにはPlayerHitObj.csのほうで操作する
+
+                
             }
         }
         else
         {
+            if(FallFlg==true)
+            {
+                if (_jump.WasPerformedThisFrame())
+                {
+                    FlyFlg = true;
+                }
+            }
 
             if (BoundFlg == false)
             {
@@ -316,6 +328,7 @@ public class CameraPlayer : MonoBehaviour
         // 飛行中の処理
         if (FlyFlg == true)
         {
+            FallFlg = false;
             FlyCount++;
 
             // 飛行カウントが5に達っするか地面に触れると飛行を停止
@@ -494,7 +507,7 @@ public class CameraPlayer : MonoBehaviour
             WallHitMouseButtonFlg = true;//貼りつきするための右クリックのフラグがtrue(可能)
             StickWallCount = 0;//貼りつき解除のための右クリックのクールタイムをリセット
             UnStickWall = false;//任意では無い時に張り付きが解除された場合のフラグもfalse(そうではない状態)にする
-            WallHitFlg = true;//再度貼り付けるように、貼り付け準備フラグをtrue(可能)にする
+            //WallHitFlg = true;//再度貼り付けるように、貼り付け準備フラグをtrue(可能)にする
 
 
         }
