@@ -29,7 +29,11 @@ public class CustomButton : MonoBehaviour {
 	[SerializeField] private CustomButton SelectOnLeft = null;	// 左
 	[SerializeField] private CustomButton SelectOnUp = null;	// 上
 	[SerializeField] private CustomButton SelectOnRight = null;	// 右
-	[SerializeField] private CustomButton SelectOnDown = null;	// 下
+	[SerializeField] private CustomButton SelectOnDown = null;  // 下
+
+	// 一時的に用意したパラメータ
+	// この値が真ならActive状態にならない
+	[SerializeField] private bool Debug_IsInvalid = false;
 
 	// メッセージ発信の窓口
 	// IDをキーとすることで、「どのボタンからのメッセージか」を区別する
@@ -63,7 +67,7 @@ public class CustomButton : MonoBehaviour {
 	// アクティブ状態かどうか
 	public bool IsActive {
 		get => _isActiveRP.Value;
-		set => _isActiveRP.Value = value;
+		set => _isActiveRP.Value = !Debug_IsInvalid && value;
 	}
 
 	// EventSystemに選択されたときのメッセージ

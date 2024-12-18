@@ -800,6 +800,11 @@ PrefabInstance:
       propertyPath: SelectOnRight
       value: 
       objectReference: {fileID: 375934208}
+    - target: {fileID: 5715982197718986098, guid: 5452a94701b48eb498e8f61cee47e7d9,
+        type: 3}
+      propertyPath: Debug_IsInvalid
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7516685603680862865, guid: 5452a94701b48eb498e8f61cee47e7d9,
         type: 3}
       propertyPath: m_Name
@@ -1001,6 +1006,11 @@ PrefabInstance:
       propertyPath: SelectOnRight
       value: 
       objectReference: {fileID: 1143332195}
+    - target: {fileID: 5715982197718986098, guid: 5452a94701b48eb498e8f61cee47e7d9,
+        type: 3}
+      propertyPath: Debug_IsInvalid
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7516685603680862865, guid: 5452a94701b48eb498e8f61cee47e7d9,
         type: 3}
       propertyPath: m_Name
