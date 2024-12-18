@@ -20,7 +20,7 @@ public class BerryListView : MonoBehaviour {
 
 	private void Awake() {
 		for (byte i = 0; i < _images.Length; ++i) {
-			_images[i] = transform.GetChild(0).GetChild(i).GetComponent<Image>();
+			_images[i] = transform.GetChild(1).GetChild(i).GetComponent<Image>();
 		}
 
 		_list = GetComponent<BerryList>();
