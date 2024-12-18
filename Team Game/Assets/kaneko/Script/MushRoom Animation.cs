@@ -15,6 +15,16 @@ public class MushRoomAnimation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKey(KeyCode.T))
+        {
+            //Bool型のパラメーターであるblRotをTrueにする
+            anim.SetBool("blRot", true);
+        }
+
+        if (Input.GetKey(KeyCode.R))
+        {
+            //Bool型のパラメーターであるblRotをTrueにする
+            anim.SetBool("blRot", false);
+        }
     }
 }
