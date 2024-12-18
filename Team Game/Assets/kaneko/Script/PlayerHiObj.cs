@@ -45,10 +45,24 @@ public class PlayerHiObj : MonoBehaviour
         {
             player.PlayerStaminaRec();//スタミナを回復
         }
+       
 
         if (collision.gameObject.CompareTag("Spring") || collision.gameObject.CompareTag("Ground"))
         {
+            player.FlyFlg = false;
             player.PlayerStaminaRec();//スタミナを回復(念のためここにも記述している。)
+        }
+       
+
+
+        //FallFlgの管理
+        if (collision.gameObject.CompareTag("Ground")||collision.gameObject.CompareTag("Spring")||player.StickWall==true)
+        {
+            player.FallFlg = false;
+        }
+        else
+        {
+            player.FallFlg = true;
         }
     }
 }
