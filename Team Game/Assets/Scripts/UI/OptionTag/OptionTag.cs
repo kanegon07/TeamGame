@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using VContainer;
 
+[RequireComponent(typeof(AudioSource))]
 [RequireComponent(typeof(ObservableEventTrigger))]
 public class OptionTag : MonoBehaviour {
 	public struct OptionMessage : IEquatable<OptionMessage> {
@@ -20,6 +21,7 @@ public class OptionTag : MonoBehaviour {
 	}
 
 	[SerializeField] private InputAction OptionInputAction = null;
+	[SerializeField] private AudioClip TurnOnSE = null;
 
 	[Inject] private IPublisher<OptionMessage> _optionPublisher = null;
 
@@ -27,6 +29,7 @@ public class OptionTag : MonoBehaviour {
 
 	private bool _isTurnedOn = false;
 	private ObservableEventTrigger _eventTrigger = null;
+	private AudioSource _audioSource = null;
 
 	// 自分の上でマウスのボタンが押され、離されたときのメッセージ
 	public Observable<Unit> OnPointerClickObservable => _eventTrigger.OnPointerClickAsObservable()
@@ -37,6 +40,7 @@ public class OptionTag : MonoBehaviour {
 			_optionPublisher.Publish(new OptionMessage(false));
 		} else {
 			_optionPublisher.Publish(new OptionMessage(true));
+			_audioSource.PlayOneShot(TurnOnSE);
 		}
 	}
 
@@ -44,6 +48,8 @@ public class OptionTag : MonoBehaviour {
 
 	private void Awake() {
 		_eventTrigger = GetComponent<ObservableEventTrigger>();
+
+		_audioSource = GetComponent<AudioSource>();
 
 		_optionStateSubscriber.Subscribe(x => OnTurn(x))
 			.AddTo(this.GetCancellationTokenOnDestroy());

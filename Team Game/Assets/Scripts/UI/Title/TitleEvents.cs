@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using VContainer;
 
+[RequireComponent(typeof(AudioSource))]
 public class TitleEvents : MonoBehaviour {
 	public enum WindowID : byte {
 		Main,
@@ -24,6 +25,8 @@ public class TitleEvents : MonoBehaviour {
 
 	[Inject] private ISubscriber<byte, CustomButton.PressMessage> _pressSubscriber = null;
 	[Inject] private ISubscriber<byte, CustomButton.CancelMessage> _cancelSubscriber = null;
+
+	private AudioSource _audioSource = null;
 
 	private void OpenStageSelector() {
 		_displayPublisher.Publish((byte)WindowID.StageSelector, new Window.DisplayMessage(true));
@@ -46,6 +49,8 @@ public class TitleEvents : MonoBehaviour {
 		);
 
 	private async void TransitScene(string nextScene) {
+		_audioSource.Stop();
+
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
 
@@ -57,6 +62,8 @@ public class TitleEvents : MonoBehaviour {
 	}
 
 	private void Awake() {
+		_audioSource = GetComponent<AudioSource>();
+
 		_pressSubscriber.Subscribe((byte)ButtonID.Start, _ => OpenStageSelector())
 			.AddTo(this.GetCancellationTokenOnDestroy());
 

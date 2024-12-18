@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using VContainer;
 
+[RequireComponent(typeof(AudioSource))]
 public class ResultEvents : MonoBehaviour {
 	public enum WindowID : byte {
 		Main,
@@ -20,6 +21,8 @@ public class ResultEvents : MonoBehaviour {
 
 	[Inject] private ISubscriber<byte, CustomButton.PressMessage> _pressSubscriber = null;
 
+	private AudioSource _audioSource = null;
+
 	private async UniTask Wipe(bool wipesOut)
 		=> await _wipeAsyncPublisher.PublishAsync(
 			new WipeEffectController.WipeMessage(wipesOut),
@@ -27,6 +30,8 @@ public class ResultEvents : MonoBehaviour {
 		);
 
 	private async void TransitScene(string nextScene) {
+		_audioSource.Stop();
+
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
 
@@ -38,6 +43,8 @@ public class ResultEvents : MonoBehaviour {
 	}
 
 	private void Awake() {
+		_audioSource = GetComponent<AudioSource>();
+
 		_pressSubscriber.Subscribe((byte)ButtonID.ReturnToTitle, _ => TransitScene("Title"))
 			.AddTo(this.GetCancellationTokenOnDestroy());
 	}

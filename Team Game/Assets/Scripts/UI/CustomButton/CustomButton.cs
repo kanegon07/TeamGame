@@ -23,7 +23,7 @@ public class CustomButton : MonoBehaviour {
 
 	// 識別番号
 	// イベントとの対応は各シーンでのイベント管理クラスを参照のこと
-	[SerializeField] private byte ID = 0;
+	[SerializeField] private byte ButtonID = 0;
 
 	// OnMoveによってフォーカスを変更するボタン
 	[SerializeField] private CustomButton SelectOnLeft = null;	// 左
@@ -69,6 +69,8 @@ public class CustomButton : MonoBehaviour {
 		get => _isActiveRP.Value;
 		set => _isActiveRP.Value = !Debug_IsInvalid && value;
 	}
+
+	public byte ID => ButtonID;
 
 	// EventSystemに選択されたときのメッセージ
 	public Observable<Unit> OnSelectObservable => _eventTrigger.OnSelectAsObservable()

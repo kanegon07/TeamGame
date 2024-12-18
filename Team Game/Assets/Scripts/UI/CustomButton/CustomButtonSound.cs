@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using MessagePipe;
 using R3;
 using UnityEngine;
+using VContainer;
 
 /// <summary>
 /// 自作ボタンのSEを変更・管理するクラス
@@ -10,9 +11,13 @@ using UnityEngine;
 [RequireComponent(typeof(CustomButton))]
 public class CustomButtonSound : MonoBehaviour {
 	// SE
-	[SerializeField] private AudioClip SelectSE = null;	// 選択時
+	[SerializeField] private AudioClip MoveSE = null;	// 移動時
 	[SerializeField] private AudioClip PressSE = null;	// 押されたとき
-	[SerializeField] private AudioClip CancelSE = null;	// キャンセルされたとき
+	[SerializeField] private AudioClip CancelSE = null; // キャンセルされたとき
+
+	// メッセージ受信の窓口
+	[Inject] private ISubscriber<byte, CustomButton.PressMessage> _pressSubscriber = null;     // ボタン押下メッセージ
+	[Inject] private ISubscriber<byte, CustomButton.CancelMessage> _cancelSubscriber = null;   // キャンセルメッセージ
 
 	// 音声を再生するコンポーネント
 	private AudioSource _audioSource = null;
@@ -22,7 +27,7 @@ public class CustomButtonSound : MonoBehaviour {
 	/// <summary>
 	/// EventSystemに選択されたときの処理
 	/// </summary>
-	private void OnSelect() => _audioSource.PlayOneShot(SelectSE);
+	private void OnMove() => _audioSource.PlayOneShot(MoveSE);
 
 	/// <summary>
 	/// 押されたときの処理
@@ -40,11 +45,13 @@ public class CustomButtonSound : MonoBehaviour {
 	}
 
 	private void Start() {
-		_button.OnSelectObservable.Subscribe(_ => OnSelect()).AddTo(this.GetCancellationTokenOnDestroy());
+		_button.OnMoveObservable.Subscribe(_ => OnMove())
+			.AddTo(this.GetCancellationTokenOnDestroy());
 
-		_button.OnSubmitObservable.Subscribe(_ => OnPress()).AddTo(this.GetCancellationTokenOnDestroy());
-		_button.OnPointerClickObservable.Subscribe(_ => OnPress()).AddTo(this.GetCancellationTokenOnDestroy());
+		_pressSubscriber.Subscribe(_button.ID, _ => OnPress())
+			.AddTo(this.GetCancellationTokenOnDestroy());
 
-		_button.OnCancelObservable.Subscribe(_ => OnCancel()).AddTo(this.GetCancellationTokenOnDestroy());
+		_cancelSubscriber.Subscribe(_button.ID, _ => OnCancel())
+			.AddTo(this.GetCancellationTokenOnDestroy());
 	}
 }

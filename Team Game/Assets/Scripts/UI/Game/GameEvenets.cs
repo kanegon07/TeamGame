@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using VContainer;
 
+[RequireComponent(typeof(AudioSource))]
 public class GameEvents : MonoBehaviour {
 	public struct GameOverMessage { }
 
@@ -21,6 +22,9 @@ public class GameEvents : MonoBehaviour {
 	[SerializeField] private FPSCamera Camera = null;
 	[SerializeField] private DebugMouse MouseLock = null;
 
+	[SerializeField] private AudioClip GoalSE = null;
+	[SerializeField] private AudioClip GameOverSE = null;
+
 	[Inject] private IPublisher<bool> _optionStatePublisher = null;
 	[Inject] private IPublisher<byte, Window.DisplayMessage> _displayPublisher = null;
 	[Inject] private IPublisher<byte, Window.ActivateMessage> _activatePublisher = null;
@@ -32,6 +36,8 @@ public class GameEvents : MonoBehaviour {
 	[Inject] private ISubscriber<byte, CustomButton.CancelMessage> _cancelSubscriber = null;
 	[Inject] private ISubscriber<GoalFlag.GoalMessage> _goalSubscriber = null;
 	[Inject] private ISubscriber<GameOverMessage> _gameOverSubscriber = null;
+
+	private AudioSource _audioSource = null;
 
 	private void OpenOption() {
 		Time.timeScale = 0F;
@@ -83,6 +89,8 @@ public class GameEvents : MonoBehaviour {
 	}
 
 	private void Awake() {
+		_audioSource = GetComponent<AudioSource>();
+
 		_optionSubscriber.Subscribe(x => {
 			if (x.Value) {
 				OpenOption();
@@ -94,8 +102,10 @@ public class GameEvents : MonoBehaviour {
 		_pressSubscriber.Subscribe((byte)ButtonID.Resume, _ => CloseOption())
 			.AddTo(this.GetCancellationTokenOnDestroy());
 
-		_pressSubscriber.Subscribe((byte)ButtonID.Title, _ => TransitScene("Title"))
-			.AddTo(this.GetCancellationTokenOnDestroy());
+		_pressSubscriber.Subscribe((byte)ButtonID.Title, _ => {
+			_audioSource.Stop();
+			TransitScene("Title");
+		}).AddTo(this.GetCancellationTokenOnDestroy());
 
 		_cancelSubscriber.Subscribe((byte)ButtonID.Resume, _ => CloseOption())
 			.AddTo(this.GetCancellationTokenOnDestroy());
@@ -103,9 +113,17 @@ public class GameEvents : MonoBehaviour {
 		_cancelSubscriber.Subscribe((byte)ButtonID.Title, _ => CloseOption())
 			.AddTo(this.GetCancellationTokenOnDestroy());
 
-		_goalSubscriber.Subscribe(x => TransitScene(x.NextScene)).AddTo(this.GetCancellationTokenOnDestroy());
+		_goalSubscriber.Subscribe(x => {
+			_audioSource.Stop();
+			_audioSource.PlayOneShot(GoalSE);
+			TransitScene(x.NextScene);
+		}).AddTo(this.GetCancellationTokenOnDestroy());
 
-		_gameOverSubscriber.Subscribe(x => TransitScene(SceneManager.GetActiveScene().name));
+		_gameOverSubscriber.Subscribe(x => {
+			_audioSource.Stop();
+			_audioSource.PlayOneShot(GameOverSE);
+			TransitScene(SceneManager.GetActiveScene().name);
+		}).AddTo(this.GetCancellationTokenOnDestroy());
 	}
 
 	private async void Start() {

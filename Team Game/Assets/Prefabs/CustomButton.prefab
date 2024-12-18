@@ -419,6 +419,7 @@ MonoBehaviour:
   SelectOnUp: {fileID: 0}
   SelectOnRight: {fileID: 0}
   SelectOnDown: {fileID: 0}
+  Debug_IsInvalid: 0
 --- !u!114 &9042200796539903930
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -443,9 +444,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a68f1986110c564e900a7f60455beca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SelectSE: {fileID: 0}
-  PressSE: {fileID: 0}
-  CancelSE: {fileID: 0}
+  MoveSE: {fileID: 8300000, guid: d20ca181548777741b9945c8a55700fb, type: 3}
+  PressSE: {fileID: 8300000, guid: 322c0452fce6ce14baed62eab49e5342, type: 3}
+  CancelSE: {fileID: 8300000, guid: 76653ef14e5ab2344aa2e4669b133430, type: 3}
 --- !u!1 &8526379858688384503
 GameObject:
   m_ObjectHideFlags: 0
