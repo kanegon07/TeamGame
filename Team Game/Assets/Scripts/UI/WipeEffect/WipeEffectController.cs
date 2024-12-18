@@ -34,7 +34,7 @@ public class WipeEffectController : MonoBehaviour {
 			if (msg.WipesOut) {
 				_wipeSize = 0F;
 
-				while (_wipeSize < 1F) {
+				while (_wipeSize <= 1F) {
 					_wipeSize += Time.unscaledDeltaTime;
 					Material.SetFloat(WipeSize, _wipeSize);
 					await UniTask.Yield();
@@ -44,7 +44,7 @@ public class WipeEffectController : MonoBehaviour {
 			} else {
 				_wipeSize = 1F;
 
-				while (_wipeSize > 0F) {
+				while (_wipeSize >= 0F) {
 					_wipeSize -= Time.unscaledDeltaTime;
 					Material.SetFloat(WipeSize, _wipeSize);
 					await UniTask.Yield();

@@ -75,12 +75,16 @@ public class CustomButtonView : MonoBehaviour {
 		_decoR = transform.Find("Deco_R").GetComponent<Image>();
 		_text = GetComponentInChildren<TMP_Text>();
 
-		_button.IsDisplayedRP.Subscribe(x => OnDisplay(x)).AddTo(this.GetCancellationTokenOnDestroy());
+		_button.IsDisplayedRP.Subscribe(x => OnDisplay(x))
+			.AddTo(this.GetCancellationTokenOnDestroy());
 
-		_button.IsActiveRP.Subscribe(x => OnActivate(x)).AddTo(this.GetCancellationTokenOnDestroy());
+		_button.IsActiveRP.Subscribe(x => OnActivate(x))
+			.AddTo(this.GetCancellationTokenOnDestroy());
 
-		_button.OnSelectObservable.Subscribe(_ => OnSelect(true)).AddTo(this.GetCancellationTokenOnDestroy());
+		_button.OnSelectObservable.Subscribe(_ => OnSelect(true))
+			.AddTo(this.GetCancellationTokenOnDestroy());
 
-		_button.OnDeselectObservable.Subscribe(_ => OnSelect(false)).AddTo(this.GetCancellationTokenOnDestroy());
+		_button.OnDeselectObservable.Subscribe(_ => OnSelect(false))
+			.AddTo(this.GetCancellationTokenOnDestroy());
 	}
 }

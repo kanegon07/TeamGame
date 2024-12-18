@@ -37,8 +37,8 @@ public class CustomButton : MonoBehaviour {
 	[Inject] private IPublisher<byte, CancelMessage> _cancelPublisher = null;	// キャンセルメッセージ
 
 	// ウィンドウクラスからのメッセージ受信の窓口
-	[Inject] private ISubscriber<int, Window.DisplayMessage> _displaySubscrber = null;		// 表示or非表示のメッセージ
-	[Inject] private ISubscriber<int, Window.ActivateMessage> _activateSubscrber = null;	// アクティブ状態変更のメッセージ
+	[Inject] private ISubscriber<int, Window.DisplayMessage> _displaySubscriber = null;		// 表示or非表示のメッセージ
+	[Inject] private ISubscriber<int, Window.ActivateMessage> _activateSubscriber = null;	// アクティブ状態変更のメッセージ
 
 	// 現在の状態を保存するReactiveProperty
 	// 端的にいえば、値が変更されたときにメッセージを発信する変数
@@ -204,8 +204,8 @@ public class CustomButton : MonoBehaviour {
 
 		OnPointerClickObservable.Subscribe(_ => OnPress()).AddTo(this.GetCancellationTokenOnDestroy());
 
-		_displaySubscrber.Subscribe(transform.parent.GetInstanceID(), x => OnDisplay(x.Value)).AddTo(this.GetCancellationTokenOnDestroy());
+		_displaySubscriber.Subscribe(transform.parent.GetInstanceID(), x => OnDisplay(x.Value)).AddTo(this.GetCancellationTokenOnDestroy());
 
-		_activateSubscrber.Subscribe(transform.parent.GetInstanceID(), x => OnActivate(x.Value)).AddTo(this.GetCancellationTokenOnDestroy());
+		_activateSubscriber.Subscribe(transform.parent.GetInstanceID(), x => OnActivate(x.Value)).AddTo(this.GetCancellationTokenOnDestroy());
 	}
 }

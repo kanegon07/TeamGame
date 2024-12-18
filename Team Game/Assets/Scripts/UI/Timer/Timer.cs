@@ -21,12 +21,16 @@ public class Timer : MonoBehaviour {
 		set { _remainingRP.Value = value; }
 	}
 
-	private void FixedUpdate() {
-		Remaining = TimeLimit - _time;
+	private void Start() {
+		Remaining = Max;
+	}
 
-		if (Remaining < 0F) {
+	private void FixedUpdate() {
+		if (Remaining <= 0F) {
 			_gameOverPublisher.Publish(new GameEvents.GameOverMessage());
 		}
+
+		Remaining = TimeLimit - _time;
 
 		_time += Time.fixedDeltaTime;
 	}
