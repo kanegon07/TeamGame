@@ -74,6 +74,7 @@
     <Compile Include="Assets\kaneko\Script\Sky Spin.cs" />
     <Compile Include="Assets\Supercyan Character Pack Free Sample\Scripts\FreeCameraLogic.cs" />
     <Compile Include="Assets\Supercyan Character Pack Free Sample\Scripts\DemoFree.cs" />
+    <Compile Include="Assets\kaneko\Script\SpeedUp.cs" />
     <Compile Include="Assets\kaneko\Script\mushroom.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\Readme.cs" />
     <Compile Include="Assets\Scripts\BulletManager.cs" />

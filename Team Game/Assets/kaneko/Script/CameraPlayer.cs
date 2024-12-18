@@ -62,7 +62,11 @@ public class CameraPlayer : MonoBehaviour
     private const float StaminaUp = 1.0f;//スタミナの回復の値
     private const float StaminaDown = 0.5f;//スタミナの消費の値
 
-    public bool FallFlg = false;
+    public bool FallFlg = false;//落下しているかどうか
+    public float RingSpeedUpForward = 0.0f;//リングでスピードアップする速さ
+    public float RingSpeedUpY = 0.0f;//リングで上昇するY座標の大きさ
+    private const float _Speed = 5.0f;//プレイヤーの移動速度の固定値
+    public bool RingFlg = false;
 
 
     //--------------------------------カメラ関連---------------------------------------------------
@@ -119,7 +123,7 @@ public class CameraPlayer : MonoBehaviour
     void Update()
     {
         //Debug.Log(Player_Stamina);
-        Debug.Log(FallFlg);
+        //Debug.Log(FallFlg);
         //頭は常に非表示
         HideObjectRenderer(_playerHead);
 
@@ -156,6 +160,17 @@ public class CameraPlayer : MonoBehaviour
 
         //--------------------------キャラの移動-------------------------------------------
        
+
+        if(Input.GetKey(KeyCode.T))
+        {
+            //transform.forward += UpSpeed;
+            //nowForward = transform.forward;
+            
+           
+        }
+       
+        
+
         //貼りついてる時
         if (StickWall == true)
         {
@@ -570,6 +585,20 @@ public class CameraPlayer : MonoBehaviour
         if (Player_Stamina >= StamiMax)
         {
             Player_Stamina = StamiMax;
+        }
+    }
+
+
+    public void RingSpeedUp(float ForwardSpeed,float SpeedY)
+    {
+        if (RingFlg == true)
+        {
+            moveSpeed = ForwardSpeed;
+            _moveVelocity.y = SpeedY;
+        }
+        else
+        {
+            moveSpeed = _Speed;
         }
     }
 }
