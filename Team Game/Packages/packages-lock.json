@@ -8,11 +8,11 @@
       "hash": "cd2b1459035aa7ff59924913f09c467adf72412f"
     },
     "com.cysharp.messagepipe.vcontainer": {
-      "version": "1.8.1",
+      "version": "https://github.com/Cysharp/MessagePipe.git?path=src/MessagePipe.Unity/Assets/Plugins/MessagePipe.VContainer",
       "depth": 0,
-      "source": "registry",
+      "source": "git",
       "dependencies": {},
-      "url": "https://package.openupm.com"
+      "hash": "cd2b1459035aa7ff59924913f09c467adf72412f"
     },
     "com.cysharp.r3": {
       "version": "https://github.com/Cysharp/R3.git?path=src/R3.Unity/Assets/R3.Unity",
