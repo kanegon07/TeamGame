@@ -27,9 +27,13 @@ public class BerryListView : MonoBehaviour {
 	}
 
 	private void Start() {
-		for (byte i = 0; i < _images.Length; ++i) {
-			_list.TakenRP(i).Subscribe(x => ReflectValue(i, x))
-				.AddTo(this.GetCancellationTokenOnDestroy());
-		}
+		_list.TakenRP(0).Subscribe(x => ReflectValue(0, x))
+			.AddTo(this.GetCancellationTokenOnDestroy());
+
+		_list.TakenRP(1).Subscribe(x => ReflectValue(1, x))
+			.AddTo(this.GetCancellationTokenOnDestroy());
+
+		_list.TakenRP(2).Subscribe(x => ReflectValue(2, x))
+			.AddTo(this.GetCancellationTokenOnDestroy());
 	}
 }

@@ -4,12 +4,17 @@ using R3;
 using UnityEngine;
 using VContainer;
 
+[RequireComponent(typeof(AudioSource))]
 public class BerryList : MonoBehaviour {
-	[Inject] private ISubscriber<byte, Berry.BerryMessage> _berrySubscriber = null;
+	[SerializeField] private AudioClip GetSE = null;
+
+	[Inject] private ISubscriber<Berry.BerryMessage> _berrySubscriber = null;
 
 	private ReactiveProperty<bool>[] _takenRP = new ReactiveProperty<bool>[] {
 		new(), new(), new()
 	};
+
+	private AudioSource _audioSource = null;
 
 	public ReadOnlyReactiveProperty<bool> TakenRP(byte id) {
 		if (id >= _takenRP.Length) {
@@ -19,26 +24,22 @@ public class BerryList : MonoBehaviour {
 		return _takenRP[id];
 	}
 
-	public bool GetTakenRPValue(byte id) {
-		if (id >= _takenRP.Length) {
-			return false;
-		}
-
-		return _takenRP[id].Value;
-	}
-
 	public void SetTakenRPValue(byte id, bool value) {
 		if (id >= _takenRP.Length) {
 			return;
 		}
 
 		_takenRP[id].Value = value;
+
+		if (value) {
+			_audioSource.PlayOneShot(GetSE);
+		}
 	}
 
 	private void Awake() {
-		for (byte i = 0; i < _takenRP.Length; ++i) {
-			_berrySubscriber.Subscribe(i, _ => SetTakenRPValue(i, true))
+		_berrySubscriber.Subscribe(x => SetTakenRPValue(x.BerryID, true))
 				.AddTo(this.GetCancellationTokenOnDestroy());
-		}
+
+		_audioSource = GetComponent<AudioSource>();
 	}
 }

@@ -1,29 +1,29 @@
 using MessagePipe;
+using System;
 using UnityEngine;
 using VContainer;
 
-[RequireComponent(typeof(MeshRenderer))]
-[RequireComponent(typeof(MeshCollider))]
+[RequireComponent(typeof(SphereCollider))]
 public class Berry : MonoBehaviour {
-	public struct BerryMessage { }
+	public struct BerryMessage : IEquatable<BerryMessage> {
+		public byte BerryID;
+
+		public BerryMessage(byte id) {
+			BerryID = id;
+		}
+
+		public bool Equals(BerryMessage other)
+			=> BerryID == other.BerryID;
+	}
 
 	[SerializeField] private byte ID = 0;
 
-	[Inject] private IPublisher<byte, BerryMessage> _berryPublisher = null;
+	[Inject] private IPublisher<BerryMessage> _berryPublisher = null;
 
-	private MeshRenderer _renderer = null;
-	private SphereCollider _collider = null;
-
-	private void Awake() {
-		_renderer = GetComponent<MeshRenderer>();
-		_collider = GetComponent<SphereCollider>();
-	}
-
-	private void OnCollisionEnter(Collision collision) {
-		if (collision.gameObject.CompareTag("Player")) {
-			_berryPublisher.Publish(ID, new BerryMessage());
-			_renderer.enabled = false;
-			_collider.enabled = false;
+	private void OnTriggerEnter(Collider other) {
+		if (other.CompareTag("Player")) {
+			_berryPublisher.Publish(new BerryMessage(ID));
+			gameObject.SetActive(false);
 		}
 	}
 }

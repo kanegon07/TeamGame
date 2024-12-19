@@ -40,8 +40,9 @@ public class OptionTag : MonoBehaviour {
 			_optionPublisher.Publish(new OptionMessage(false));
 		} else {
 			_optionPublisher.Publish(new OptionMessage(true));
-			_audioSource.PlayOneShot(TurnOnSE);
 		}
+
+		_audioSource.PlayOneShot(TurnOnSE);
 	}
 
 	private void OnTurn(bool flag) => _isTurnedOn = flag;

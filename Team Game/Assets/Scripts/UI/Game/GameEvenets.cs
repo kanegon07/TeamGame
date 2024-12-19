@@ -21,6 +21,7 @@ public class GameEvents : MonoBehaviour {
 	[SerializeField] private CameraPlayer Player = null;
 	[SerializeField] private FPSCamera Camera = null;
 	[SerializeField] private DebugMouse MouseLock = null;
+	[SerializeField] private Throw ThrowScript = null;
 
 	[SerializeField] private AudioClip GoalSE = null;
 	[SerializeField] private AudioClip GameOverSE = null;
@@ -82,6 +83,7 @@ public class GameEvents : MonoBehaviour {
 
 		Player.enabled = false;
 		Camera.enabled = false;
+		ThrowScript.enabled = false;
 
 		await Wipe(true);
 
@@ -131,6 +133,7 @@ public class GameEvents : MonoBehaviour {
 
 		Player.enabled = false;
 		Camera.enabled = false;
+		ThrowScript.enabled = false;
 
 		_displayPublisher.Publish((byte)WindowID.Main, new Window.DisplayMessage(true));
 
@@ -138,12 +141,14 @@ public class GameEvents : MonoBehaviour {
 
 		Player.enabled = true;
 		Camera.enabled = true;
+		ThrowScript.enabled = true;
 
 		_activatePublisher.Publish((byte)WindowID.Main, new Window.ActivateMessage(true));
 
 		SceneManager.sceneUnloaded += (_) => {
 			Player = null;
 			Camera = null;
+			ThrowScript = null;
 			MouseLock = null;
 		};
 	}
