@@ -3,6 +3,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.ProBuilder.MeshOperations;
@@ -62,7 +63,12 @@ public class CameraPlayer : MonoBehaviour
     private const float StaminaUp = 1.0f;//スタミナの回復の値
     private const float StaminaDown = 0.5f;//スタミナの消費の値
 
-    public bool FallFlg = false;
+    public bool FallFlg = false;//落下しているかどうか
+    public float RingSpeedUpForward = 0.0f;//リングでスピードアップする速さ
+    public float RingSpeedUpY = 0.0f;//リングで上昇するY座標の大きさ
+    private const float _Speed = 5.0f;//プレイヤーの移動速度の固定値
+    public bool RingFlg = false;
+    private int RingCount = 0;
 
 
     //--------------------------------カメラ関連---------------------------------------------------
@@ -119,9 +125,26 @@ public class CameraPlayer : MonoBehaviour
     void Update()
     {
         //Debug.Log(Player_Stamina);
-        Debug.Log(FallFlg);
+        //Debug.Log(FallFlg);
+        Debug.Log(RingCount);
         //頭は常に非表示
         HideObjectRenderer(_playerHead);
+
+
+        if(RingFlg==true)
+        {
+            RingCount++;
+            if(RingCount>=30)
+            {
+                RingCount = 30;
+                RingFlg = false;
+            }
+        }
+        if (RingFlg == false)
+        {
+            RingCount = 0;
+            moveSpeed = _Speed;
+        }
 
         //Debug.Log(BoundTime);
 
@@ -156,6 +179,17 @@ public class CameraPlayer : MonoBehaviour
 
         //--------------------------キャラの移動-------------------------------------------
        
+
+        if(Input.GetKey(KeyCode.T))
+        {
+            //transform.forward += UpSpeed;
+            //nowForward = transform.forward;
+            
+           
+        }
+       
+        
+
         //貼りついてる時
         if (StickWall == true)
         {
@@ -571,5 +605,20 @@ public class CameraPlayer : MonoBehaviour
         {
             Player_Stamina = StamiMax;
         }
+    }
+
+
+    
+    public void RingSpeedUp(float ForwardSpeed,float SpeedY)
+    {
+        if (RingFlg == true)
+        {
+            moveSpeed = ForwardSpeed;
+            _moveVelocity.y = SpeedY;
+        }
+        //else
+        //{
+        //    moveSpeed = _Speed;
+        //}
     }
 }
