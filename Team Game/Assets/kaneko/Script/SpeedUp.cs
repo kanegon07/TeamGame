@@ -6,6 +6,8 @@ public class SpeedUp : MonoBehaviour
 {
 
     CameraPlayer player;//ここでのプレイヤー
+    public float Forward_speed = 0.0f;
+    public float Y_speed = 0.0f;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,7 +27,9 @@ public class SpeedUp : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             player.RingFlg = true;
-            player.RingSpeedUp(10.0f, 20.0f);
+
+
+            player.RingSpeedUp(Forward_speed, Y_speed);//ここでどうするかを指定
             Debug.Log("true");
         }
     }
