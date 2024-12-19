@@ -15,6 +15,7 @@ TagManager:
   - MushRoom
   - Wall
   - WallHit
+  - Ring
   layers:
   - Default
   - TransparentFX

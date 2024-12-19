@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &4553219719461727309
+--- !u!1001 &7322823604461865544
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -71,7 +71,12 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 21863c5a425dd6a418cfbce06af0dd75,
         type: 3}
       propertyPath: m_Name
-      value: Air Ring
+      value: Air Ring 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 21863c5a425dd6a418cfbce06af0dd75,
+        type: 3}
+      propertyPath: m_TagString
+      value: Ring
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -80,39 +85,39 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 21863c5a425dd6a418cfbce06af0dd75,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 3720581656190408328}
+      addedObject: {fileID: 815350599608926940}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 21863c5a425dd6a418cfbce06af0dd75,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 261145840431326102}
+      addedObject: {fileID: 8587760973139006945}
   m_SourcePrefab: {fileID: 100100000, guid: 21863c5a425dd6a418cfbce06af0dd75, type: 3}
---- !u!1 &3742808929464013084 stripped
+--- !u!1 &7592660592646076185 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 21863c5a425dd6a418cfbce06af0dd75,
     type: 3}
-  m_PrefabInstance: {fileID: 4553219719461727309}
+  m_PrefabInstance: {fileID: 7322823604461865544}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3720581656190408328
+--- !u!114 &815350599608926940
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3742808929464013084}
+  m_GameObject: {fileID: 7592660592646076185}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1f144f6fd264d21428159ed1a8e816e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Forward_speed: 0
-  Y_speed: 0
---- !u!64 &261145840431326102
+  Forward_speed: 5
+  Y_speed: 5
+--- !u!64 &8587760973139006945
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3742808929464013084}
+  m_GameObject: {fileID: 7592660592646076185}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
