@@ -124,7 +124,7 @@ Material:
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
-    - _WipeSize: -0.0025351958
+    - _WipeSize: -0.0017394864
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:

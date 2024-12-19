@@ -37,7 +37,7 @@
       "dependencies": {}
     },
     "com.unity.ai.navigation": {
-      "version": "2.0.0",
+      "version": "2.0.5",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -74,7 +74,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.rider": {
-      "version": "3.0.28",
+      "version": "3.0.34",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -194,7 +194,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.timeline": {
-      "version": "1.8.6",
+      "version": "1.8.7",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -225,7 +225,7 @@
       "url": "https://packages.unity.com"
     },
     "jp.hadashikick.vcontainer": {
-      "version": "1.16.5",
+      "version": "1.16.6",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
