@@ -11,7 +11,7 @@ namespace Supercyan.FreeSample
 
         private void Start()
         {
-            m_animators = Object.FindObjectsByType<Animator>(FindObjectsSortMode.None);
+            m_animators = FindObjectsOfType<Animator>();
         }
 
         private void Update()

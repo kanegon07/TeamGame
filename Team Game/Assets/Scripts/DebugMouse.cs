@@ -1,10 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
-public class DebugMouse : MonoBehaviour
-{
+public class DebugMouse : MonoBehaviour {
     private bool isCursorLocked = true; // 現在のカーソルのロック状態を管理
+
+    // 別のスクリプトからいじりたいタイミングがあるので
+    // 追加させていただきました
+    public void Lock(bool flag) {
+        if (flag) {
+            LockCursor();
+        } else {
+            UnlockCursor();
+        }
+    }
 
     void Start()
     {
