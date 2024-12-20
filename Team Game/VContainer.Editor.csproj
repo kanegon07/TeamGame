@@ -61,16 +61,16 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\2023.2.19f1\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Library\PackageCache\jp.hadashikick.vcontainer@1.16.5\Editor\Diagnostics\TypeNameHelper.cs" />
-    <Compile Include="Library\PackageCache\jp.hadashikick.vcontainer@1.16.5\Editor\Diagnostics\VContainerDiagnosticsWindow.cs" />
-    <Compile Include="Library\PackageCache\jp.hadashikick.vcontainer@1.16.5\Editor\Diagnostics\SplitterGUILayout.cs" />
-    <Compile Include="Library\PackageCache\jp.hadashikick.vcontainer@1.16.5\Editor\ScriptTemplateModifier.cs" />
-    <Compile Include="Library\PackageCache\jp.hadashikick.vcontainer@1.16.5\Editor\ParentReferencePropertyDrawer.cs" />
-    <Compile Include="Library\PackageCache\jp.hadashikick.vcontainer@1.16.5\Editor\Diagnostics\VContainerDiagnosticsTreeView.cs" />
-    <Compile Include="Library\PackageCache\jp.hadashikick.vcontainer@1.16.5\Editor\Diagnostics\VContainerInstanceTreeView.cs" />
+    <Compile Include="Library\PackageCache\jp.hadashikick.vcontainer@1.16.6\Editor\Diagnostics\TypeNameHelper.cs" />
+    <Compile Include="Library\PackageCache\jp.hadashikick.vcontainer@1.16.6\Editor\Diagnostics\VContainerDiagnosticsWindow.cs" />
+    <Compile Include="Library\PackageCache\jp.hadashikick.vcontainer@1.16.6\Editor\Diagnostics\SplitterGUILayout.cs" />
+    <Compile Include="Library\PackageCache\jp.hadashikick.vcontainer@1.16.6\Editor\ScriptTemplateModifier.cs" />
+    <Compile Include="Library\PackageCache\jp.hadashikick.vcontainer@1.16.6\Editor\ParentReferencePropertyDrawer.cs" />
+    <Compile Include="Library\PackageCache\jp.hadashikick.vcontainer@1.16.6\Editor\Diagnostics\VContainerDiagnosticsTreeView.cs" />
+    <Compile Include="Library\PackageCache\jp.hadashikick.vcontainer@1.16.6\Editor\Diagnostics\VContainerInstanceTreeView.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Library\PackageCache\jp.hadashikick.vcontainer@1.16.5\Editor\VContainer.Editor.asmdef" />
+    <None Include="Library\PackageCache\jp.hadashikick.vcontainer@1.16.6\Editor\VContainer.Editor.asmdef" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
