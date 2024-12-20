@@ -67,7 +67,7 @@ public class TitleEvents : MonoBehaviour {
 		_pressSubscriber.Subscribe((byte)ButtonID.Start, _ => OpenStageSelector())
 			.AddTo(this.GetCancellationTokenOnDestroy());
 
-		_pressSubscriber.Subscribe((byte)ButtonID.Stage1, _ => TransitScene("Stage1"))
+		_pressSubscriber.Subscribe((byte)ButtonID.Stage1, _ => TransitScene("FujiiScene"))
 			.AddTo(this.GetCancellationTokenOnDestroy());
 
 		_pressSubscriber.Subscribe((byte)ButtonID.Stage2, _ => TransitScene("Stage2"))
