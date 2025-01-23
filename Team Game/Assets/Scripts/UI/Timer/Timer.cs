@@ -6,7 +6,7 @@ using VContainer;
 public class Timer : MonoBehaviour {
 	[SerializeField] private int TimeLimit = 0;
 
-	[Inject] private IPublisher<GameEvents.GameOverMessage> _gameOverPublisher = null;
+	[Inject] private readonly IPublisher<int> _eventPublisher = null;
 
 	private readonly ReactiveProperty<float> _remainingRP = new(0);
 
@@ -27,7 +27,7 @@ public class Timer : MonoBehaviour {
 
 	private void FixedUpdate() {
 		if (Remaining <= 0F) {
-			_gameOverPublisher.Publish(new GameEvents.GameOverMessage());
+			_eventPublisher.Publish((int)GameEvents.EventID.Miss);
 		}
 
 		Remaining = TimeLimit - _time;

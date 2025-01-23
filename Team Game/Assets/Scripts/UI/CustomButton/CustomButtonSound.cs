@@ -2,24 +2,17 @@ using Cysharp.Threading.Tasks;
 using MessagePipe;
 using R3;
 using UnityEngine;
-using VContainer;
 
-/// <summary>
-/// 自作ボタンのSEを変更・管理するクラス
-/// </summary>
+// 自作ボタンのSEを変更・管理するクラス
 [RequireComponent(typeof(AudioSource))]
 [RequireComponent(typeof(CustomButton))]
 public class CustomButtonSound : MonoBehaviour {
 	// SE
-	[SerializeField] private AudioClip MoveSE = null;	// 移動時
-	[SerializeField] private AudioClip PressSE = null;	// 押されたとき
-	[SerializeField] private AudioClip CancelSE = null; // キャンセルされたとき
+	[SerializeField] private AudioClip MoveSE = null;	// 移動
+	[SerializeField] private AudioClip PressSE = null;	// 決定
+	[SerializeField] private AudioClip CancelSE = null; // キャンセル
 
-	// メッセージ受信の窓口
-	[Inject] private ISubscriber<byte, CustomButton.PressMessage> _pressSubscriber = null;     // ボタン押下メッセージ
-	[Inject] private ISubscriber<byte, CustomButton.CancelMessage> _cancelSubscriber = null;   // キャンセルメッセージ
-
-	// 音声を再生するコンポーネント
+	// SE再生用
 	private AudioSource _audioSource = null;
 	// 自作ボタン
 	private CustomButton _button = null;
@@ -40,18 +33,23 @@ public class CustomButtonSound : MonoBehaviour {
 	private void OnCancel() => _audioSource.PlayOneShot(CancelSE);
 
 	private void Awake() {
+		// 必要なコンポーネントをキャッシュ
 		_audioSource = GetComponent<AudioSource>();
 		_button = GetComponent<CustomButton>();
 	}
 
 	private void Start() {
+		// メッセージ受信時の処理を設定
 		_button.OnMoveObservable.Subscribe(_ => OnMove())
 			.AddTo(this.GetCancellationTokenOnDestroy());
 
-		_pressSubscriber.Subscribe(_button.ID, _ => OnPress())
-			.AddTo(this.GetCancellationTokenOnDestroy());
+		_button.OnReceiveCallback += OnPress;
 
-		_cancelSubscriber.Subscribe(_button.ID, _ => OnCancel())
+		_button.OnCancelObservable.Subscribe(_ => OnCancel())
 			.AddTo(this.GetCancellationTokenOnDestroy());
+	}
+
+	private void OnDestroy() {
+		_button.OnReceiveCallback -= OnPress;
 	}
 }

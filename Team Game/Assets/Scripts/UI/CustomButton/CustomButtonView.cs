@@ -4,22 +4,20 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>
-/// 自作ボタンの見た目を変更・管理するクラス
-/// </summary>
+// 自作ボタンの見た目を変更・管理するクラス
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(CustomButton))]
 public class CustomButtonView : MonoBehaviour {
-	// アニメーション再生用のコンポーネント
+	// アニメーション再生用
 	private Animator _animator;
 	// 自作ボタン
 	private CustomButton _button = null;
 
-	private Image _base = null;
-	private Image _color = null;
-	private Image _decoL = null;
-	private Image _decoR = null;
+	// 画像
+	private Image _base = null;		// 大枠
+	private Image _color = null;	// 中
 
+	// ボタン上に表示するテキスト
 	private TMP_Text _text = null;
 
 	/// <summary>
@@ -30,8 +28,6 @@ public class CustomButtonView : MonoBehaviour {
 		// 表示状態を変更
 		_base.enabled = flag;
 		_color.enabled = flag;
-		_decoL.enabled = flag;
-		_decoR.enabled = flag;
 		_text.enabled = flag;
 	}
 
@@ -40,6 +36,7 @@ public class CustomButtonView : MonoBehaviour {
 	/// </summary>
 	/// <param name="flag">値</param>
 	private void OnActivate(bool flag) {
+		// それぞれのアニメーションを再生する
 		if (flag) {
 			_animator.SetFloat(Animator.StringToHash("Speed"), 1F);
 			_animator.Play("Activate", 0, 0F);
@@ -54,6 +51,7 @@ public class CustomButtonView : MonoBehaviour {
 	/// </summary>
 	/// <param name="flag">値</param>
 	private void OnSelect(bool flag) {
+		// それぞれのアニメーションを再生する
 		if (flag) {
 			_animator.SetFloat(Animator.StringToHash("Speed"), 1F);
 			_animator.Play("Select", 0, 0F);
@@ -64,17 +62,18 @@ public class CustomButtonView : MonoBehaviour {
 	}
 
 	private void Awake() {
+		// 必要なコンポーネントをキャッシュ
 		_animator = GetComponent<Animator>();
 		_button = GetComponent<CustomButton>();
 	}
 
 	private void Start() {
+		// 子オブジェクトのコンポーネントをキャッシュ
 		_base = transform.Find("Base").GetComponent<Image>();
 		_color = transform.Find("Color").GetComponent<Image>();
-		_decoL = transform.Find("Deco_L").GetComponent<Image>();
-		_decoR = transform.Find("Deco_R").GetComponent<Image>();
 		_text = GetComponentInChildren<TMP_Text>();
 
+		// メッセージ受信時の処理を設定
 		_button.IsDisplayedRP.Subscribe(x => OnDisplay(x))
 			.AddTo(this.GetCancellationTokenOnDestroy());
 

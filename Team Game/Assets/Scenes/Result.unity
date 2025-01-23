@@ -772,7 +772,7 @@ PrefabInstance:
     - target: {fileID: 2379237940018411571, guid: 5452a94701b48eb498e8f61cee47e7d9,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2379237940018411571, guid: 5452a94701b48eb498e8f61cee47e7d9,
         type: 3}
@@ -782,7 +782,7 @@ PrefabInstance:
     - target: {fileID: 2379237940018411571, guid: 5452a94701b48eb498e8f61cee47e7d9,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2379237940018411571, guid: 5452a94701b48eb498e8f61cee47e7d9,
         type: 3}
@@ -837,7 +837,7 @@ PrefabInstance:
     - target: {fileID: 2379237940018411571, guid: 5452a94701b48eb498e8f61cee47e7d9,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -224
       objectReference: {fileID: 0}
     - target: {fileID: 2379237940018411571, guid: 5452a94701b48eb498e8f61cee47e7d9,
         type: 3}
@@ -1033,7 +1033,7 @@ MonoBehaviour:
   m_text: THANKS FOR PLAYING!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1118,8 +1118,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 702383686}
-  - component: {fileID: 702383687}
-  - component: {fileID: 702383689}
   - component: {fileID: 702383688}
   m_Layer: 5
   m_Name: Window_Main
@@ -1148,18 +1146,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!225 &702383687
-CanvasGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 702383685}
-  m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
 --- !u!114 &702383688
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1172,34 +1158,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 264a4eb5e8138b24790826542ac48b77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: 0
+  EventID: -1
+  WindowID: 0
   FirstSelected: {fileID: 304328548}
---- !u!114 &702383689
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 702383685}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 192
-    m_Bottom: 0
-  m_ChildAlignment: 4
-  m_Spacing: 0
-  m_ChildForceExpandWidth: 0
-  m_ChildForceExpandHeight: 0
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
-  m_ChildScaleWidth: 0
-  m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
 --- !u!1001 &722822634
 PrefabInstance:
   m_ObjectHideFlags: 0

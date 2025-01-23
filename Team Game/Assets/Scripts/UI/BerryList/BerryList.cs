@@ -8,11 +8,11 @@ using VContainer;
 public class BerryList : MonoBehaviour {
 	[SerializeField] private AudioClip GetSE = null;
 
-	[Inject] private ISubscriber<Berry.BerryMessage> _berrySubscriber = null;
+	[Inject] private readonly ISubscriber<StageInfo> _stageInfoSubscriber = null;
 
-	private ReactiveProperty<bool>[] _takenRP = new ReactiveProperty<bool>[] {
-		new(), new(), new()
-	};
+	[Inject] private readonly ISubscriber<Berry.BerryMessage> _berrySubscriber = null;
+
+	private readonly ReactiveProperty<bool>[] _takenRP = null;
 
 	private AudioSource _audioSource = null;
 
@@ -36,7 +36,13 @@ public class BerryList : MonoBehaviour {
 		}
 	}
 
+	private void Initialize(int count) {
+
+	}
+
 	private void Awake() {
+		_stageInfoSubscriber.Subscribe(x => Initialize(x.BerryCount));
+
 		_berrySubscriber.Subscribe(x => SetTakenRPValue(x.BerryID, true))
 				.AddTo(this.GetCancellationTokenOnDestroy());
 
