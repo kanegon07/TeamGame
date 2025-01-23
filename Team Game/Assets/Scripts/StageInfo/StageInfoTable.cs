@@ -12,4 +12,14 @@ public class StageInfo {
 [CreateAssetMenu(fileName = "StageInfoTable", menuName = "ScriptableObject/StageInfoTable", order = 1)]
 public class StageInfoTable : ScriptableObject {
 	public List<StageInfo> Table;
+
+	public StageInfo Find(int stageID) {
+		foreach (var info in Table) {
+			if (info.StageID == stageID) {
+				return info;
+			}
+		}
+
+		return null;
+	}
 }

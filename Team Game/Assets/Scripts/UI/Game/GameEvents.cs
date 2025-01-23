@@ -160,7 +160,7 @@ public class GameEvents : MonoBehaviour {
 		// 必要なコンポーネントをキャッシュ
 		_audioSource = GetComponent<AudioSource>();
 
-		// _stageInfo = Resources.Load<StageInfoTable>("ScriptableObjects").Table[StageID];
+		_stageInfo = Resources.Load<StageInfoTable>("StageInfoTable").Find(StageID);
 
 		// メッセージ受信時の処理を設定
 		_eventSubscriber.Subscribe(x => {
@@ -189,7 +189,7 @@ public class GameEvents : MonoBehaviour {
 	}
 
 	private async void Start() {
-		// _stageInfoPublisher.Publish(_stageInfo);
+		_stageInfoPublisher.Publish(_stageInfo);
 
 		// カーソルの位置を固定し、見えないようにする
 		MouseLock.Lock(true);

@@ -59,7 +59,5 @@ public class SelectionHook : MonoBehaviour {
 
 	private void Start() {
 		StartCoroutine(RestrictSelection());
-
-		SceneManager.sceneUnloaded += _ => ResetSelection();
 	}
 }

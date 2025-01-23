@@ -1,18 +1,19 @@
+using Cysharp.Threading.Tasks;
 using MessagePipe;
 using R3;
 using UnityEngine;
 using VContainer;
 
 public class Timer : MonoBehaviour {
-	[SerializeField] private int TimeLimit = 0;
-
 	[Inject] private readonly IPublisher<int> _eventPublisher = null;
+
+	[Inject] private readonly ISubscriber<StageInfo> _stageInfoSubscriber = null;
 
 	private readonly ReactiveProperty<float> _remainingRP = new(0);
 
 	private float _time = 0F;
 
-	public float Max => TimeLimit;
+	public float Max { get; set; } = 0F;
 
 	public ReadOnlyReactiveProperty<float> RemainingRP => _remainingRP;
 
@@ -21,8 +22,13 @@ public class Timer : MonoBehaviour {
 		set { _remainingRP.Value = value; }
 	}
 
-	private void Start() {
-		Remaining = Max;
+	private void Initialize(int timeLimit) {
+		Remaining = Max = timeLimit;
+	}
+
+	private void Awake() {
+		_stageInfoSubscriber.Subscribe(x => Initialize(x.TimeLimit))
+			.AddTo(this.GetCancellationTokenOnDestroy());
 	}
 
 	private void FixedUpdate() {
@@ -30,7 +36,7 @@ public class Timer : MonoBehaviour {
 			_eventPublisher.Publish((int)GameEvents.EventID.Miss);
 		}
 
-		Remaining = TimeLimit - _time;
+		Remaining = Max - _time;
 
 		_time += Time.fixedDeltaTime;
 	}
