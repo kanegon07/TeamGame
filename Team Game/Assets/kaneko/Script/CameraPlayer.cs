@@ -57,6 +57,7 @@ public class CameraPlayer : MonoBehaviour
 
     private InputAction _StickWall;//壁に貼りついてる時のプレイヤー操作
 
+    private RayManager rayManager;  // RayManager を参照する変数
 
     //--------------------------------カメラ関連---------------------------------------------------
     //public Transform camTrans;//カメラは誰なのか
@@ -93,6 +94,7 @@ public class CameraPlayer : MonoBehaviour
         //-------------------InputSystemの導入や、キャッシュ-------------------------------
         _characterController = GetComponent<CharacterController>();
         _capsuleCollider = GetComponent<CapsuleCollider>(); // カプセルコライダーを取得
+        rayManager = GetComponent<RayManager>();
 
         // CharacterController の元の設定を保存
         _originalCenter = _characterController.center;
@@ -111,7 +113,7 @@ public class CameraPlayer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(WallHitFlg);
+        //Debug.Log(WallHitFlg);
         //頭は常に非表示
         HideObjectRenderer(_playerHead);
 
@@ -263,8 +265,8 @@ public class CameraPlayer : MonoBehaviour
 
     void Fly()
     {
-        // ジャンプ中かどうかを確認
-        if (JumpingFlg == true)
+        // 地面に触れていないなら滑空可能
+        if (!_characterController.isGrounded)
         {
             // ジャンプ開始時に飛行フラグをセット
             if (_jump.WasPerformedThisFrame() && !FlyFlg)
@@ -396,8 +398,6 @@ public class CameraPlayer : MonoBehaviour
             }
         }
     }
-
-
 
     void Stickwall()
     {

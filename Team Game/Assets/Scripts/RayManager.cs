@@ -5,7 +5,50 @@ using UnityEngine.UI;
 
 public class RayManager : MonoBehaviour
 {
-    public Camera mainCamera;  // カメラを参照
+    public Transform player;    // プレイヤーのTransform
+    public float rayLength = 0.5f; // レイの長さ（短め）
+    public LayerMask wallLayer; // 壁判定用のレイヤー
+
+    private float rayHeightOffset = 0.5f; // レイの高さオフセット
+    private bool isTouchingWallFront = false; // 正面の壁
+    public bool isRayHit = false; // レイが当たったかどうかのフラグ
+
+    void Update()
+    {
+        CheckWallDetection();
+    }
+
+    void CheckWallDetection()
+    {
+        // 正面にレイを飛ばす
+        Vector3 frontDirection = player.forward;   // 正面方向
+
+        // レイを飛ばす起点の位置を計算（足元 + 高さオフセット）
+        Vector3 rayStartPosition = player.position + Vector3.up * rayHeightOffset;
+
+        // レイキャストを実行
+        isTouchingWallFront = Physics.Raycast(rayStartPosition, frontDirection, rayLength, wallLayer);
+
+        // レイが当たった場合にフラグをtrueに設定
+        if (isTouchingWallFront)
+        {
+            isRayHit = true;
+            //Debug.Log("trueに！");
+        }
+        else
+        {
+            isRayHit = false;
+            //Debug.Log("falseに！");
+        }
+
+        // デバッグ用のレイを描画
+        //Debug.DrawRay(rayStartPosition, frontDirection * rayLength, isTouchingWallFront ? Color.green : Color.red);
+
+        // 壁接触のログを出力
+        //if (isTouchingWallFront) Debug.Log("壁に触れた！");
+    }
+
+    /*public Camera mainCamera;  // カメラを参照
     public BulletManager bulletManager;  // BulletManagerを参照
 
     // ターゲット位置を取得するメソッド
@@ -28,7 +71,7 @@ public class RayManager : MonoBehaviour
         }
 
         return targetPosition;
-    }
+    }*/
 
     /*//発射元オブジェクト
     public GameObject Emitter_object;

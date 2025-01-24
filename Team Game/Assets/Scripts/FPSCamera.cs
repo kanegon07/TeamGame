@@ -17,18 +17,25 @@ public class FPSCamera : MonoBehaviour
 
     private List<GameObject> cameraRelatedObjects; // 回転を適用するオブジェクトのリスト
 
+    public CameraPlayer playerController; // CameraPlayerスクリプトへの参照
+
     private void Start()
     {
         // 一括で回転を適用する対象オブジェクトをリストに登録
         cameraRelatedObjects = new List<GameObject> { playerHead, mainCamera, subCamera, trajectoryLine, particleEffect };
+    
+        playerController = GetComponent<CameraPlayer>();
     }
     void Update()
     {
         // マウス入力の取得
         Vector2 mouseInput = GetMouseInput();
 
-        // プレイヤーの水平回転
-        RotatePlayerHorizontally(mouseInput.x);
+        // 壁に張り付いていない場合のみ水平回転を許可
+        if (playerController == null || !playerController.StickWall)
+        {
+            RotatePlayerHorizontally(mouseInput.x);
+        }
 
         // カメラの垂直回転
         RotateCameraVertically(mouseInput.y);
