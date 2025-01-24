@@ -22,6 +22,7 @@ public class Throw : MonoBehaviour
 
     void Update()
     {
+/*
         if (Input.GetMouseButton(0)) // 左クリック長押し
         {
             holdTime += Time.deltaTime; // 左クリック時間の計測
@@ -34,6 +35,7 @@ public class Throw : MonoBehaviour
             ClearTrajectory(); // 軌跡を消去
             holdTime = 0f; // 左クリック時間リセット
         }
+*/
     }
 
     // 軌跡の更新

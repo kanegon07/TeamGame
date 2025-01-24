@@ -4,11 +4,11 @@ using VContainer;
 
 [RequireComponent(typeof(MeshCollider))]
 public class LowerCloud : MonoBehaviour {
-	[Inject] private IPublisher<GameEvents.GameOverMessage> _gameOverPublisher = null;
+	[Inject] private readonly IPublisher<int> _eventPublisher = null;
 
 	private void OnCollisionEnter(Collision other) {
-		if (other.gameObject.CompareTag("Player")) {
-			_gameOverPublisher.Publish(new GameEvents.GameOverMessage());
+		if (other.gameObject.CompareTag("PlayerHit")) {
+			_eventPublisher.Publish((int)GameEvents.EventID.Miss);
 		}
 	}
 }

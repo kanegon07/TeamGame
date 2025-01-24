@@ -108,8 +108,8 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.nuget.mono-cecil": {
-      "version": "1.11.4",
-      "depth": 4,
+      "version": "1.11.5",
+      "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
@@ -225,7 +225,7 @@
       "url": "https://packages.unity.com"
     },
     "jp.hadashikick.vcontainer": {
-      "version": "1.16.6",
+      "version": "1.16.8",
       "depth": 0,
       "source": "registry",
       "dependencies": {},

@@ -6,19 +6,19 @@ using VContainer;
 [RequireComponent(typeof(SphereCollider))]
 public class Berry : MonoBehaviour {
 	public struct BerryMessage : IEquatable<BerryMessage> {
-		public byte BerryID;
+		public int BerryID;
 
-		public BerryMessage(byte id) {
+		public BerryMessage(int id) {
 			BerryID = id;
 		}
 
-		public bool Equals(BerryMessage other)
+		public readonly bool Equals(BerryMessage other)
 			=> BerryID == other.BerryID;
 	}
 
 	[SerializeField] private byte ID = 0;
 
-	[Inject] private IPublisher<BerryMessage> _berryPublisher = null;
+	[Inject] private readonly IPublisher<BerryMessage> _berryPublisher = null;
 
 	private void OnTriggerEnter(Collider other) {
 		if (other.CompareTag("Player")) {

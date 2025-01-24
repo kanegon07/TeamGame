@@ -44,7 +44,7 @@ Camera:
   m_GameObject: {fileID: 254255813996706061}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 2
   m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -5035,7 +5035,7 @@ Camera:
   m_GameObject: {fileID: 2230006650249726620}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 2
   m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -5687,7 +5687,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: b5ad8f0ee23c3044d9556ca570c20278,
         type: 3}
       propertyPath: m_Name
-      value: Player_0 1
+      value: Player_0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: b5ad8f0ee23c3044d9556ca570c20278,
         type: 3}
@@ -5861,6 +5861,11 @@ MonoBehaviour:
   FlyFlg: 0
   WallHitFlg: 0
   StickWall: 0
+  Player_Stamina: 0
+  FallFlg: 0
+  RingSpeedUpForward: 0
+  RingSpeedUpY: 0
+  RingFlg: 0
   mouseSensitivity: 1
   invertX: 0
   invertY: 0
