@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using MessagePipe;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using VContainer;
 
 // ゲームシーン用のイベント管理クラス
@@ -10,7 +11,8 @@ public class GameEvents : MonoBehaviour {
 	// 出力先に割り振る番号
 	public enum WindowID {
 		Main,	// メインウィンドウ
-		Option	// オプションウィンドウ
+		Option,	// オプションウィンドウ
+		ControlGuide
 	}
 
 	// 入力元に割り振る番号
@@ -19,7 +21,9 @@ public class GameEvents : MonoBehaviour {
 		CloseOption,
 		ReturnToTitle,
 		Miss,
-		Clear
+		Clear,
+		OpenControlGuide,
+		CloseControlGuide
 	}
 
 	public enum TransitType {
@@ -50,6 +54,8 @@ public class GameEvents : MonoBehaviour {
 
 	// メッセージ受信の窓口(同期)
 	[Inject] private readonly ISubscriber<int> _eventSubscriber = null;
+
+	private RawImage _windEffect = null;
 
 	// BGM再生用
 	private AudioSource _audioSource = null;
@@ -156,8 +162,22 @@ public class GameEvents : MonoBehaviour {
 		SceneManager.LoadScene(nextScene);
 	}
 
+	private void OpenControlGuide() {
+		_audioSource.PlayOneShot(OptionSE);
+
+		_statePublisher.Publish((int)WindowID.Option, new Window.StateMessage(Window.StateMessage.State.Inactive));
+		_statePublisher.Publish((int)WindowID.ControlGuide, new Window.StateMessage(Window.StateMessage.State.Active));
+	}
+
+	private void CloseControlGuide() {
+		_statePublisher.Publish((int)WindowID.ControlGuide, new Window.StateMessage(Window.StateMessage.State.Hiding));
+		_statePublisher.Publish((int)WindowID.Option, new Window.StateMessage(Window.StateMessage.State.Active));
+	}
+
 	private void Awake() {
 		// 必要なコンポーネントをキャッシュ
+		_windEffect = transform.Find("Wind").GetComponent<RawImage>();
+
 		_audioSource = GetComponent<AudioSource>();
 
 		_stageInfo = Resources.Load<StageInfoTable>("StageInfoTable").Find(StageID);
@@ -183,6 +203,17 @@ public class GameEvents : MonoBehaviour {
 
 				case (int)EventID.Clear:
 					TransitScene(TransitType.Clear, "Result");
+					break;
+
+				case (int)EventID.OpenControlGuide:
+					OpenControlGuide();
+					break;
+
+				case (int)EventID.CloseControlGuide:
+					CloseControlGuide();
+					break;
+
+				default:
 					break;
 			}
 		}).AddTo(this.GetCancellationTokenOnDestroy());
@@ -217,5 +248,9 @@ public class GameEvents : MonoBehaviour {
 
 		// BGMの再生を始める
 		_audioSource.Play();
+	}
+
+	private void Update() {
+		_windEffect.enabled = Player.FlyFlg;
 	}
 }

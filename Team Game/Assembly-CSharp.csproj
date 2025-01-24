@@ -82,11 +82,13 @@
     <Compile Include="Assets\Scripts\UI\Title\TitleEvents.cs" />
     <Compile Include="Assets\Scripts\UI\PostureIcon\PostureIconView.cs" />
     <Compile Include="Assets\Effekseer\Example\EfkBasic.cs" />
+    <Compile Include="Assets\Scripts\UI\ControlGuide.cs" />
     <Compile Include="Assets\Scripts\TriangleMesh.cs" />
     <Compile Include="Assets\kaneko\Script\Sky Spin.cs" />
     <Compile Include="Assets\Forst\CTI Runtime Components\CTI Runtime Components URP 14plus\Scripts\CTI_URP_CustomWind.cs" />
     <Compile Include="Assets\Scripts\UI\CustomButton\CustomButton.cs" />
     <Compile Include="Assets\Scripts\GoalFlag.cs" />
+    <Compile Include="Assets\Scripts\Sign.cs" />
     <Compile Include="Assets\Supercyan Character Pack Free Sample\Scripts\FreeCameraLogic.cs" />
     <Compile Include="Assets\Supercyan Character Pack Free Sample\Scripts\DemoFree.cs" />
     <Compile Include="Assets\kaneko\Script\SpeedUp.cs" />
@@ -114,7 +116,6 @@
     <Compile Include="Assets\Scripts\StageInfo\StageInfoTable.cs" />
     <Compile Include="Assets\Scripts\UI\Result\ResultLifetimeScope.cs" />
     <Compile Include="Assets\kaneko\Script\PlayerHiObj.cs" />
-    <Compile Include="Assets\Scripts\UI\BerryList\BerryListView.cs" />
     <Compile Include="Assets\Scripts\UI\StaminaGauge\StaminaGaugeView.cs" />
     <Compile Include="Assets\Scripts\UI\SelectionHook.cs" />
     <Compile Include="Assets\Scripts\UI\OptionTag\OptionTag.cs" />
