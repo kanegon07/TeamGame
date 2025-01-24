@@ -12,7 +12,7 @@
         },
         {
             "StageID": 3,
-            "TimeLimit": 60,
+            "TimeLimit": 90,
             "BerryCount": 3
         }
     ]
