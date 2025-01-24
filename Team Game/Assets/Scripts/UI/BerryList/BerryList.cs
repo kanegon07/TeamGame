@@ -1,8 +1,8 @@
 using Cysharp.Threading.Tasks;
 using MessagePipe;
 using R3;
-using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 using VContainer;
 
 [RequireComponent(typeof(AudioSource))]
@@ -13,50 +13,55 @@ public class BerryList : MonoBehaviour {
 
 	[Inject] private readonly ISubscriber<Berry.BerryMessage> _berrySubscriber = null;
 
-	private readonly ReactiveProperty<int> _countRP = new(0);
-
-	private ReactiveProperty<bool>[] _takenRP = null;
+	private int _count = 0;
 
 	private AudioSource _audioSource = null;
 
-	public ReadOnlyReactiveProperty<int> CountRP => _countRP;
+	private GameObject _icon = null;
 
-	public int Count {
-		get { return _countRP.Value; }
-		set { _countRP.Value = value; }
-	}
-
-	public ReadOnlyReactiveProperty<bool> TakenRP(int id) {
-		if (id >= _takenRP.Length) {
-			return null;
-		}
-
-		return _takenRP[id];
-	}
-
-	public void SetTakenRPValue(int id, bool value) {
-		if (id >= _takenRP.Length) {
+	public void ReflectValue(int id, bool value) {
+		if (id >= _count) {
 			return;
 		}
 
-		_takenRP[id].Value = value;
-
 		if (value) {
+			transform.GetChild(id).GetComponent<Image>().color = new Color(1F, 1F, 1F, 1F);
 			_audioSource.PlayOneShot(GetSE);
+		} else {
+			transform.GetChild(id).GetComponent<Image>().color = new Color(1F, 1F, 1F, 0.5F);
 		}
 	}
 
 	private void Initialize(int count) {
-		_takenRP = Enumerable.Repeat(new ReactiveProperty<bool>(false), count).ToArray();
+		_count = count;
 
-		Count = count;
+		RectTransform rectTransform = GetComponent<RectTransform>();
+
+		rectTransform.sizeDelta = new Vector2(
+			80F * count,
+			rectTransform.sizeDelta.y
+		);
+
+		for (int i = 0; i < count; ++i) {
+			RectTransform iconRect = Instantiate(
+				_icon,
+				transform
+			).GetComponent<RectTransform>();
+
+			iconRect.anchoredPosition = new Vector2(
+				-40F * (_count - 1) + 80F * i,
+				0F
+			);
+		}
 	}
 
 	private void Awake() {
+		_icon = Resources.Load<GameObject>("BerryIcon");
+
 		_stageInfoSubscriber.Subscribe(x => Initialize(x.BerryCount))
 			.AddTo(this.GetCancellationTokenOnDestroy());
 
-		_berrySubscriber.Subscribe(x => SetTakenRPValue(x.BerryID, true))
+		_berrySubscriber.Subscribe(x => ReflectValue(x.BerryID, true))
 			.AddTo(this.GetCancellationTokenOnDestroy());
 
 		_audioSource = GetComponent<AudioSource>();

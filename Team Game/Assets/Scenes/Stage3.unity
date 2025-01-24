@@ -2852,6 +2852,11 @@ PrefabInstance:
       objectReference: {fileID: 862665308}
     - target: {fileID: 2936343869793053579, guid: aa1c01aa9c92681479d18424c71acf4c,
         type: 3}
+      propertyPath: StageID
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2936343869793053579, guid: aa1c01aa9c92681479d18424c71acf4c,
+        type: 3}
       propertyPath: MouseLock
       value: 
       objectReference: {fileID: 1611130063}

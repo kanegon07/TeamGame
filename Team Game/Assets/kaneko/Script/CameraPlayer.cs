@@ -370,7 +370,7 @@ public class CameraPlayer : MonoBehaviour
             // 飛行カウントが5に達っするか地面に触れると飛行を停止
             if (FlyCount >= 5)
             {
-                if (_jump.WasPerformedThisFrame() || _characterController.isGrounded)
+                if (_jump.WasPerformedThisFrame() || _characterController.isGrounded || Player_Stamina <= 0F)
                 {
                     FlyFlg = false;
                 }
