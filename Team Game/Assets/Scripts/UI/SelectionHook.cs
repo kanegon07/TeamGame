@@ -6,20 +6,17 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using VContainer;
 
-/// <summary>
-/// 選択フッククラス
-/// このクラスに登録されたオブジェクトは、他のものが登録されるまで選択解除されない
-/// ゲームパッドの場合、選択が外れると他のオブジェクトを
-/// 選択し直せずに詰むので、それの対策用
-/// </summary>
+// 選択フッククラス
+// このクラスに登録されたオブジェクトは、他のものが登録されるまで選択解除されない
+// ゲームパッドの場合、選択が外れると他のオブジェクトを
+// 選択し直せないせいで詰みかねないので、それの対策用
 public class SelectionHook : MonoBehaviour {
 	// 登録解除を求めるメッセージ
 	public struct UnhookMessage { }
 
-	// 最後に選択されたオブジェクト
-	public GameObject PrevSelected { get; set; } = null;
-
 	[Inject] private ISubscriber<UnhookMessage> _unhookSubscriber = null;
+
+	private GameObject _prevSelected = null;
 
 	/// <summary>
 	/// EventSystemのオブジェクト選択を待つコルーチン
@@ -29,15 +26,21 @@ public class SelectionHook : MonoBehaviour {
 	/// <returns></returns>
 	private IEnumerator RestrictSelection() {
 		while (true) {
+			GameObject currentSelected = EventSystem.current.currentSelectedGameObject;
+
 			yield return new WaitUntil(
-				() => EventSystem.current.currentSelectedGameObject == null
+				() => currentSelected != _prevSelected
 			);
 
-			if (PrevSelected == null) {
-				continue;
-			}
+			if (currentSelected == null) {
+				if (_prevSelected == null) {
+					continue;
+				}
 
-			EventSystem.current.SetSelectedGameObject(PrevSelected);
+				EventSystem.current.SetSelectedGameObject(_prevSelected);
+			} else {
+				_prevSelected = currentSelected;
+			}
 		}
 	}
 
@@ -45,7 +48,10 @@ public class SelectionHook : MonoBehaviour {
 	/// 現在のシーンが終了したときの処理
 	/// オブジェクトの登録を解除する
 	/// </summary>
-	private void ResetSelection() => PrevSelected = null;
+	private void ResetSelection() {
+		_prevSelected = null;
+		EventSystem.current.SetSelectedGameObject(null);
+	}
 
 	private void Awake() {
 		_unhookSubscriber.Subscribe(_ => ResetSelection()).AddTo(this.GetCancellationTokenOnDestroy());
@@ -53,7 +59,5 @@ public class SelectionHook : MonoBehaviour {
 
 	private void Start() {
 		StartCoroutine(RestrictSelection());
-
-		SceneManager.sceneUnloaded += _ => ResetSelection();
 	}
 }

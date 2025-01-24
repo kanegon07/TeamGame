@@ -208,12 +208,12 @@ public class CameraPlayer : MonoBehaviour
             //スタミナのための処理
             if(vexX!=_moveVelocity.x)
             {
-                PlayerStaminaDec();//スタミナをここで消費
+                PlayerStaminaDec(0.2F);//スタミナをここで消費
             }
 
             if (vexY!= _moveVelocity.y)
             {
-                PlayerStaminaDec();//スタミナをここで消費
+                PlayerStaminaDec(0.2F);//スタミナをここで消費
             }
 
             //移動処理
@@ -362,7 +362,9 @@ public class CameraPlayer : MonoBehaviour
         // 飛行中の処理
         if (FlyFlg == true)
         {
-            FallFlg = false;
+			PlayerStaminaDec(0.05F);
+
+			FallFlg = false;
             FlyCount++;
 
             // 飛行カウントが5に達っするか地面に触れると飛行を停止
