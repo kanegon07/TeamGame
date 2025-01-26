@@ -21,7 +21,7 @@ MonoBehaviour:
     Message: Press "Space" or "A"\nin midair\nto start gliding.
   - SignID: 2
     Name: Berry
-    Message: Collect all the berries\non the stage\nand the goal flag\nis activated.
+    Message: Collect all the berries\non the stage\nand the goal flag\nwill be activated.
   - SignID: 3
     Name: Timer
     Message: Touch the goal flag\nwithin the time limit.

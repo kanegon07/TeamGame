@@ -110,7 +110,7 @@ public class TitleEvents : MonoBehaviour {
 					break;
 
 				case (int)EventID.StartStage3:
-					TransitScene("YamajiScene");
+					TransitScene("Yamaji Scene");
 					break;
 
 				default:
