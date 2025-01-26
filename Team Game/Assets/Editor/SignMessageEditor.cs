@@ -6,8 +6,8 @@ using UnityEditor;
 #endif
 
 #if UNITY_EDITOR
-[CustomEditor(typeof(StageInfoTable))]
-public class StageInfoEditor : Editor {
+[CustomEditor(typeof(SignMessageTable))]
+public class SignMessageEditor : Editor {
 	/// <summary>
 	/// ファイルの絶対パスを取得する
 	/// </summary>
@@ -24,7 +24,7 @@ public class StageInfoEditor : Editor {
 	/// </summary>
 	/// <param name="fileName">ファイル名</param>
 	/// <param name="table">テーブル</param>
-	public void Save(string fileName, StageInfoTable table) {
+	public void Save(string fileName, SignMessageTable table) {
 		try {
 			// 現在のテーブルのデータをファイルに書き込む
 			System.IO.File.WriteAllText(
@@ -44,7 +44,7 @@ public class StageInfoEditor : Editor {
 	/// </summary>
 	/// <param name="fileName">ファイル名</param>
 	/// <param name="table">テーブル</param>
-	public void Load(string fileName, StageInfoTable table) {
+	public void Load(string fileName, SignMessageTable table) {
 		try {
 			// ファイルから読み出したデータを現在のテーブルに反映させる
 			JsonUtility.FromJsonOverwrite(
@@ -62,18 +62,18 @@ public class StageInfoEditor : Editor {
 	public override bool RequiresConstantRepaint() => true;
 
 	public override void OnInspectorGUI() {
-		StageInfoTable importer = target as StageInfoTable;
+		SignMessageTable importer = target as SignMessageTable;
 
 		DrawDefaultInspector();
 
 		// セーブボタンを押してセーブ
 		if (GUILayout.Button("セーブ")) {
-			Save("StageInfoTable", importer);
+			Save("SignMessageTable", importer);
 		}
 
 		// ロードボタンを押してロード
 		if (GUILayout.Button("ロード")) {
-			Load("StageInfoTable", importer);
+			Load("SignMessageTable", importer);
 		}
 	}
 }

@@ -1,11 +1,37 @@
+using Cysharp.Threading.Tasks;
 using MessagePipe;
-using System;
 using UnityEngine;
 using VContainer;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(CapsuleCollider))]
 public class GoalFlag : MonoBehaviour {
+	[SerializeField] private AudioClip UnlockSE = null;
+
 	[Inject] private readonly IPublisher<int> _eventPublisher = null;
+
+	[Inject] private readonly ISubscriber<BerryList.UnlockMessage> _unlockSubscriber = null;
+
+	private AudioSource _audioSource = null;
+	private CapsuleCollider _collider = null;
+	private GameObject _effect = null;
+
+	private void Unlock() {
+		_audioSource.PlayOneShot(UnlockSE);
+		_collider.enabled = true;
+		_effect.SetActive(true);
+	}
+
+	private void Awake() {
+		_audioSource = GetComponent<AudioSource>();
+		_collider = GetComponent<CapsuleCollider>();
+		_effect = transform.Find("Godray").gameObject;
+
+		_effect.SetActive(false);
+
+		_unlockSubscriber.Subscribe(_ => Unlock())
+			.AddTo(this.GetCancellationTokenOnDestroy());
+	}
 
 	private void OnTriggerEnter(Collider other) {
 		if (other.CompareTag("Player")) {

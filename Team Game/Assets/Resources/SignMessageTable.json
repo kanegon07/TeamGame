@@ -1,0 +1,34 @@
+{
+    "Table": [
+        {
+            "SignID": 0,
+            "Name": "Jump",
+            "Message": "Press \"Space\" or \"A\"\\nto jump."
+        },
+        {
+            "SignID": 1,
+            "Name": "Glide",
+            "Message": "Press \"Space\" or \"A\"\\nin midair\\nto start gliding."
+        },
+        {
+            "SignID": 2,
+            "Name": "Berry",
+            "Message": "Collect all the berries\\non the stage\\nand the goal is activated."
+        },
+        {
+            "SignID": 3,
+            "Name": "Timer",
+            "Message": "Touch the goal flag\\nwithin the time limit."
+        },
+        {
+            "SignID": 4,
+            "Name": "Stick",
+            "Message": "Press \"Right Click\"\\nor \"Left Trigger\"\\nto stick to the wall\\nand climb it up."
+        },
+        {
+            "SignID": 5,
+            "Name": "Ring",
+            "Message": "You gets boost\\nwhen passing\\nthrough\\nthe ring."
+        }
+    ]
+}

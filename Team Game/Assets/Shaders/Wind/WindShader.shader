@@ -9,12 +9,12 @@ Shader "Custom/WindShader" {
 		_PatternSeed("PatternSeed", Range(10, 100)) = 1  
 		
 		[Space(10)]
-		_Edge1("Edge1", Range(0, 1)) = 0.5
-		_Edge2("Edge2", Range(0, 1)) = 1
+		_Edge1("Edge1", Range(0.0, 1.0)) = 0.5
+		_Edge2("Edge2", Range(0.0, 1.0)) = 1.0
 
 		[Space(10)]
-		[Toggle] _IsAutoAnim("IsAutoAnim", float) = 0
-		_AutoAnimSpeed("AutoAnimSpeed", Range(1, 20)) = 10
+		[Toggle] _IsAutoAnim("IsAutoAnim", float) = 0.0
+		_AutoAnimSpeed("AutoAnimSpeed", Range(1.0, 20.0)) = 10.0
 	}
 
 	SubShader {
@@ -25,6 +25,7 @@ Shader "Custom/WindShader" {
 		}
 
 		Cull Off
+		Lighting Off
 		ZWrite Off
 		Blend SrcAlpha OneMinusSrcAlpha
 
@@ -36,7 +37,7 @@ Shader "Custom/WindShader" {
 			#pragma fragment frag
 
 			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-            #include "Packages/com.unity.render-pipelines.core/Runtime/Utilities/Blit.hlsl"
+			#include "Packages/com.unity.render-pipelines.core/Runtime/Utilities/Blit.hlsl"
 
 			struct VS_Input {
 				float4 positionOS : POSITION;
@@ -75,7 +76,7 @@ Shader "Custom/WindShader" {
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
 
 				output.positionHCS = TransformObjectToHClip(input.positionOS.xyz);
-				output.uv = input.uv;
+				output.uv = TRANSFORM_TEX(input.uv, _MainTex);
 				return output;
 			}
 		
