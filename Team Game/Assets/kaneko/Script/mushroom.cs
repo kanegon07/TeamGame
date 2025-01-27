@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class mushroom : MonoBehaviour
 {
-
+    public float JumpY = 10.0f;
     CameraPlayer player;
     // Start is called before the first frame update
     void Start()
@@ -26,7 +26,7 @@ public class mushroom : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             Debug.Log("“–‚½‚Á‚Ä‚é‚æ");
-            player.UpPlayer(10.0f,15);
+            player.UpPlayer(JumpY, 15);
             
             
         }

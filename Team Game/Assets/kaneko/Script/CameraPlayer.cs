@@ -126,7 +126,7 @@ public class CameraPlayer : MonoBehaviour
     {
         //Debug.Log(Player_Stamina);
         //Debug.Log(FallFlg);
-        Debug.Log(RingCount);
+        //Debug.Log(RingCount);
         //頭は常に非表示
         HideObjectRenderer(_playerHead);
 
@@ -285,6 +285,7 @@ public class CameraPlayer : MonoBehaviour
             {
                 _moveVelocity.y = 0.0f;
                 FlyGravity += -0.8f * Time.deltaTime;
+
             }
 
             if(StickWall == true)
