@@ -1,5 +1,6 @@
 //テスト
 
+using Cysharp.Threading.Tasks.Triggers;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -70,6 +71,10 @@ public class CameraPlayer : MonoBehaviour
     public bool RingFlg = false;
     private int RingCount = 0;
 
+    private bool TornadoFlg;//トルネードの中にいるときのフラグ
+    private bool TornadoTopFlg;//トルネードの上部にいるときのフラグ
+    private float TornadoGravity = 0.0f;//トルネードの内部の処理
+    private float TornadoMove = 0.0f;
 
     //--------------------------------カメラ関連---------------------------------------------------
     //public Transform camTrans;//カメラは誰なのか
@@ -130,8 +135,8 @@ public class CameraPlayer : MonoBehaviour
         //頭は常に非表示
         HideObjectRenderer(_playerHead);
 
-
-        if(RingFlg==true)
+        
+        if (RingFlg==true)
         {
             RingCount++;
             if(RingCount>=30)
@@ -292,7 +297,30 @@ public class CameraPlayer : MonoBehaviour
             {
                 _moveVelocity.y = 0.0f;
             }
+
+            if(TornadoFlg==true)
+            {
+                FlyFlg = false;
+                _moveVelocity.y = 0.0f;
+                TornadoMove = 1.0f;
+
+               
+
+                TornadoGravity += TornadoMove + Time.deltaTime;
+
+
+            }
+            else
+            {
+                TornadoGravity = 0.0f;
+            }
+
             
+            
+            //if (TornadoTopFlg == true)
+            //{
+            //    TornadoGravity = 0.0f;
+            //}
 
             //if(BoundFlg==true)
             //{
@@ -304,10 +332,14 @@ public class CameraPlayer : MonoBehaviour
 
         
 
-
-        if(StickWall==true)
+        
+        if (StickWall==true)
         {
             moveInput.y = moveInput.y + 0;
+        }
+        else if (TornadoFlg == true)
+        {
+            moveInput.y = moveInput.y + TornadoGravity;
         }
         else if (FlyFlg == true)
         {
@@ -624,4 +656,44 @@ public class CameraPlayer : MonoBehaviour
         //    moveSpeed = _Speed;
         //}
     }
+
+        
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.CompareTag("Tornado"))
+        {
+
+            TornadoFlg = true;
+
+            //float playerSpeedX = 0;
+            //float playerSpeedZ = 0;
+            //if (other.GetComponent<Tornado>() != null)
+            //{
+            //    playerSpeedX = other.GetComponent<Tornado>().MoveX;
+            //    playerSpeedZ = other.GetComponent<Tornado>().MoveZ;
+            //}
+
+            //_characterController.Move(Vector3.right * playerSpeedX * Time.deltaTime);
+            //_characterController.Move(Vector3.forward * playerSpeedZ * Time.deltaTime);
+
+        }
+
+
+
+
+
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Tornado"))
+        {
+            TornadoFlg = false;
+        }
+
+
+    }
+
 }
+
