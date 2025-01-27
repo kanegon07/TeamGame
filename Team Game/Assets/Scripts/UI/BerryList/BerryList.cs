@@ -7,7 +7,11 @@ using VContainer;
 
 [RequireComponent(typeof(AudioSource))]
 public class BerryList : MonoBehaviour {
+	public struct UnlockMessage { }
+
 	[SerializeField] private AudioClip GetSE = null;
+
+	[Inject] private readonly IPublisher<UnlockMessage> _unlockPublisher = null;
 
 	[Inject] private readonly ISubscriber<StageInfo> _stageInfoSubscriber = null;
 
@@ -15,18 +19,33 @@ public class BerryList : MonoBehaviour {
 
 	private int _count = 0;
 
+	private bool[] _state = null;
+
 	private AudioSource _audioSource = null;
 
 	private GameObject _icon = null;
+
+	public void CheckState() {
+		foreach (bool flag in _state) {
+			if (!flag) {
+				return;
+			}
+		}
+
+		_unlockPublisher.Publish(new UnlockMessage());
+	}
 
 	public void ReflectValue(int id, bool value) {
 		if (id >= _count) {
 			return;
 		}
 
+		_state[id] = value;
+
 		if (value) {
-			transform.GetChild(id).GetComponent<Image>().color = new Color(1F, 1F, 1F, 1F);
 			_audioSource.PlayOneShot(GetSE);
+			transform.GetChild(id).GetComponent<Image>().color = new Color(1F, 1F, 1F, 1F);
+			CheckState();
 		} else {
 			transform.GetChild(id).GetComponent<Image>().color = new Color(1F, 1F, 1F, 0.5F);
 		}
@@ -53,6 +72,8 @@ public class BerryList : MonoBehaviour {
 				0F
 			);
 		}
+
+		_state = new bool[count];
 	}
 
 	private void Awake() {

@@ -23,5 +23,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/FujiiScene.unity
     guid: 1a8a01505c0eaf942b0b7f757e0b46fe
+  - enabled: 1
+    path: Assets/Scenes/Yamaji Scene.unity
+    guid: e36b00343ff9e2144bff507ed08492c8
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

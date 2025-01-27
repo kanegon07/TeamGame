@@ -82,14 +82,17 @@
     <Compile Include="Assets\Scripts\UI\Title\TitleEvents.cs" />
     <Compile Include="Assets\Scripts\UI\PostureIcon\PostureIconView.cs" />
     <Compile Include="Assets\Effekseer\Example\EfkBasic.cs" />
+    <Compile Include="Assets\Scripts\UI\TutorialMessage.cs" />
     <Compile Include="Assets\Scripts\UI\ControlGuide.cs" />
     <Compile Include="Assets\Scripts\TriangleMesh.cs" />
     <Compile Include="Assets\kaneko\Script\Sky Spin.cs" />
     <Compile Include="Assets\Forst\CTI Runtime Components\CTI Runtime Components URP 14plus\Scripts\CTI_URP_CustomWind.cs" />
     <Compile Include="Assets\Scripts\UI\CustomButton\CustomButton.cs" />
+    <Compile Include="Assets\Scripts\SignTable\SignMessageTable.cs" />
     <Compile Include="Assets\Scripts\GoalFlag.cs" />
     <Compile Include="Assets\Scripts\Sign.cs" />
     <Compile Include="Assets\Supercyan Character Pack Free Sample\Scripts\FreeCameraLogic.cs" />
+    <Compile Include="Assets\Scripts\UI\OptionTag\OptionTagSound.cs" />
     <Compile Include="Assets\Supercyan Character Pack Free Sample\Scripts\DemoFree.cs" />
     <Compile Include="Assets\kaneko\Script\SpeedUp.cs" />
     <Compile Include="Assets\kaneko\Script\mushroom.cs" />
@@ -143,6 +146,7 @@
     <None Include="Assets\Effekseer\Materials\EffekseerShaderAdLitUnlitPS.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\Forst\CTI Runtime Components\CTI Runtime Components URP 14plus\Shaders\Includes\CTI URP SG BillboardVertexSimple.hlsl" />
+    <None Include="Assets\Shaders\Scroll\ScrollShader.shader" />
     <None Include="Assets\Forst\CTI Runtime Components\CTI Runtime Components URP 14plus\Shaders\Includes\CTI URP SG Utils.hlsl" />
     <None Include="Assets\Forst\CTI Runtime Components\CTI Runtime Components URP 14plus\Shaders\Includes\CTI URP SG BillboardFragment.hlsl" />
     <None Include="Assets\Supercyan Character Pack Free Sample\Shaders\SupercyanShader.shader" />
