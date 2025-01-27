@@ -67,6 +67,7 @@
     <Compile Include="Assets\Scripts\UI\BerryList\BerryList.cs" />
     <Compile Include="Assets\Scripts\UI\CustomButton\CustomButtonView.cs" />
     <Compile Include="Assets\kaneko\Script\MushRoom Animation.cs" />
+    <Compile Include="Assets\kaneko\Script\Tornado.cs" />
     <Compile Include="Assets\Scripts\UI\CustomButton\CustomButtonSound.cs" />
     <Compile Include="Assets\Supercyan Character Pack Free Sample\Scripts\AccessoryWearLogic.cs" />
     <Compile Include="Assets\Scripts\UI\StaminaGauge\StaminaGauge.cs" />

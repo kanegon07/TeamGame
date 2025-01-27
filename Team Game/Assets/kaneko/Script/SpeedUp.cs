@@ -34,7 +34,7 @@ public class SpeedUp : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             player.RingFlg = true;
-            
+            player.FlyFlg = false;
 
             player.RingSpeedUp(Forward_speed, Y_speed);//‚±‚±‚Å‚Ç‚¤‚·‚é‚©‚ðŽw’è
             

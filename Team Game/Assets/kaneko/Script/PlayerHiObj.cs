@@ -50,7 +50,7 @@ public class PlayerHiObj : MonoBehaviour
         if (collision.gameObject.CompareTag("Spring") || collision.gameObject.CompareTag("Ground"))
         {
             player.FlyFlg = false;
-            player.PlayerStaminaRec();//スタミナを回復(念のためここにも記述している。)
+            //player.PlayerStaminaRec();//スタミナを回復(念のためここにも記述している。)
         }
        
 

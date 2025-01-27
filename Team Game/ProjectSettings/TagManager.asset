@@ -16,6 +16,7 @@ TagManager:
   - Wall
   - WallHit
   - Ring
+  - Tornado
   layers:
   - Default
   - TransparentFX
