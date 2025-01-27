@@ -25,15 +25,14 @@ public class StageInfoEditor : Editor {
 	/// <param name="fileName">ファイル名</param>
 	/// <param name="table">テーブル</param>
 	public void Save(string fileName, StageInfoTable table) {
-		// ファイルの絶対パスを取得する
-		string absolutePath = AbsolutePath(fileName);
-
-		// テーブルを文字列に変換する
-		string jsonString = JsonUtility.ToJson(table, true);
-
 		try {
-			// ファイルに書き込む
-			System.IO.File.WriteAllText(absolutePath, jsonString);
+			// 現在のテーブルのデータをファイルに書き込む
+			System.IO.File.WriteAllText(
+				AbsolutePath(fileName),
+				JsonUtility.ToJson(table, true)
+			);
+
+			Debug.Log("Saving completed.");
 		} catch (Exception e) {
 			// 失敗したらログを出す
 			Debug.LogError("Failed to save : " + e.Message);
@@ -46,15 +45,14 @@ public class StageInfoEditor : Editor {
 	/// <param name="fileName">ファイル名</param>
 	/// <param name="table">テーブル</param>
 	public void Load(string fileName, StageInfoTable table) {
-		// ファイルの絶対パスを取得する
-		string absolutePath = AbsolutePath(fileName);
-
-		// ファイルから読み込む
-		string jsonString = System.IO.File.ReadAllText(absolutePath);
-
 		try {
-			// テーブルに反映させる
-			JsonUtility.FromJsonOverwrite(jsonString, table);
+			// ファイルから読み出したデータを現在のテーブルに反映させる
+			JsonUtility.FromJsonOverwrite(
+				System.IO.File.ReadAllText(AbsolutePath(fileName)),
+				table
+			);
+
+			Debug.Log("Loading completed.");
 		} catch (Exception e) {
 			// 失敗したらログを出す
 			Debug.LogError("Failed to save : " + e.Message);

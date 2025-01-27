@@ -1,20 +1,19 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
 public class StageInfo {
-	public int StageID;
-	public int TimeLimit;
-	public int BerryCount;
+	public int StageID = -1;
+	public int TimeLimit = 0;
+	public int BerryCount = 0;
 }
 
 [CreateAssetMenu(fileName = "StageInfoTable", menuName = "ScriptableObject/StageInfoTable", order = 1)]
 public class StageInfoTable : ScriptableObject {
-	public List<StageInfo> Table;
+	public StageInfo[] Table = null;
 
 	public StageInfo Find(int stageID) {
-		foreach (var info in Table) {
+		foreach (StageInfo info in Table) {
 			if (info.StageID == stageID) {
 				return info;
 			}

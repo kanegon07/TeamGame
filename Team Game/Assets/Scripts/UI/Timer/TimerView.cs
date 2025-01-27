@@ -19,7 +19,7 @@ public class TimerView : MonoBehaviour {
 
 	private void Start() {
 		_fillImage = transform.Find("Color").GetComponent<Image>();
-		_timer.RemainingRP.Subscribe(x => _text.text = Mathf.CeilToInt(x).ToString("D2"));
+		_timer.RemainingRP.Subscribe(x => _text.text = Mathf.CeilToInt(x).ToString("D3"));
 	}
 
 	private void Update() {

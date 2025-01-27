@@ -40,7 +40,6 @@ public class GameEvents : MonoBehaviour {
 	[SerializeField] private DebugMouse MouseLock = null;	// マウスロック
 
 	// SEデータ
-	[SerializeField] private AudioClip OptionSE = null;
 	[SerializeField] private AudioClip ClearSE = null;		// ゴール
 	[SerializeField] private AudioClip MissSE = null;		// ゲームオーバー
 
@@ -66,8 +65,6 @@ public class GameEvents : MonoBehaviour {
 	/// オプションを開く
 	/// </summary>
 	private void OpenOption() {
-		_audioSource.PlayOneShot(OptionSE);
-
 		// ゲーム内時間を止める
 		Time.timeScale = 0F;
 
@@ -163,8 +160,6 @@ public class GameEvents : MonoBehaviour {
 	}
 
 	private void OpenControlGuide() {
-		_audioSource.PlayOneShot(OptionSE);
-
 		_statePublisher.Publish((int)WindowID.Option, new Window.StateMessage(Window.StateMessage.State.Inactive));
 		_statePublisher.Publish((int)WindowID.ControlGuide, new Window.StateMessage(Window.StateMessage.State.Active));
 	}
