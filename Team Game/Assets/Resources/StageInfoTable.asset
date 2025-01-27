@@ -17,7 +17,7 @@ MonoBehaviour:
     TimeLimit: 99
     BerryCount: 1
   - StageID: 2
-    TimeLimit: 60
+    TimeLimit: 200
     BerryCount: 3
   - StageID: 3
     TimeLimit: 110
