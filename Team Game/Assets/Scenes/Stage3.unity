@@ -1598,6 +1598,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Berry (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3119069971212648208, guid: c51c11c55d15ad1438b751a9fde2a18d,
+        type: 3}
+      propertyPath: ID
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7119,6 +7124,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Berry (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3119069971212648208, guid: c51c11c55d15ad1438b751a9fde2a18d,
+        type: 3}
+      propertyPath: ID
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
