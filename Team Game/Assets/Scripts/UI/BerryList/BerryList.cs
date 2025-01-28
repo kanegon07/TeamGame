@@ -6,33 +6,32 @@ using UnityEngine.UI;
 using VContainer;
 
 [RequireComponent(typeof(AudioSource))]
-public class BerryList : MonoBehaviour {
-	public struct UnlockMessage { }
+public class BerryList : MonoBehaviour, IRequestHandler<bool, bool[]> {
+	[Inject] private readonly IPublisher<bool> _unlockPublisher = null;
 
-	[SerializeField] private AudioClip GetSE = null;
-
-	[Inject] private readonly IPublisher<UnlockMessage> _unlockPublisher = null;
+	[Inject] private readonly IPublisher<int, bool> _berryPublisher = null;
 
 	[Inject] private readonly ISubscriber<StageInfo> _stageInfoSubscriber = null;
 
 	[Inject] private readonly ISubscriber<Berry.BerryMessage> _berrySubscriber = null;
 
+	[Inject] private readonly ISubscriber<bool[]> _berryResetSubscriber = null;
+
 	private int _count = 0;
 
 	private bool[] _state = null;
-
-	private AudioSource _audioSource = null;
 
 	private GameObject _icon = null;
 
 	public void CheckState() {
 		foreach (bool flag in _state) {
 			if (!flag) {
+				_unlockPublisher.Publish(false);
 				return;
 			}
 		}
 
-		_unlockPublisher.Publish(new UnlockMessage());
+		_unlockPublisher.Publish(true);
 	}
 
 	public void ReflectValue(int id, bool value) {
@@ -43,12 +42,12 @@ public class BerryList : MonoBehaviour {
 		_state[id] = value;
 
 		if (value) {
-			_audioSource.PlayOneShot(GetSE);
 			transform.GetChild(id).GetComponent<Image>().color = new Color(1F, 1F, 1F, 1F);
-			CheckState();
 		} else {
 			transform.GetChild(id).GetComponent<Image>().color = new Color(1F, 1F, 1F, 0.5F);
 		}
+
+		CheckState();
 	}
 
 	private void Initialize(int count) {
@@ -76,6 +75,23 @@ public class BerryList : MonoBehaviour {
 		_state = new bool[count];
 	}
 
+	private void ResetState(bool[] state) {
+		for (int i = 0; i < _state.Length; ++i) {
+			_berryPublisher.Publish(i, state[i]);
+			ReflectValue(i, state[i]);
+		}
+	}
+
+	public bool[] Invoke(bool fills) {
+		if (fills) {
+			for (int i = 0; i < _state.Length; ++i) {
+				ReflectValue(i, true);
+			}
+		}
+
+		return _state;
+	}
+
 	private void Awake() {
 		_icon = Resources.Load<GameObject>("BerryIcon");
 
@@ -85,6 +101,7 @@ public class BerryList : MonoBehaviour {
 		_berrySubscriber.Subscribe(x => ReflectValue(x.BerryID, true))
 			.AddTo(this.GetCancellationTokenOnDestroy());
 
-		_audioSource = GetComponent<AudioSource>();
+		_berryResetSubscriber.Subscribe(x => ResetState(x))
+			.AddTo(this.GetCancellationTokenOnDestroy());
 	}
 }

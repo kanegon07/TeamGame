@@ -6,6 +6,7 @@ public class StageInfo {
 	public int StageID = -1;
 	public int TimeLimit = 0;
 	public int BerryCount = 0;
+	public Vector3 StartPosition = Vector3.zero;
 }
 
 [CreateAssetMenu(fileName = "StageInfoTable", menuName = "ScriptableObject/StageInfoTable", order = 1)]
