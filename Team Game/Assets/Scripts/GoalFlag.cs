@@ -10,16 +10,18 @@ public class GoalFlag : MonoBehaviour {
 
 	[Inject] private readonly IPublisher<int> _eventPublisher = null;
 
-	[Inject] private readonly ISubscriber<BerryList.UnlockMessage> _unlockSubscriber = null;
+	[Inject] private readonly ISubscriber<bool> _unlockSubscriber = null;
 
 	private AudioSource _audioSource = null;
 	private CapsuleCollider _collider = null;
 	private GameObject _effect = null;
 
-	private void Unlock() {
-		_audioSource.PlayOneShot(UnlockSE);
-		_collider.enabled = true;
-		_effect.SetActive(true);
+	private void Unlock(bool flag) {
+		_collider.enabled = flag;
+		_effect.SetActive(flag);
+		if (flag) {
+			_audioSource.PlayOneShot(UnlockSE);
+		}
 	}
 
 	private void Awake() {
@@ -29,7 +31,7 @@ public class GoalFlag : MonoBehaviour {
 
 		_effect.SetActive(false);
 
-		_unlockSubscriber.Subscribe(_ => Unlock())
+		_unlockSubscriber.Subscribe(x => Unlock(x))
 			.AddTo(this.GetCancellationTokenOnDestroy());
 	}
 

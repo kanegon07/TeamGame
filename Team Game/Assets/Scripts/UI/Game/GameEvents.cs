@@ -28,9 +28,10 @@ public class GameEvents : MonoBehaviour {
 
 	public enum TransitType {
 		Abort,
-		Miss,
 		Clear
 	}
+
+	public struct ReserMessage { }
 
 	[SerializeField] private int StageID = 0;
 
@@ -48,11 +49,19 @@ public class GameEvents : MonoBehaviour {
 
 	[Inject] private readonly IPublisher<StageInfo> _stageInfoPublisher = null;
 
+	[Inject] private readonly IPublisher<bool[]> _berryResetPublisher = null;
+
+	[Inject] private readonly IPublisher<ReserMessage> _resetPublisher = null;
+
 	// メッセージ送信の窓口(非同期)
 	[Inject] private readonly IAsyncPublisher<WipeEffectController.WipeMessage> _wipeAsyncPublisher = null; // ワイプ処理
 
 	// メッセージ受信の窓口(同期)
 	[Inject] private readonly ISubscriber<int> _eventSubscriber = null;
+
+	[Inject] private readonly ISubscriber<Vector3> _halfwaySubscriber = null;
+
+	[Inject] private readonly IRequestHandler<bool, bool[]> _berryRequestHandler = null;
 
 	private RawImage _windEffect = null;
 
@@ -60,6 +69,10 @@ public class GameEvents : MonoBehaviour {
 	private AudioSource _audioSource = null;
 
 	private StageInfo _stageInfo = null;
+
+	private Vector3 _respawnPosition = Vector3.zero;
+
+	private bool[] _gotBerries;
 
 	/// <summary>
 	/// オプションを開く
@@ -127,13 +140,6 @@ public class GameEvents : MonoBehaviour {
 				_statePublisher.Publish((int)WindowID.Option, new Window.StateMessage(Window.StateMessage.State.Inactive));
 				break;
 
-			case TransitType.Miss:
-				// ミス時のSEを再生する
-				_audioSource.PlayOneShot(MissSE);
-				// メインウィンドウが操作を受け付けないようにする
-				_statePublisher.Publish((int)WindowID.Main, new Window.StateMessage(Window.StateMessage.State.Inactive));
-				break;
-
 			case TransitType.Clear:
 				// クリア時のSEを再生する
 				_audioSource.PlayOneShot(ClearSE);
@@ -159,6 +165,44 @@ public class GameEvents : MonoBehaviour {
 		SceneManager.LoadScene(nextScene);
 	}
 
+	private async void Miss() {
+		// BGMを止める
+		_audioSource.Stop();
+
+		// ミス時のSEを再生する
+		_audioSource.PlayOneShot(MissSE);
+		// メインウィンドウが操作を受け付けないようにする
+		_statePublisher.Publish((int)WindowID.Main, new Window.StateMessage(Window.StateMessage.State.Inactive));
+
+		// カーソルの位置を固定し、見えないようにする
+		MouseLock.Lock(true);
+
+		// 操作を受け付けないようにする
+		Player.enabled = false;
+		Camera.enabled = false;
+
+		// ワイプアウトの完了を待つ
+		await Wipe(true);
+
+		Player.transform.rotation = Quaternion.identity;
+		Player.transform.position = _respawnPosition;
+
+		_berryResetPublisher.Publish(_gotBerries);
+		_resetPublisher.Publish(new ReserMessage());
+
+		// ワイプインの完了を待つ
+		await Wipe(false);
+
+		// 操作を受け付けるようにする
+		Player.enabled = true;
+		Camera.enabled = true;
+
+		_statePublisher.Publish((int)WindowID.Main, new Window.StateMessage(Window.StateMessage.State.Active));
+
+		// BGMの再生を始める
+		_audioSource.Play();
+	}
+
 	private void OpenControlGuide() {
 		_statePublisher.Publish((int)WindowID.Option, new Window.StateMessage(Window.StateMessage.State.Inactive));
 		_statePublisher.Publish((int)WindowID.ControlGuide, new Window.StateMessage(Window.StateMessage.State.Active));
@@ -169,6 +213,11 @@ public class GameEvents : MonoBehaviour {
 		_statePublisher.Publish((int)WindowID.Option, new Window.StateMessage(Window.StateMessage.State.Active));
 	}
 
+	private void UpdateRespawnInfo(in Vector3 position) {
+		_respawnPosition = position;
+		_gotBerries = _berryRequestHandler.Invoke(false);
+	}
+
 	private void Awake() {
 		// 必要なコンポーネントをキャッシュ
 		_windEffect = transform.Find("Wind").GetComponent<RawImage>();
@@ -176,6 +225,8 @@ public class GameEvents : MonoBehaviour {
 		_audioSource = GetComponent<AudioSource>();
 
 		_stageInfo = Resources.Load<StageInfoTable>("StageInfoTable").Find(StageID);
+		_respawnPosition = _stageInfo.StartPosition;
+		_gotBerries = new bool[_stageInfo.BerryCount];
 
 		// メッセージ受信時の処理を設定
 		_eventSubscriber.Subscribe(x => {
@@ -193,7 +244,7 @@ public class GameEvents : MonoBehaviour {
 					break;
 
 				case (int)EventID.Miss:
-					TransitScene(TransitType.Miss, SceneManager.GetActiveScene().name);
+					Miss();
 					break;
 
 				case (int)EventID.Clear:
@@ -212,6 +263,9 @@ public class GameEvents : MonoBehaviour {
 					break;
 			}
 		}).AddTo(this.GetCancellationTokenOnDestroy());
+
+		_halfwaySubscriber.Subscribe(x => UpdateRespawnInfo(x))
+			.AddTo(this.GetCancellationTokenOnDestroy());
 	}
 
 	private async void Start() {
